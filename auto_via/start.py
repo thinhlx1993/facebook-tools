@@ -40,52 +40,52 @@ class AutoVia:
         waiting_for("change_ip_success.PNG")
 
     def import_cookies(self):
-        while True:
-            time.sleep(1)
-            self.cookie = cookies_table.find_one({"used": False, "failed": False})
-            if self.cookie:
-                if 'cookie' in self.cookie:
-                    if not check_exist("import_cookies.PNG"):
-                        click_to("fb_cookies.PNG")
-                    import_x, import_y = waiting_for("import_cookies.PNG")
-                    pyautogui.click(import_x, import_y - 50)
-                    clipboard.copy(self.cookie['cookie'])
-                    logger.debug(f"cookies id: {self.cookie['_id']}")
-                    pyautogui.hotkey('ctrl', 'v')
-                    click_to("import_cookies.PNG")
-                    # click_many("x_btn.PNG")
-                    #         pyautogui.click(x=462, y=640, interval=2)
-                    click_to("check_page.PNG", confidence=0.92)
-                    click_to("next_long.PNG", waiting_time=10, confidence=0.5)
-                    click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
+        # while True:
+        time.sleep(1)
+        self.cookie = cookies_table.find_one({"used": False, "failed": False})
+        if self.cookie:
+            if 'cookie' in self.cookie:
+                if not check_exist("import_cookies.PNG"):
+                    click_to("fb_cookies.PNG")
+                import_x, import_y = waiting_for("import_cookies.PNG")
+                pyautogui.click(import_x, import_y - 50)
+                clipboard.copy(self.cookie['cookie'])
+                logger.debug(f"cookies id: {self.cookie['_id']}")
+                pyautogui.hotkey('ctrl', 'v')
+                click_to("import_cookies.PNG")
+                # click_many("x_btn.PNG")
+                #         pyautogui.click(x=462, y=640, interval=2)
+                click_to("check_page.PNG", confidence=0.92)
+                click_to("next_long.PNG", waiting_time=10, confidence=0.5)
+                click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
 
-                    btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
-                    _, _, index_btn = deciscion(btns, confidence=0.85)
-                    if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
-                            check_exist("dark_logo.PNG", confidence=0.85):
-                        click_to(btns[index_btn], interval=3)
+                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
+                _, _, index_btn = deciscion(btns, confidence=0.85)
+                if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
+                        check_exist("dark_logo.PNG", confidence=0.85):
+                    click_to(btns[index_btn], interval=3)
+                    self.fb_id = get_fb_id()
+                    logger.debug(f"facebook id: {self.fb_id}")
+                    while self.fb_id is None:
+                        self.change_ip()
                         self.fb_id = get_fb_id()
                         logger.debug(f"facebook id: {self.fb_id}")
-                        while self.fb_id is None:
-                            self.change_ip()
-                            self.fb_id = get_fb_id()
-                            logger.debug(f"facebook id: {self.fb_id}")
 
-                        # check fb_id is not exist on database
-                        exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
-                        if not exist_fb_id:
-                            click_to(btns[index_btn])
-                            break
-                        else:
-                            # clear cookies
-                            myquery = {"_id": self.cookie['_id']}
-                            newvalues = {"$set": {"used": True, "failed": False}}
-                            cookies_table.update_one(myquery, newvalues)
-                    if check_exist("cookies_failed.PNG", confidence=0.85) or \
-                            check_exist("cookies_failed_1.PNG", confidence=0.85):
-                        cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
-                else:
-                    cookies_table.delete_one({"_id": self.cookie['_id']})
+                    # check fb_id is not exist on database
+                    exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
+                    if not exist_fb_id:
+                        click_to(btns[index_btn])
+                        break
+                    else:
+                        # clear cookies
+                        myquery = {"_id": self.cookie['_id']}
+                        newvalues = {"$set": {"used": True, "failed": False}}
+                        cookies_table.update_one(myquery, newvalues)
+                if check_exist("cookies_failed.PNG", confidence=0.85) or \
+                        check_exist("cookies_failed_1.PNG", confidence=0.85):
+                    cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
+            else:
+                cookies_table.delete_one({"_id": self.cookie['_id']})
 
     @staticmethod
     def check_dark_light_theme():
@@ -121,82 +121,82 @@ class AutoVia:
 
     def change_phone(self):
         click_to("cookies_alive_1.PNG")
-        while True:
-            click_to("setting_dropdown.PNG")
-            click_to("setting_icon.PNG", confidence=0.85)
-            click_to("setting_icon.PNG", confidence=0.85)
-            click_to("cai_dat_tai_khoan.PNG", waiting_time=5)
-            click_to("cai_dat_chung.PNG", waiting_time=5)
-            contact_x, contact_y = waiting_for("contact.PNG")
-            print(contact_x, contact_y)
-            click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.8)
-            click_to("add_phone_btn.PNG", confidence=0.7)
-            click_to("add_your_phone.PNG", confidence=0.7)
-            self.phone_number, self.session = get_new_phone()
-            #     time.sleep(10)
-            click_to("input_phone_inp.PNG", confidence=0.7)
-            paste_text(self.phone_number)
-            click_to("tiep_tuc.PNG")
-            otp_code = get_code(self.session)
-            if otp_code is not None:
-                if check_exist("input_otp_box.PNG"):
-                    click_to("input_otp_box.PNG")
-                pyautogui.typewrite(otp_code, interval=0.2)
-                click_to("confirm_otp.PNG")
-                waiting_for("input_otp_success.PNG")
-                click_to("ok_btn.PNG")
+        click_to("setting_dropdown.PNG")
+        click_to("setting_icon.PNG", confidence=0.85)
+        click_to("setting_icon.PNG", confidence=0.85)
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
+        pyautogui.click(x, y)
+        contact_x, contact_y = waiting_for("contact.PNG")
+        print(contact_x, contact_y)
+        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.8, check_close=False)
+        click_to("add_phone_btn.PNG", confidence=0.7)
+        click_to("add_your_phone.PNG", confidence=0.7)
+        self.phone_number, self.session = get_new_phone()
+        #     time.sleep(10)
+        click_to("input_phone_inp.PNG", confidence=0.7)
+        paste_text(self.phone_number)
+        click_to("tiep_tuc.PNG")
+        otp_code = get_code(self.session)
+        if otp_code is not None:
+            if check_exist("input_otp_box.PNG"):
+                click_to("input_otp_box.PNG")
+            pyautogui.typewrite(otp_code, interval=0.2)
+            click_to("confirm_otp.PNG")
+            waiting_for("input_otp_success.PNG")
+            click_to("ok_btn.PNG")
 
-                # forgot password
-                session = get_exist_phone(self.phone_number)
-                pyautogui.click(x=1767, y=520)  # click to space
-                pyautogui.hotkey('ctrl', 'shift', 'n')
-                if check_exist("fun_screen_not_able.PNG"):
-                    click_to("fun_screen_not_able.PNG")
+            # forgot password
+            session = get_exist_phone(self.phone_number)
+            pyautogui.click(x=1767, y=520)  # click to space
+            pyautogui.hotkey('ctrl', 'shift', 'n')
+            if check_exist("fun_screen_not_able.PNG"):
+                click_to("fun_screen_not_able.PNG")
 
-                click_to("forgot_password.PNG", interval=5)
-                btns = ["find_your_account.PNG", "input_phone_fogot_password.PNG"]
-                x, y, btn_index = deciscion(btns)
-                if btn_index == 0:
-                    click_to("input_phone_box.PNG")
-                    paste_text(self.phone_number)
-                    click_to("tim_kiem_phone.PNG")
-                    click_to("tim_kiem_phone_2.PNG")
-                    otp_code = get_code(session)
-                    if otp_code is not None:
-                        pyautogui.click(x=1767, y=520, interval=1)  # click to space
-                        click_to("nhap_ma_otp.PNG")
-                        paste_text(otp_code)
-                        click_to("tiep_tuc.PNG")
-                        click_to("new_password_box.PNG")
-                        paste_text("Minh1234@")
-                        click_to("tiep_tuc.PNG", interval=5)
-                        pyautogui.click(x=1454, y=610, interval=0.5)
-                        time.sleep(15)
-                        pyautogui.hotkey("alt", "f4")
-                        break
-                    else:
-                        pyautogui.hotkey('ctrl', 'f4')
+            click_to("forgot_password.PNG", interval=5)
+            btns = ["find_your_account.PNG", "input_phone_fogot_password.PNG"]
+            x, y, btn_index = deciscion(btns)
+            if btn_index == 0:
+                click_to("input_phone_box.PNG")
+                paste_text(self.phone_number)
+                click_to("tim_kiem_phone.PNG")
+                click_to("tim_kiem_phone_2.PNG")
+                otp_code = get_code(session)
+                if otp_code is not None:
+                    pyautogui.click(x=1767, y=520, interval=1)  # click to space
+                    click_to("nhap_ma_otp.PNG")
+                    paste_text(otp_code)
+                    click_to("tiep_tuc.PNG")
+                    click_to("new_password_box.PNG")
+                    paste_text("Minh1234@")
+                    click_to("tiep_tuc.PNG", interval=5)
+                    pyautogui.click(x=1454, y=610, interval=0.5)
+                    time.sleep(15)
+                    pyautogui.hotkey("alt", "f4")
+                    return True
+                else:
+                    pyautogui.hotkey('ctrl', 'f4')
 
-                if btn_index == 1:
-                    click_to("input_phone_fogot_password.PNG")
-                    paste_text(self.phone_number)
-                    click_to("forgot_password_search.PNG")
+            if btn_index == 1:
+                click_to("input_phone_fogot_password.PNG")
+                paste_text(self.phone_number)
+                click_to("forgot_password_search.PNG")
+                click_to("forgot_password_next.PNG")
+                otp_code = get_code(session)
+                if otp_code is not None:
+                    pyautogui.click(x=1767, y=520, interval=1)  # click to space
+                    click_to("forgot_password_input_otp.PNG")
+                    paste_text(otp_code)
                     click_to("forgot_password_next.PNG")
-                    otp_code = get_code(session)
-                    if otp_code is not None:
-                        pyautogui.click(x=1767, y=520, interval=1)  # click to space
-                        click_to("forgot_password_input_otp.PNG")
-                        paste_text(otp_code)
-                        click_to("forgot_password_next.PNG")
-                        click_to("new_password_inp.PNG")
-                        paste_text("Minh1234@")
-                        click_to("forgot_password_next.PNG", interval=5)
-                        pyautogui.click(x=1454, y=610, interval=0.5)
-                        time.sleep(15)
-                        pyautogui.hotkey("alt", "f4")
-                        break
-                    else:
-                        pyautogui.hotkey('ctrl', 'f4')
+                    click_to("new_password_inp.PNG")
+                    paste_text("Minh1234@")
+                    click_to("forgot_password_next.PNG", interval=5)
+                    pyautogui.click(x=1454, y=610, interval=0.5)
+                    time.sleep(15)
+                    pyautogui.hotkey("alt", "f4")
+                    return True
+                else:
+                    pyautogui.hotkey('ctrl', 'f4')
+        return False
 
     def change_email(self):
         click_to("cookies_alive_1.PNG")
@@ -314,7 +314,9 @@ class AutoVia:
         worker.show_meta_data()
         worker.change_language()
         worker.show_meta_data()
-        worker.change_phone()
+        status = worker.change_phone()
+        if not status:
+            return False
         worker.show_meta_data()
         worker.change_email()
         worker.show_meta_data()
@@ -324,6 +326,7 @@ class AutoVia:
         worker.show_meta_data()
         worker.save_results()
         worker.clear_metadata()
+        return True
 
 
 if __name__ == '__main__':
