@@ -32,7 +32,7 @@ class AutoVia:
 
     def import_cookies(self):
         while True:
-            self.cookie = cookies_table.find_one({"used": False})
+            self.cookie = cookies_table.find_one({"used": False, "failed": False})
             if 'cookie' in self.cookie:
                 if not check_exist("import_cookies.PNG"):
                     click_to("fb_cookies.PNG")
@@ -49,8 +49,9 @@ class AutoVia:
                 click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
 
                 btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
-                _, _, index_btn = deciscion(btns, confidence=0.8)
-                if check_exist("cookies_alive_1.PNG", confidence=0.8) or check_exist("dark_logo.PNG", confidence=0.8):
+                _, _, index_btn = deciscion(btns, confidence=0.85)
+                if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
+                        check_exist("dark_logo.PNG", confidence=0.85):
                     click_to(btns[index_btn])
                     self.fb_id = get_fb_id()
                     # check fb_id is not exist on database
@@ -61,10 +62,10 @@ class AutoVia:
                     else:
                         # clear cookies
                         myquery = {"_id": self.cookie['_id']}
-                        newvalues = {"$set": {"used": True}}
+                        newvalues = {"$set": {"used": True, "failed": True}}
                         cookies_table.update_one(myquery, newvalues)
-                if check_exist("cookies_failed.PNG", confidence=0.8) or check_exist("cookies_failed_1.PNG",
-                                                                                    confidence=0.8):
+                if check_exist("cookies_failed.PNG", confidence=0.85) or \
+                        check_exist("cookies_failed_1.PNG", confidence=0.85):
                     cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
             else:
                 cookies_table.delete_one({"_id": self.cookie['_id']})
