@@ -20,6 +20,15 @@ class AutoVia:
         self.secret_key = ''
         self.cookie = None
 
+    def clear_metadata(self):
+        self.fb_id = ''
+        self.phone_number = ''
+        self.session = ''
+        self.email_outlook = ''
+        self.email_password = ''
+        self.secret_key = ''
+        self.cookie = None
+
     def show_meta_data(self):
         print(f"{self.fb_id}|Minh1234@|{self.secret_key}|{self.email_outlook}|{self.email_password}|{self.phone_number}\n")
 
@@ -54,8 +63,14 @@ class AutoVia:
                     _, _, index_btn = deciscion(btns, confidence=0.85)
                     if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
                             check_exist("dark_logo.PNG", confidence=0.85):
-                        click_to(btns[index_btn])
+                        click_to(btns[index_btn], interval=3)
                         self.fb_id = get_fb_id()
+                        logger.debug(f"facebook id: {self.fb_id}")
+                        while self.fb_id is None:
+                            self.change_ip()
+                            self.fb_id = get_fb_id()
+                            logger.debug(f"facebook id: {self.fb_id}")
+
                         # check fb_id is not exist on database
                         exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
                         if not exist_fb_id:
@@ -64,7 +79,7 @@ class AutoVia:
                         else:
                             # clear cookies
                             myquery = {"_id": self.cookie['_id']}
-                            newvalues = {"$set": {"used": True, "failed": True}}
+                            newvalues = {"$set": {"used": True, "failed": False}}
                             cookies_table.update_one(myquery, newvalues)
                     if check_exist("cookies_failed.PNG", confidence=0.85) or \
                             check_exist("cookies_failed_1.PNG", confidence=0.85):
@@ -282,7 +297,8 @@ class AutoVia:
             "secret_key": self.secret_key,
             "email": self.email_outlook,
             "email_password": self.email_password,
-            "phone_number": self.phone_number
+            "phone_number": self.phone_number,
+            "cookies": self.cookie['cookie']
         }
         via_share_table.insert_one(insert_dict)
 
@@ -305,9 +321,11 @@ class AutoVia:
         worker.change_2fa_code()
         worker.show_meta_data()
         worker.save_results()
+        worker.clear_metadata()
 
 
 if __name__ == '__main__':
+    time.sleep(10)
     while True:
         st = time.time()
         worker = AutoVia()

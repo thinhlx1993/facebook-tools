@@ -223,7 +223,7 @@ def get_email():
                     myquery = { "_id": email['_id'] }
                     newvalues = { "$set": { "used": True } }
                     email_table.update_one(myquery, newvalues)
-                    logger.debug(f"email is not ready: {email_outlook}")
+                    logger.debug(f"email is ready: {email_outlook}")
                     return email_outlook, email_password
                 except Exception as ex:
                     myquery = { "_id": email['_id'] }
@@ -242,7 +242,8 @@ def get_fb_id():
     click_to("get_fb_uid.PNG")
     pyautogui.hotkey('ctrl', 'v')
     click_to("get_id.PNG")
-    waiting_for("facebookid_dialog.PNG")
+    if not waiting_for("facebookid_dialog.PNG", waiting_time=20):
+        return None
     pyautogui.hotkey('ctrl', 'c')
     pyautogui.press('esc')
     fb_id = clipboard.paste()
