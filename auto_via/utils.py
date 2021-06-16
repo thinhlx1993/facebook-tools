@@ -211,7 +211,7 @@ def get_out_look(email_outlook, email_password):
 def get_email():
     # check email is access able
     while True:
-        email = email_table.find_one({"used": False})
+        email = email_table.find_one({"used": False, "failed": False})
         if email:
             email_outlook = email['email']
             email_password = email['password']
