@@ -26,7 +26,7 @@ logger.addHandler(ch)
 
 
 def click_to(btn, region=None, waiting_time=1000):
-    logger.info(f"Click to {btn}")
+    logger.debug(f"Click to {btn}")
     start_count = 0
 
     while start_count < waiting_time:
@@ -39,7 +39,7 @@ def click_to(btn, region=None, waiting_time=1000):
 
 
 def click_many(btn, region=None):
-    logger.info(f"Click many {btn}")
+    logger.debug(f"Click many {btn}")
     results = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)
     for ret in results:
         pyautogui.click(ret, interval=0.5)
@@ -48,12 +48,12 @@ def click_many(btn, region=None):
 
 def check_exist(btn, region=None):
     exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
-    logger.info(f"Check exist {btn} result {exist}")
+    logger.debug(f"Check exist {btn} result {exist}")
     return exist
 
 
 def waiting_for(btn, region=None):
-    logger.info(f"Watiing for {btn}")
+    logger.debug(f"Watiing for {btn}")
     while True:
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=.8, region=region)
         if ret:

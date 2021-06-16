@@ -44,7 +44,7 @@ def random_interval():
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
-    logger.info(f"Click to {btn}")
+    logger.debug(f"Click to {btn}")
     start_count = 0
     if check_close:
         click_many("x_btn.PNG", confidence=0.95, region=(0, 100, 1920, 900), log=False)
@@ -64,7 +64,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
 
 def click_many(btn, region=None, confidence=0.8, log=True):
     if log:
-        logger.info(f"Click many {btn}")
+        logger.debug(f"Click many {btn}")
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=0.85, region=region)))
     for ret in elements:
@@ -74,12 +74,12 @@ def click_many(btn, region=None, confidence=0.8, log=True):
 
 def check_exist(btn, region=None, confidence=0.8):
     exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
-    logger.info(f"Check exist {btn} result {exist}")
+    logger.debug(f"Check exist {btn} result {exist}")
     return exist
 
 
 def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
-    logger.info(f"Waiting for {btn}")
+    logger.debug(f"Waiting for {btn}")
     start_count = 0
     while start_count < waiting_time:
         start_count += 1
@@ -99,7 +99,7 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
 def deciscion(btns, region=None, confidence=0.8):
     while True:
         for btn_index, btn in enumerate(btns):
-            logger.info(f"Waiting for {btn}")
+            logger.debug(f"Waiting for {btn}")
             ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
             if ret:
                 x, y = ret
@@ -123,7 +123,7 @@ def get_new_phone():
         res = requests.get(api_uri)
         if res.status_code == 200:
             res_json = res.json()
-            logger.info(f"Get new phone {res_json}")
+            logger.debug(f"Get new phone {res_json}")
             if res_json['status_code'] == 200:
                 res_json['_id'] = str(uuid.uuid4())
                 res_json['api_type'] = 'get_new_phone'
@@ -137,7 +137,7 @@ def get_exist_phone(phone_number):
     res = requests.get(api_uri)
     if res.status_code == 200:
         res_json = res.json()
-        logger.info(f"Get exist phone {res_json}")
+        logger.debug(f"Get exist phone {res_json}")
         if res_json['status_code'] == 200:
             res_json['_id'] = str(uuid.uuid4())
             res_json['api_type'] = 'get_exist_phone'
@@ -156,7 +156,7 @@ def get_code(session):
             res = requests.get(api_uri)
             if res.status_code == 200:
                 res_json = res.json()
-                logger.info(f"Get code otp {res_json}")
+                logger.debug(f"Get code otp {res_json}")
                 if res_json['status_code'] == 200:
 #                     res_json['_id'] = str(uuid.uuid4())
 #                     res_json['api_type'] = 'get_code'
@@ -180,7 +180,7 @@ def cancel_session(session):
     res_json['_id'] = str(uuid.uuid4())
     res_json['api_type'] = 'cancel_session'
     phone_table.insert_one(res_json)
-    logger.info(f"cancel session: {session} json {res_json}")
+    logger.debug(f"cancel session: {session} json {res_json}")
     return True if res.status_code == 200 else False
 
 
@@ -223,7 +223,7 @@ def get_email():
                     myquery = { "_id": email['_id'] }
                     newvalues = { "$set": { "used": True } }
                     email_table.update_one(myquery, newvalues)
-                    logger.info(f"email is not ready: {email_outlook}")
+                    logger.debug(f"email is not ready: {email_outlook}")
                     return email_outlook, email_password
                 except Exception as ex:
                     myquery = { "_id": email['_id'] }
