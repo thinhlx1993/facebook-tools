@@ -18,10 +18,10 @@ logger = logging.getLogger('application')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-fh.setLevel(logging.DEBUG)
+# fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
+# ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -55,7 +55,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
             interval = random_interval() if interval is None else interval
             pyautogui.click(ret, interval=interval)
             break
-        if pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
+        if check_close and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
             click_to("passowrd_input_txt.PNG")
             paste_text("Minh1234@")
             click_to("input_password_next.PNG", confidence=0.7)
@@ -223,7 +223,7 @@ def get_email():
                     myquery = { "_id": email['_id'] }
                     newvalues = { "$set": { "used": True } }
                     email_table.update_one(myquery, newvalues)
-                    logger.debug(f"email is not ready: {email_outlook}")
+                    logger.debug(f"email is ready: {email_outlook}")
                     return email_outlook, email_password
                 except Exception as ex:
                     myquery = { "_id": email['_id'] }
@@ -242,7 +242,8 @@ def get_fb_id():
     click_to("get_fb_uid.PNG")
     pyautogui.hotkey('ctrl', 'v')
     click_to("get_id.PNG")
-    waiting_for("facebookid_dialog.PNG")
+    if not waiting_for("facebookid_dialog.PNG", waiting_time=20):
+        return None
     pyautogui.hotkey('ctrl', 'c')
     pyautogui.press('esc')
     fb_id = clipboard.paste()
