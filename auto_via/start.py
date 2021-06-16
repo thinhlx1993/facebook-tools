@@ -32,43 +32,45 @@ class AutoVia:
 
     def import_cookies(self):
         while True:
+            time.sleep(1)
             self.cookie = cookies_table.find_one({"used": False, "failed": False})
-            if 'cookie' in self.cookie:
-                if not check_exist("import_cookies.PNG"):
-                    click_to("fb_cookies.PNG")
-                import_x, import_y = waiting_for("import_cookies.PNG")
-                pyautogui.click(import_x, import_y - 50)
-                clipboard.copy(self.cookie['cookie'])
-                logger.debug(f"cookies id: {self.cookie['_id']}")
-                pyautogui.hotkey('ctrl', 'v')
-                click_to("import_cookies.PNG")
-                # click_many("x_btn.PNG")
-                #         pyautogui.click(x=462, y=640, interval=2)
-                click_to("check_page.PNG", confidence=0.92)
-                click_to("next_long.PNG", waiting_time=10, confidence=0.5)
-                click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
+            if self.cookie:
+                if 'cookie' in self.cookie:
+                    if not check_exist("import_cookies.PNG"):
+                        click_to("fb_cookies.PNG")
+                    import_x, import_y = waiting_for("import_cookies.PNG")
+                    pyautogui.click(import_x, import_y - 50)
+                    clipboard.copy(self.cookie['cookie'])
+                    logger.debug(f"cookies id: {self.cookie['_id']}")
+                    pyautogui.hotkey('ctrl', 'v')
+                    click_to("import_cookies.PNG")
+                    # click_many("x_btn.PNG")
+                    #         pyautogui.click(x=462, y=640, interval=2)
+                    click_to("check_page.PNG", confidence=0.92)
+                    click_to("next_long.PNG", waiting_time=10, confidence=0.5)
+                    click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
 
-                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
-                _, _, index_btn = deciscion(btns, confidence=0.85)
-                if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
-                        check_exist("dark_logo.PNG", confidence=0.85):
-                    click_to(btns[index_btn])
-                    self.fb_id = get_fb_id()
-                    # check fb_id is not exist on database
-                    exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
-                    if not exist_fb_id:
+                    btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
+                    _, _, index_btn = deciscion(btns, confidence=0.85)
+                    if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
+                            check_exist("dark_logo.PNG", confidence=0.85):
                         click_to(btns[index_btn])
-                        break
-                    else:
-                        # clear cookies
-                        myquery = {"_id": self.cookie['_id']}
-                        newvalues = {"$set": {"used": True, "failed": True}}
-                        cookies_table.update_one(myquery, newvalues)
-                if check_exist("cookies_failed.PNG", confidence=0.85) or \
-                        check_exist("cookies_failed_1.PNG", confidence=0.85):
-                    cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
-            else:
-                cookies_table.delete_one({"_id": self.cookie['_id']})
+                        self.fb_id = get_fb_id()
+                        # check fb_id is not exist on database
+                        exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
+                        if not exist_fb_id:
+                            click_to(btns[index_btn])
+                            break
+                        else:
+                            # clear cookies
+                            myquery = {"_id": self.cookie['_id']}
+                            newvalues = {"$set": {"used": True, "failed": True}}
+                            cookies_table.update_one(myquery, newvalues)
+                    if check_exist("cookies_failed.PNG", confidence=0.85) or \
+                            check_exist("cookies_failed_1.PNG", confidence=0.85):
+                        cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
+                else:
+                    cookies_table.delete_one({"_id": self.cookie['_id']})
 
     @staticmethod
     def check_dark_light_theme():
