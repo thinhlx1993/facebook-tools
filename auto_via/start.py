@@ -171,6 +171,7 @@ class AutoVia:
                         paste_text("Minh1234@")
                         click_to("tiep_tuc.PNG", interval=5)
                         pyautogui.click(x=1454, y=610, interval=0.5)
+                        time.sleep(15)
                         pyautogui.hotkey("alt", "f4")
                         break
                     else:
@@ -191,6 +192,7 @@ class AutoVia:
                         paste_text("Minh1234@")
                         click_to("forgot_password_next.PNG", interval=5)
                         pyautogui.click(x=1454, y=610, interval=0.5)
+                        time.sleep(15)
                         pyautogui.hotkey("alt", "f4")
                         break
                     else:
