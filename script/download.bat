@@ -1,0 +1,1 @@
+for /F %%A in (input.txt) do youtube-dl %%A

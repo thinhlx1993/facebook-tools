@@ -1,0 +1,8 @@
+pyotp
+pyautogui
+clipboard
+pymongo
+dnspython
+exchangelib
+bs4
+opencv-python
