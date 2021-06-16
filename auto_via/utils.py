@@ -158,14 +158,14 @@ def get_code(session):
                 res_json = res.json()
                 logger.debug(f"Get code otp {res_json}")
                 if res_json['status_code'] == 200:
-#                     res_json['_id'] = str(uuid.uuid4())
-#                     res_json['api_type'] = 'get_code'
-#                     phone_table.insert_one(res_json)
                     data_json = res_json['data']
                     if data_json['status'] == 0:
+                        res_json['_id'] = str(uuid.uuid4())
+                        res_json['api_type'] = 'get_code'
+                        phone_table.insert_one(res_json)
                         return data_json['messages'][0]['otp']
                 current_time = time.time()
-                if current_time - st > 20:
+                if current_time - st > 120:
                     # waiting for 2 min
                     cancel_session(session)
                     return None

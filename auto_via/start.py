@@ -31,7 +31,8 @@ class AutoVia:
 
     def show_meta_data(self):
         print(f"{self.fb_id}|Minh1234@|{self.secret_key}|{self.email_outlook}|{self.email_password}|{self.phone_number}\n")
-        print(self.cookie['cookie'])
+        if self.cookie is not None:
+            print(self.cookie['cookie'])
 
     @staticmethod
     def change_ip():
@@ -68,6 +69,7 @@ class AutoVia:
                     self.fb_id = get_fb_id()
                     logger.debug(f"facebook id: {self.fb_id}")
                     if self.fb_id is None:
+                        pyautogui.hotkey('ctrl', 'w')
                         return False
 
                     # check fb_id is not exist on database
