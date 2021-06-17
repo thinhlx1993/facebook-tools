@@ -192,10 +192,10 @@ class AutoVia:
                 click_to("input_phone_fogot_password.PNG")
                 paste_text(self.phone_number)
                 click_to("forgot_password_search.PNG")
-                click_to("forgot_password_next.PNG")
                 if waiting_for("no_result.PNG", waiting_time=10):
                     cancel_session(session)
                     return False
+                click_to("forgot_password_next.PNG")
 
                 otp_code = get_code(session)
                 if otp_code is not None:
