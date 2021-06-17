@@ -210,7 +210,7 @@ class AutoVia:
         self.email_outlook, self.email_password = get_email()
         print(self.email_outlook, self.email_password)
         contact_x, contact_y = waiting_for("contact.PNG")
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7)
+        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
         click_to("add_phone_btn.PNG", confidence=0.7)
         click_to("new_email_inp.PNG")
         clipboard.copy(self.email_outlook)
@@ -246,7 +246,7 @@ class AutoVia:
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
         pyautogui.click(x, y)
         contact_x, contact_y = waiting_for("contact.PNG")
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7)
+        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
         click_many("remove_old_email.PNG", confidence=0.95)
         pyautogui.press('f5')
 
