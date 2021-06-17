@@ -205,7 +205,7 @@ class AutoVia:
         click_to("setting_dropdown.PNG")
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
-        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'], confidence=0.75)
         pyautogui.click(x, y)
         self.email_outlook, self.email_password = get_email()
         print(self.email_outlook, self.email_password)
