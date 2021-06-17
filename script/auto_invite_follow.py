@@ -41,9 +41,10 @@ def click_to(btn, region=None, waiting_time=1000):
 def click_many(btn, region=None):
     logger.debug(f"Click many {btn}")
     results = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)
+    number = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)))
     for ret in results:
         pyautogui.click(ret, interval=0.5)
-    return len(list(results))
+    return number
 
 
 def check_exist(btn, region=None):
@@ -63,7 +64,7 @@ def waiting_for(btn, region=None):
 
 if __name__ == '__main__':
     number_invited = 0
-    while number_invited < 200:
+    while number_invited < 150:
         if check_exist("like.PNG", region=(1050, 200, 70, 800)):
             click_to("like.PNG", region=(1050, 200, 70, 800))
 
