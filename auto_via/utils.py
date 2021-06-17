@@ -98,8 +98,8 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
 
 def deciscion(btns, region=None, confidence=0.8):
     while True:
+        logger.debug(f"Waiting for {btns}")
         for btn_index, btn in enumerate(btns):
-            logger.debug(f"Waiting for {btn}")
             ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
             if ret:
                 x, y = ret
