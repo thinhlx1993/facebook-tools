@@ -143,6 +143,9 @@ class AutoVia:
         click_to("input_phone_inp.PNG", confidence=0.7)
         paste_text(self.phone_number)
         click_to("tiep_tuc.PNG")
+        if waiting_for("no_result.PNG", waiting_time=10):
+            return False
+
         otp_code = get_code(self.session)
         if otp_code is not None:
             if check_exist("input_otp_box.PNG"):
