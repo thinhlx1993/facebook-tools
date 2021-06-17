@@ -332,7 +332,7 @@ class AutoVia:
         status = worker.import_cookies()
         worker.show_meta_data()
         if not status:
-            # self.reset_cookies()
+            self.reset_cookies()
             return False
 
         worker.check_dark_light_theme()
@@ -344,14 +344,14 @@ class AutoVia:
         status = worker.change_phone()
         worker.show_meta_data()
         if not status:
-            # self.reset_cookies()
+            self.reset_cookies()
             return False
 
         # update current email
         status = worker.change_email()
         worker.show_meta_data()
         if not status:
-            # self.reset_cookies()
+            self.reset_cookies()
             return False
 
         worker.remove_old_contact()
