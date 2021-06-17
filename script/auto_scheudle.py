@@ -64,4 +64,6 @@ if __name__ == '__main__':
         waiting_for("done.png")
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
         date_time_obj_ts += 3600
-        os.rename(f"{dir_path}\\{filename}", f"C:\\code\\auto_schedule\\uploaded\\{filename}")
+        move_to_uploaded = f"C:\\code\\facebook-tools\\script\\uploaded\\{filename}"
+        if os.path.isfile(""):
+            os.rename(f"{dir_path}\\{filename}", move_to_uploaded)
