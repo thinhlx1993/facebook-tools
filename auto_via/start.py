@@ -37,8 +37,9 @@ class AutoVia:
     @staticmethod
     def change_ip():
         hma_x, hma_y = waiting_for("hma_app.PNG")
-        pyautogui.click(hma_x, hma_y, button='right', interval=1)
-        click_to("change_ip_address.png", interval=1)
+        pyautogui.moveTo(hma_x, hma_y)
+        pyautogui.click(hma_x, hma_y, button='right', interval=3)
+        click_to("change_ip_address.png", interval=3)
         waiting_for("change_ip_success.PNG")
 
     def import_cookies(self):
@@ -106,7 +107,7 @@ class AutoVia:
         if check_exist("not_in_fun_screen_light.PNG", confidence=0.85):
             click_to("not_in_fun_screen_light.PNG")
         if not check_exist("is_vietnam.PNG"):
-            click_to("setting_dropdown.PNG", confidence=0.85)
+            click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
             click_to("setting_icon.PNG", confidence=0.85)
             click_to("change_language.PNG", confidence=0.85)
             pyautogui.scroll(-2000)
@@ -127,7 +128,7 @@ class AutoVia:
 
     def change_phone(self):
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
@@ -207,7 +208,7 @@ class AutoVia:
 
     def change_email(self):
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
@@ -246,7 +247,7 @@ class AutoVia:
     @staticmethod
     def remove_old_contact():
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
@@ -258,7 +259,7 @@ class AutoVia:
         pyautogui.press('f5')
 
     def change_2fa_code(self):
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         # x, y, btn_idx = deciscion(['account_proteted.PNG'], confidence=0.7)
@@ -329,7 +330,7 @@ class AutoVia:
         status = worker.import_cookies()
         worker.show_meta_data()
         if not status:
-            self.reset_cookies()
+            # self.reset_cookies()
             return False
 
         worker.check_dark_light_theme()
@@ -341,14 +342,14 @@ class AutoVia:
         status = worker.change_phone()
         worker.show_meta_data()
         if not status:
-            self.reset_cookies()
+            # self.reset_cookies()
             return False
 
         # update current email
         status = worker.change_email()
         worker.show_meta_data()
         if not status:
-            self.reset_cookies()
+            # self.reset_cookies()
             return False
 
         worker.remove_old_contact()

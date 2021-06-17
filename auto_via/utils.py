@@ -247,5 +247,11 @@ def get_fb_id():
     pyautogui.hotkey('ctrl', 'c')
     pyautogui.press('esc')
     fb_id = clipboard.paste()
+
+    try:
+        check = int(fb_id)
+    except Exception as ex:
+        logger.error(f"facebook id is not integer {fb_id}")
+        return None
     pyautogui.hotkey('ctrl', 'w')
     return fb_id
