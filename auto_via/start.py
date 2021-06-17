@@ -47,6 +47,10 @@ class AutoVia:
         self.cookie = cookies_table.find_one({"used": False, "failed": False})
         if self.cookie:
             if 'cookie' in self.cookie:
+                myquery = {"_id": self.cookie['_id']}
+                newvalues = {"$set": {"used": True}}
+                cookies_table.update_one(myquery, newvalues)
+
                 if not check_exist("import_cookies.PNG"):
                     click_to("fb_cookies.PNG")
                 import_x, import_y = waiting_for("import_cookies.PNG")
@@ -288,6 +292,12 @@ class AutoVia:
         x, y, _ = deciscion(["2fa_enabled.PNG", "otp_done.PNG", 'input_otp_success_1.PNG'])
         pyautogui.click(x, y, interval=1)
 
+    def reset_cookies(self):
+        # clear cookies
+        myquery = {"_id": self.cookie['_id']}
+        newvalues = {"$set": {"used": False}}
+        cookies_table.update_one(myquery, newvalues)
+
     def save_results(self):
         pyautogui.hotkey('ctrl', 'w')
         with open("output.txt", 'a', encoding='utf-8') as output_file:
@@ -311,8 +321,7 @@ class AutoVia:
         }
         via_share_table.insert_one(insert_dict)
 
-    @staticmethod
-    def start_job():
+    def start_job(self):
         worker.change_ip()
         worker.show_meta_data()
 
@@ -320,6 +329,7 @@ class AutoVia:
         status = worker.import_cookies()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         worker.check_dark_light_theme()
@@ -331,12 +341,14 @@ class AutoVia:
         status = worker.change_phone()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         # update current email
         status = worker.change_email()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         worker.remove_old_contact()
