@@ -52,7 +52,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
         ret = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
         if ret:
-            pyautogui.moveTo(ret[0], ret[1])
+            pyautogui.moveTo(ret[0], ret[1], duration=1)
             interval = random_interval() if interval is None else interval
             pyautogui.click(ret, interval=interval)
             break
