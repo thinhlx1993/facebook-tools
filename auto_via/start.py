@@ -7,7 +7,7 @@ import pyotp
 
 from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
-    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many
+    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session
 
 
 class AutoVia:
@@ -143,8 +143,6 @@ class AutoVia:
         click_to("input_phone_inp.PNG", confidence=0.7)
         paste_text(self.phone_number)
         click_to("tiep_tuc.PNG")
-        if waiting_for("no_result.PNG", waiting_time=10):
-            return False
 
         otp_code = get_code(self.session)
         if otp_code is not None:
@@ -170,6 +168,10 @@ class AutoVia:
                 paste_text(self.phone_number)
                 click_to("tim_kiem_phone.PNG")
                 click_to("tim_kiem_phone_2.PNG")
+                if waiting_for("no_result.PNG", waiting_time=10):
+                    cancel_session(session)
+                    return False
+
                 otp_code = get_code(session)
                 if otp_code is not None:
                     pyautogui.click(x=1767, y=520, interval=1)  # click to space
@@ -191,6 +193,10 @@ class AutoVia:
                 paste_text(self.phone_number)
                 click_to("forgot_password_search.PNG")
                 click_to("forgot_password_next.PNG")
+                if waiting_for("no_result.PNG", waiting_time=10):
+                    cancel_session(session)
+                    return False
+
                 otp_code = get_code(session)
                 if otp_code is not None:
                     pyautogui.click(x=1767, y=520, interval=1)  # click to space
