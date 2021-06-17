@@ -91,8 +91,8 @@ class AutoVia:
 
     @staticmethod
     def check_dark_light_theme():
-        if waiting_for("dark_logo.PNG", waiting_time=2):
-            click_to("dark_drop_down.PNG")
+        if waiting_for("dark_logo.PNG", waiting_time=2, confidence=0.95):
+            click_to("dark_drop_down.PNG", confidence=0.95)
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
 
