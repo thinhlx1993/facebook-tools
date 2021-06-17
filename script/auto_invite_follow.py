@@ -32,8 +32,6 @@ def random_interval():
 def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
     logger.debug(f"Click to {btn}")
     start_count = 0
-    if check_close:
-        click_many("x_btn.PNG", confidence=0.95, region=(0, 100, 1920, 900), log=False)
     while start_count < waiting_time:
         ret = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
@@ -41,10 +39,6 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
             interval = random_interval() if interval is None else interval
             pyautogui.click(ret, interval=interval)
             break
-        if check_close and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
 
 
@@ -73,11 +67,6 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
         if ret:
             x, y = ret
             return x, y
-
-        if pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
     return None
 
