@@ -66,10 +66,10 @@ class AutoVia:
                 click_to("next_long.PNG", waiting_time=10, confidence=0.5)
                 click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
 
-                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
+                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", 'locked.PNG']
                 _, _, index_btn = deciscion(btns, confidence=0.85)
-                if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
-                        check_exist("dark_logo.PNG", confidence=0.85):
+                if index_btn == 0 or \
+                        index_btn == 3:
                     click_to(btns[index_btn], interval=3)
                     self.fb_id = get_fb_id()
                     logger.debug(f"facebook id: {self.fb_id}")
@@ -87,8 +87,7 @@ class AutoVia:
                         myquery = {"_id": self.cookie['_id']}
                         newvalues = {"$set": {"used": True, "failed": False}}
                         cookies_table.update_one(myquery, newvalues)
-                if check_exist("cookies_failed.PNG", confidence=0.85) or \
-                        check_exist("cookies_failed_1.PNG", confidence=0.85):
+                else:
                     cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
             else:
                 cookies_table.delete_one({"_id": self.cookie['_id']})

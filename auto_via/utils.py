@@ -254,4 +254,7 @@ def get_fb_id():
         logger.error(f"facebook id is not integer {fb_id}")
         return None
     pyautogui.hotkey('ctrl', 'w')
+    time.sleep(1)
+    if not check_exist("cookies_alive_1.PNG"):
+        pyautogui.hotkey('ctrl', 'w')
     return fb_id
