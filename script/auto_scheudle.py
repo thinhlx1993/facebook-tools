@@ -11,7 +11,7 @@ os.makedirs('uploaded', exist_ok=True)
 
 
 if __name__ == '__main__':
-    dir_path = r"C:\code\fb-get-links\script\upload"
+    dir_path = r"C:\code\facebook-tools\script\upload"
     while True:
         try:
             start_date = pyautogui.prompt('Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: 13/6/2021 12:00')
@@ -64,4 +64,6 @@ if __name__ == '__main__':
         waiting_for("done.png")
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
         date_time_obj_ts += 3600
-        os.rename(f"{dir_path}\\{filename}", f"C:\\code\\auto_schedule\\uploaded\\{filename}")
+        move_to_uploaded = f"C:\\code\\facebook-tools\\script\\uploaded\\{filename}"
+        if os.path.isfile(""):
+            os.rename(f"{dir_path}\\{filename}", move_to_uploaded)

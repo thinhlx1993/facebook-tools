@@ -6,10 +6,10 @@ import random
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-logger.setLevel(logging.INFO)
+# logger.setLevel(logging.INFO)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-fh.setLevel(logging.INFO)
+# fh.setLevel(logging.INFO)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
@@ -27,7 +27,7 @@ def random_interval():
 
 
 def click_to(btn, region=None, waiting_time=1000):
-    logger.debug(f"Click to {btn}")
+    print(f"Click to {btn}")
     start_count = 0
 
     while start_count < waiting_time:
@@ -40,7 +40,7 @@ def click_to(btn, region=None, waiting_time=1000):
 
 
 def click_many(btn, region=None):
-    logger.debug(f"Click many {btn}")
+    print(f"Click many {btn}")
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)))
     for ret in elements:
@@ -50,12 +50,12 @@ def click_many(btn, region=None):
 
 def check_exist(btn, region=None):
     exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
-    logger.debug(f"Check exist {btn} result {exist}")
+    print(f"Check exist {btn} result {exist}")
     return exist
 
 
 def waiting_for(btn, region=None):
-    logger.debug(f"Watiing for {btn}")
+    print(f"Watiing for {btn}")
     while True:
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=.8, region=region)
         if ret:
