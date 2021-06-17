@@ -11,7 +11,7 @@ os.makedirs('uploaded', exist_ok=True)
 
 
 if __name__ == '__main__':
-    dir_path = r"C:\code\fb-get-links\script\upload"
+    dir_path = r"C:\code\facebook-tools\script\upload"
     while True:
         try:
             start_date = pyautogui.prompt('Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: 13/6/2021 12:00')
