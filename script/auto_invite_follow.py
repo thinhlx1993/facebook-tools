@@ -93,8 +93,8 @@ def paste_text(inp_text):
 if __name__ == '__main__':
     number_invited = 0
     while number_invited < 200:
-        if check_exist("like.PNG", region=(850, 200, 70, 800)):
-            click_to("like.PNG", region=(850, 200, 70, 800))
+        if check_exist("like.PNG", region=(850, 0, 200, 1000)):
+            click_to("like.PNG", region=(850, 0, 200, 1000))
 
             waiting = 0
             while waiting <= 3:
