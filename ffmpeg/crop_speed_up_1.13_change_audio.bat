@@ -3,7 +3,7 @@
 if not exist "done" mkdir ""done" "
 if not exist "crop" mkdir ""crop" "
 
-Set "SrcDir=D:\facebook\facebook-tools\ffmpeg"
+Set "SrcDir=D:\facebook\facebook-tools\ffmpeg\Nhac"
 Set "ExtLst=*.mp3"
 Set "i=0"
 For /F "Delims=" %%A In ('Where /R "%SrcDir%" %ExtLst%') Do (Set /A i+=1
