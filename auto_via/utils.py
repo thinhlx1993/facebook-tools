@@ -43,11 +43,11 @@ def random_interval():
     return random.uniform(0.5, 2)
 
 
-def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
+def click_to(btn, confidence=0.8, region=(0, 100, 1920, 900), waiting_time=1000, interval=None, check_close=True):
     logger.debug(f"Click to {btn}")
     start_count = 0
     if check_close:
-        click_many("x_btn.PNG", confidence=0.95, region=(0, 100, 1920, 900), log=False)
+        click_many("x_btn.PNG", confidence=0.95, region=region, log=False)
     while start_count < waiting_time:
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
@@ -57,10 +57,14 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
             break
-        if check_close and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
+
+        if region:
+            region_x, region_y, w, h = region
+            if w >= 288 and h >= 26 and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG",
+                                                                 confidence=0.7, region=region):
+                click_to("passowrd_input_txt.PNG")
+                paste_text("Minh1234@")
+                click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
 
 
@@ -90,10 +94,13 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
             x, y = ret
             return x, y
 
-        if pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
+        if region:
+            region_x, region_y, w, h = region
+            if w >= 288 and h >= 26 and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG",
+                                                                 confidence=0.7, region=region):
+                click_to("passowrd_input_txt.PNG")
+                paste_text("Minh1234@")
+                click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
     return None
 
