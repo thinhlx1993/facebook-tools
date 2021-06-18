@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from flask import Flask
 from flask import jsonify
@@ -18,13 +19,14 @@ from flask_marshmallow import Marshmallow
 from flask_pymongo import PyMongo, DESCENDING
 from marshmallow import ValidationError
 
-from validator import ViaShareSchema, CookiesSchema
+from validator import ViaShareSchema, CookiesSchema, SchedulerSchema
 
 app = Flask(__name__)
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = "89dfkj3478@123!!**(#"  # Change this!
-app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
+app.config["MONGO_URI"] = "mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/test?retryWrites=true&w=majority"
 app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
@@ -142,6 +144,45 @@ def update_cookies(cookie_id):
     new_values = {"$set": content}
     result = mongo.db.cookies.update_one(finder, new_values)
     return jsonify(msg='success', update_count=result.matched_count)
+
+
+@app.route("/scheduler", methods=["POST"])
+@jwt_required()
+def scheduler_share():
+    try:
+        content = request.get_json()
+        content = SchedulerSchema().load(content)
+    except ValidationError as error:
+        return jsonify(msg='failed', error=error.messages)
+
+    date_time_obj = datetime.strptime(content.get('scheduler_date'), "%d/%m/%Y %H:%M")
+    if date_time_obj < datetime.now():
+        return jsonify(msg='failed check datetime')
+
+    new_scheduler = {
+        "_id": str(uuid.uuid4()),
+        "video_id": content.get('video_id'),
+        "scheduler_time": date_time_obj.timestamp(),
+        "create_date": datetime.now().timestamp(),
+        "shared": False
+    }
+
+    result = mongo.db.scheduler.insert_one(new_scheduler)
+    return jsonify(msg='success')
+
+
+@app.route("/scheduler", methods=["GET"])
+@jwt_required()
+def get_scheduler():
+    page = int(request.args.get("page", 1))
+    page_size = int(request.args.get("page_size", 10))
+    video_id = request.args.get('video_id', '')
+    finder = {
+        "video_id": {"$regex": video_id}
+    }
+
+    data = mongo.db.scheduler.find(finder).sort([('_id', DESCENDING)]).skip(page_size * (page - 1)).limit(page_size)
+    return jsonify(data=list(data))
 
 
 if __name__ == "__main__":
