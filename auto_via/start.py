@@ -109,8 +109,8 @@ class AutoVia:
             click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
             click_to("setting_icon.PNG", confidence=0.85)
             click_to("change_language.PNG", confidence=0.85)
+            time.sleep(2)
             pyautogui.scroll(-2000)
-            time.sleep(1)
             deciscion(["vietnam.PNG", "plus_language.PNG"], confidence=0.7, region=(0, 500, 1920, 500))
             if check_exist("vietnam.PNG", region=(0, 500, 1920, 500), confidence=0.7):
                 click_to("vietnam.PNG", region=(0, 500, 1920, 500), confidence=0.7)
