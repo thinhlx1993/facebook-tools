@@ -43,7 +43,7 @@ def random_interval():
     return random.uniform(0.5, 2)
 
 
-def click_to(btn, confidence=0.8, region=(0, 100, 1920, 900), waiting_time=1000, interval=None, check_close=True):
+def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
     logger.debug(f"Click to {btn}")
     start_count = 0
     if check_close:
@@ -242,8 +242,8 @@ def get_email():
 
 
 def get_fb_id():
-    # pyautogui.click(x=1709, y=587)
-    # pyautogui.hotkey('ctrl', 't')
+    pyautogui.click(x=1709, y=587)
+    pyautogui.hotkey('ctrl', 't')
     click_to("home_page.PNG", confidence=0.9)
     pyautogui.click(x=264, y=50, interval=2)
     pyautogui.hotkey('ctrl', 'c')

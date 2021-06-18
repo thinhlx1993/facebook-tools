@@ -45,9 +45,11 @@ class AutoVia:
     def import_cookies(self):
         # while True:
         time.sleep(1)
-        self.cookie = cookies_table.find_one({"used": False, "failed": False})
+        # self.cookie = cookies_table.find_one({"used": False, "failed": False})
+        self.cookie = cookies_table.find_one({"_id": "ff979902-f2b5-4416-8f85-1ed2f3d19501"})
         if self.cookie:
             if 'cookie' in self.cookie:
+                logger.info(f"cookies: {self.cookie['_id']}")
                 myquery = {"_id": self.cookie['_id']}
                 newvalues = {"$set": {"used": True}}
                 cookies_table.update_one(myquery, newvalues)
