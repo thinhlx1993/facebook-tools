@@ -1,4 +1,4 @@
-import os
+﻿import os
 import time
 import pyautogui
 from datetime import datetime
@@ -65,5 +65,5 @@ if __name__ == '__main__':
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
         date_time_obj_ts += 3600
         move_to_uploaded = f"C:\\code\\facebook-tools\\script\\uploaded\\{filename}"
-        if os.path.isfile(""):
+        if os.path.isfile(move_to_uploaded):
             os.rename(f"{dir_path}\\{filename}", move_to_uploaded)
