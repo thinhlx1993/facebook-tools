@@ -47,13 +47,13 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
     logger.debug(f"Click to {btn}")
     start_count = 0
     if check_close:
-        click_many("x_btn.PNG", confidence=0.95, region=region, log=False)
+        click_many("x_btn.PNG", confidence=0.97, region=(0, 100, 1920, 800), log=False)
     while start_count < waiting_time:
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
         if ret:
             btn_x, btn_y = ret
-            pyautogui.moveTo(btn_x, btn_y, duration=1)
+            pyautogui.moveTo(btn_x, btn_y, duration=0.5)
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
             break
