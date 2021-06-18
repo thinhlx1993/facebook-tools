@@ -7,7 +7,7 @@ import pyotp
 
 from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
-    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many
+    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session
 
 
 class AutoVia:
@@ -37,16 +37,23 @@ class AutoVia:
     @staticmethod
     def change_ip():
         hma_x, hma_y = waiting_for("hma_app.PNG")
-        pyautogui.click(hma_x, hma_y, button='right', interval=1)
-        click_to("change_ip_address.png", interval=1)
+        pyautogui.moveTo(hma_x, hma_y)
+        pyautogui.click(hma_x, hma_y, button='right', interval=3)
+        click_to("change_ip_address.png", interval=3)
         waiting_for("change_ip_success.PNG")
 
     def import_cookies(self):
         # while True:
         time.sleep(1)
         self.cookie = cookies_table.find_one({"used": False, "failed": False})
+        # self.cookie = cookies_table.find_one({"_id": "ff979902-f2b5-4416-8f85-1ed2f3d19501"})
         if self.cookie:
             if 'cookie' in self.cookie:
+                logger.info(f"cookies: {self.cookie['_id']}")
+                myquery = {"_id": self.cookie['_id']}
+                newvalues = {"$set": {"used": True}}
+                cookies_table.update_one(myquery, newvalues)
+
                 if not check_exist("import_cookies.PNG"):
                     click_to("fb_cookies.PNG")
                 import_x, import_y = waiting_for("import_cookies.PNG")
@@ -58,13 +65,13 @@ class AutoVia:
                 # click_many("x_btn.PNG")
                 #         pyautogui.click(x=462, y=640, interval=2)
                 click_to("check_page.PNG", confidence=0.92)
-                click_to("next_long.PNG", waiting_time=10, confidence=0.5)
-                click_to("next_long_1.PNG", waiting_time=10, confidence=0.5)
+                click_to("next_long.PNG", waiting_time=5, confidence=0.7)
+                click_to("next_long_1.PNG", waiting_time=5, confidence=0.7)
 
-                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG"]
+                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", 'locked.PNG']
                 _, _, index_btn = deciscion(btns, confidence=0.85)
-                if check_exist("cookies_alive_1.PNG", confidence=0.85) or \
-                        check_exist("dark_logo.PNG", confidence=0.85):
+                if index_btn == 0 or \
+                        index_btn == 3:
                     click_to(btns[index_btn], interval=3)
                     self.fb_id = get_fb_id()
                     logger.debug(f"facebook id: {self.fb_id}")
@@ -82,8 +89,7 @@ class AutoVia:
                         myquery = {"_id": self.cookie['_id']}
                         newvalues = {"$set": {"used": True, "failed": False}}
                         cookies_table.update_one(myquery, newvalues)
-                if check_exist("cookies_failed.PNG", confidence=0.85) or \
-                        check_exist("cookies_failed_1.PNG", confidence=0.85):
+                else:
                     cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
             else:
                 cookies_table.delete_one({"_id": self.cookie['_id']})
@@ -91,8 +97,8 @@ class AutoVia:
 
     @staticmethod
     def check_dark_light_theme():
-        if waiting_for("dark_logo.PNG", waiting_time=2):
-            click_to("dark_drop_down.PNG")
+        if waiting_for("dark_logo.PNG", waiting_time=2, confidence=0.95):
+            click_to("dark_drop_down.PNG", confidence=0.95)
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
 
@@ -102,11 +108,11 @@ class AutoVia:
         if check_exist("not_in_fun_screen_light.PNG", confidence=0.85):
             click_to("not_in_fun_screen_light.PNG")
         if not check_exist("is_vietnam.PNG"):
-            click_to("setting_dropdown.PNG", confidence=0.85)
+            click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
             click_to("setting_icon.PNG", confidence=0.85)
             click_to("change_language.PNG", confidence=0.85)
+            time.sleep(2)
             pyautogui.scroll(-2000)
-            time.sleep(1)
             deciscion(["vietnam.PNG", "plus_language.PNG"], confidence=0.7, region=(0, 500, 1920, 500))
             if check_exist("vietnam.PNG", region=(0, 500, 1920, 500), confidence=0.7):
                 click_to("vietnam.PNG", region=(0, 500, 1920, 500), confidence=0.7)
@@ -123,13 +129,14 @@ class AutoVia:
 
     def change_phone(self):
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
-        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         contact_x, contact_y = waiting_for("contact.PNG")
         print(contact_x, contact_y)
+        time.sleep(2)
         click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.8, check_close=False)
         click_to("add_phone_btn.PNG", confidence=0.7)
         click_to("add_your_phone.PNG", confidence=0.7)
@@ -138,6 +145,7 @@ class AutoVia:
         click_to("input_phone_inp.PNG", confidence=0.7)
         paste_text(self.phone_number)
         click_to("tiep_tuc.PNG")
+
         otp_code = get_code(self.session)
         if otp_code is not None:
             if check_exist("input_otp_box.PNG"):
@@ -162,6 +170,10 @@ class AutoVia:
                 paste_text(self.phone_number)
                 click_to("tim_kiem_phone.PNG")
                 click_to("tim_kiem_phone_2.PNG")
+                if waiting_for("no_result.PNG", waiting_time=10):
+                    cancel_session(session)
+                    return False
+
                 otp_code = get_code(session)
                 if otp_code is not None:
                     pyautogui.click(x=1767, y=520, interval=1)  # click to space
@@ -182,7 +194,11 @@ class AutoVia:
                 click_to("input_phone_fogot_password.PNG")
                 paste_text(self.phone_number)
                 click_to("forgot_password_search.PNG")
+                if waiting_for("no_result.PNG", waiting_time=10):
+                    cancel_session(session)
+                    return False
                 click_to("forgot_password_next.PNG")
+
                 otp_code = get_code(session)
                 if otp_code is not None:
                     pyautogui.click(x=1767, y=520, interval=1)  # click to space
@@ -202,15 +218,16 @@ class AutoVia:
 
     def change_email(self):
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
-        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         self.email_outlook, self.email_password = get_email()
         print(self.email_outlook, self.email_password)
         contact_x, contact_y = waiting_for("contact.PNG")
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7)
+        time.sleep(2)
+        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
         click_to("add_phone_btn.PNG", confidence=0.7)
         click_to("new_email_inp.PNG")
         clipboard.copy(self.email_outlook)
@@ -240,23 +257,25 @@ class AutoVia:
     @staticmethod
     def remove_old_contact():
         click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
-        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG'])
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         contact_x, contact_y = waiting_for("contact.PNG")
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7)
-        click_many("remove_old_email.PNG", confidence=0.95)
+        time.sleep(1)
+        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
+        click_many("remove_old_email.PNG", confidence=0.8)
         pyautogui.press('f5')
 
     def change_2fa_code(self):
-        click_to("setting_dropdown.PNG")
+        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
         click_to("setting_icon.PNG", confidence=0.85)
-        x, y, btn_idx = deciscion(['account_proteted.PNG', 'account_proteted_title.PNG'], confidence=0.7)
-        pyautogui.click(x, y, interval=1)
-        waiting_for("account_proteted_title.PNG")
+        # x, y, btn_idx = deciscion(['account_proteted.PNG'], confidence=0.7)
+        # pyautogui.click(x, y, interval=1)
+        click_to('account_proteted.PNG', confidence=0.9)
+        waiting_for("account_proteted_title.PNG", confidence=0.7)
         use_2fa_x, use_2fa_y = waiting_for("use_2fa.PNG")
         click_to("modify_2fa.PNG", region=(use_2fa_x + 500, use_2fa_y - 20, 400, 100))
         time.sleep(5)
@@ -273,7 +292,7 @@ class AutoVia:
 
         waiting_for("next_btn_otp.PNG")
         pyautogui.moveTo(989, 540)
-        pyautogui.dragTo(1163, 600, 1, button='left')
+        pyautogui.dragTo(1183, 610, 1, button='left')
         pyautogui.hotkey('ctrl', 'c')
         self.secret_key = clipboard.paste().strip().replace(' ', '')
         totp = pyotp.TOTP(self.secret_key)
@@ -283,6 +302,12 @@ class AutoVia:
         pyautogui.hotkey('ctrl', 'v')
         x, y, _ = deciscion(["2fa_enabled.PNG", "otp_done.PNG", 'input_otp_success_1.PNG'])
         pyautogui.click(x, y, interval=1)
+
+    def reset_cookies(self):
+        # clear cookies
+        myquery = {"_id": self.cookie['_id']}
+        newvalues = {"$set": {"used": False}}
+        cookies_table.update_one(myquery, newvalues)
 
     def save_results(self):
         pyautogui.hotkey('ctrl', 'w')
@@ -307,8 +332,7 @@ class AutoVia:
         }
         via_share_table.insert_one(insert_dict)
 
-    @staticmethod
-    def start_job():
+    def start_job(self):
         worker.change_ip()
         worker.show_meta_data()
 
@@ -316,6 +340,7 @@ class AutoVia:
         status = worker.import_cookies()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         worker.check_dark_light_theme()
@@ -327,12 +352,14 @@ class AutoVia:
         status = worker.change_phone()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         # update current email
         status = worker.change_email()
         worker.show_meta_data()
         if not status:
+            self.reset_cookies()
             return False
 
         worker.remove_old_contact()

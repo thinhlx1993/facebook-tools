@@ -47,18 +47,24 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
     logger.debug(f"Click to {btn}")
     start_count = 0
     if check_close:
-        click_many("x_btn.PNG", confidence=0.95, region=(0, 100, 1920, 900), log=False)
+        click_many("x_btn.PNG", confidence=0.97, region=(0, 100, 1920, 800), log=False)
     while start_count < waiting_time:
-        ret = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
+        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
         if ret:
+            btn_x, btn_y = ret
+            pyautogui.moveTo(btn_x, btn_y, duration=0.5)
             interval = random_interval() if interval is None else interval
-            pyautogui.click(ret, interval=interval)
+            pyautogui.click(btn_x, btn_y, interval=interval)
             break
-        if check_close and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
+
+        if region:
+            region_x, region_y, w, h = region
+            if w >= 288 and h >= 26 and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG",
+                                                                 confidence=0.7, region=region):
+                click_to("passowrd_input_txt.PNG")
+                paste_text("Minh1234@")
+                click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
 
 
@@ -88,18 +94,21 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
             x, y = ret
             return x, y
 
-        if pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG", confidence=0.7, region=region):
-            click_to("passowrd_input_txt.PNG")
-            paste_text("Minh1234@")
-            click_to("input_password_next.PNG", confidence=0.7)
+        if region:
+            region_x, region_y, w, h = region
+            if w >= 288 and h >= 26 and pyautogui.locateOnScreen(f"btn/input_password_to_continue.PNG",
+                                                                 confidence=0.7, region=region):
+                click_to("passowrd_input_txt.PNG")
+                paste_text("Minh1234@")
+                click_to("input_password_next.PNG", confidence=0.7)
         time.sleep(0.2)
     return None
 
 
 def deciscion(btns, region=None, confidence=0.8):
     while True:
+        logger.debug(f"Waiting for {btns}")
         for btn_index, btn in enumerate(btns):
-            logger.debug(f"Waiting for {btn}")
             ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
             if ret:
                 x, y = ret
@@ -165,7 +174,7 @@ def get_code(session):
                         phone_table.insert_one(res_json)
                         return data_json['messages'][0]['otp']
                 current_time = time.time()
-                if current_time - st > 120:
+                if current_time - st > 60:
                     # waiting for 2 min
                     cancel_session(session)
                     return None
@@ -247,5 +256,14 @@ def get_fb_id():
     pyautogui.hotkey('ctrl', 'c')
     pyautogui.press('esc')
     fb_id = clipboard.paste()
+
+    try:
+        check = int(fb_id)
+    except Exception as ex:
+        logger.error(f"facebook id is not integer {fb_id}")
+        return None
     pyautogui.hotkey('ctrl', 'w')
+    time.sleep(1)
+    if not check_exist("cookies_alive_1.PNG"):
+        pyautogui.hotkey('ctrl', 'w')
     return fb_id
