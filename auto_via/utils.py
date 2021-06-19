@@ -241,12 +241,20 @@ def get_email():
                     logger.error(f"email is not accessible: {email_outlook}")
 
 
-def get_fb_id():
+def get_fb_id(cookie_id):
     pyautogui.click(x=1709, y=587)
     pyautogui.hotkey('ctrl', 't')
     click_to("home_page.PNG", confidence=0.9)
     pyautogui.click(x=264, y=50, interval=2)
     pyautogui.hotkey('ctrl', 'c')
+    fb_link = clipboard.paste()
+    if 'checkpoint' in fb_link:
+        # clear cookies
+        myquery = {"_id": cookie_id}
+        newvalues = {"$set": {"used": True, "failed": True}}
+        cookies_table.update_one(myquery, newvalues)
+        return None
+
     click_to("fb_cookies.PNG")
     click_to("get_fb_uid.PNG")
     pyautogui.hotkey('ctrl', 'v')
