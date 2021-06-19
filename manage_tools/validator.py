@@ -14,3 +14,8 @@ class ViaShareSchema(Schema):
 class CookiesSchema(Schema):
     used = fields.Bool(required=False)
     failed = fields.Bool(required=False)
+
+
+class SchedulerSchema(Schema):
+    video_id = fields.Str(required=True)
+    scheduler_date = fields.Str(required=True)

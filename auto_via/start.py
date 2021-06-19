@@ -134,8 +134,11 @@ class AutoVia:
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
-        contact_x, contact_y = waiting_for("contact.PNG")
-        print(contact_x, contact_y)
+        contact = waiting_for("contact.PNG")
+        if contact is None:
+            return False
+
+        (contact_x, contact_y) = contact
         time.sleep(2)
         click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.8, check_close=False)
         click_to("add_phone_btn.PNG", confidence=0.7)
