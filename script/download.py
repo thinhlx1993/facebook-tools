@@ -1,7 +1,7 @@
 import youtube_dl
 import os
 
-page_name = "Workshop"
+page_name = "Technology Unique"
 os.makedirs(f"downloaded/{page_name}", exist_ok=True)
 
 
