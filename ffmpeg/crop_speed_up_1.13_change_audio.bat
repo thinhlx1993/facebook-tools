@@ -14,5 +14,5 @@ Echo "%rand%"
 
 for %%f in (*.avi *.flv *.mkv *.mpg *.mp4) do (
 	ffmpeg -i "%%f" -i "%SrcDir%\%rand%.mp3" -c:v copy -c:a aac -b:a 256k -map "0:0" -map "1:0" -shortest crop/"%%f" -y
-	ffmpeg -i crop/"%%f" -filter_complex "[0:v]setpts=0.87*PTS[v];[0:a]atempo=1.15[a];[0:v]crop=in_w*0.86:in_h*0.86" -map "[v]" -map "[a]" done/"%%f" -y
+	ffmpeg -i crop/"%%f" -vf "setpts=0.87*PTS,crop=in_w*85/100:in_h*85/100,scale=420:420" done/"%%f" -y
 )
