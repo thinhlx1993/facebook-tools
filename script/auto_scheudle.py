@@ -49,17 +49,20 @@ if __name__ == '__main__':
         # change date
         pyautogui.click(schedule_x + 30, schedule_y, interval=0.5)
         date = date_obj.strftime("%d/%m/%Y")
-        pyautogui.typewrite(date, interval=0.1)
+        print(date)
+        pyautogui.typewrite(date, interval=0.2)
 
         # change hour
         pyautogui.click(schedule_x + 120, schedule_y, interval=0.5)
         hour = date_obj.strftime("%H")
-        pyautogui.typewrite(hour, interval=0.1)
+        print(hour)
+        pyautogui.typewrite(hour, interval=0.2)
 
         # change time
         pyautogui.click(schedule_x + 130, schedule_y, interval=0.5)
         minute = date_obj.strftime("%M")
-        pyautogui.typewrite(minute, interval=0.1)
+        print(minute)
+        pyautogui.typewrite(minute, interval=0.2)
         click_to("finish.png")
         waiting_for("done.png")
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
