@@ -15,7 +15,7 @@ if __name__ == '__main__':
     while True:
         try:
             start_date = pyautogui.prompt('Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: 13/6/2021 12:00')
-            date_time_obj = datetime.strptime(start_date, '%d/%m/%Y %HH:%MM')
+            date_time_obj = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
             date_time_obj_ts = date_time_obj.timestamp()
             break
         except Exception as ex:
