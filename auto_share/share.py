@@ -61,4 +61,4 @@ if __name__ == '__main__':
                     title = get_title()
                     paste_text(title)
                     click_to("post.PNG", confidence=0.8)
-                    waiting_for("post_success.PNG", confidence=0.8)
+                    click_to("post_success.PNG", confidence=0.8)
