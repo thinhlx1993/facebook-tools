@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # scheduler = scheduler_table.find_one({"shared": False, "scheduler_time": {"$lte": datetime.now().timestamp()}})
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-    video_id = "320460456213056"
+    video_id = "887721308476198"
     print(f"share video {video_id}")
     time.sleep(2)
     pyautogui.hotkey('winleft', 'd')
@@ -27,13 +27,14 @@ if __name__ == '__main__':
         time.sleep(2)
         waiting_for("dark_logo.PNG", confidence=0.9)
 
-        for i in range(60):
+        for i in range(20):
             time.sleep(1)
             playbtn = check_exist("playbtn.PNG", confidence=0.85)
             if playbtn:
                 pyautogui.moveTo(playbtn)
                 pyautogui.click(playbtn)
             pyautogui.moveTo(relative_position(1027, 549), duration=1)
+            pyautogui.moveTo(relative_position(800, 649), duration=1)
             playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
             if playbtn:
                 pyautogui.moveTo(playbtn)
