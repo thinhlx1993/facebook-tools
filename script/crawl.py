@@ -5,7 +5,7 @@ if os.path.isfile("input.txt"):
     os.remove("input.txt")
 
 
-page_name = "Spasia Infotech Pvt Ltd.html"
+page_name = "Workshop.html"
 html_doc = open(f"../template/{page_name}", encoding="utf-8")
 soup = BeautifulSoup(html_doc, 'html.parser')
 
