@@ -53,7 +53,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
             btn_x, btn_y = ret
             pyautogui.moveTo(btn_x, btn_y, duration=duration)
             interval = random_interval() if interval is None else interval
-            pyautogui.click(btn_x, btn_y, interval=interval, duration=duration)
+            pyautogui.click(btn_x, btn_y, interval=interval)
             break
 
         time.sleep(0.2)
