@@ -112,7 +112,9 @@ def paste_text(inp_text):
 def get_title():
     with open("title.txt") as file:
         lines = [line.strip() for line in file.readlines() if line.strip() != ""]
-        return random.choice(lines)
+        title = random.choice(lines)
+        print(title)
+        return title
 
 
 def relative_position(x, y):
