@@ -265,11 +265,13 @@ class AutoVia:
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
-        contact_x, contact_y = waiting_for("contact.PNG")
-        time.sleep(1)
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
-        click_many("remove_old_email.PNG", confidence=0.8)
-        pyautogui.press('f5')
+        contact = waiting_for("contact.PNG")
+        if contact:
+            contact_x, contact_y = contact
+            time.sleep(1)
+            click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
+            click_many("remove_old_email.PNG", confidence=0.8)
+            pyautogui.press('f5')
 
     def change_2fa_code(self):
         click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
