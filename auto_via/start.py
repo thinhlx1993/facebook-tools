@@ -73,7 +73,7 @@ class AutoVia:
                 if index_btn == 0 or \
                         index_btn == 3:
                     click_to(btns[index_btn], interval=3)
-                    self.fb_id = get_fb_id()
+                    self.fb_id = get_fb_id(self.cookie['_id'])
                     logger.debug(f"facebook id: {self.fb_id}")
                     if self.fb_id is None:
                         pyautogui.hotkey('ctrl', 'w')
@@ -233,11 +233,10 @@ class AutoVia:
         click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
         click_to("add_phone_btn.PNG", confidence=0.7)
         click_to("new_email_inp.PNG")
-        clipboard.copy(self.email_outlook)
-        pyautogui.hotkey('ctrl', 'v')
+        paste_text(self.email_outlook)
         click_to("add_new_email.PNG")
 
-        waiting_for("nhap lai mat khau.PNG", waiting_time=3)
+        waiting_for("nhap lai mat khau.PNG", waiting_time=20)
         if check_exist("nhap lai mat khau.PNG"):
             paste_text("Minh1234@")
             click_to("send_password.PNG")
