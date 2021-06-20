@@ -6,3 +6,4 @@ dnspython
 exchangelib
 bs4
 opencv-python
+dnspython
