@@ -1,3 +1,8 @@
+import base64
+import datetime
+import os
+import pickle
+import pyotp
 import clipboard
 import requests
 import logging
@@ -5,13 +10,17 @@ import pymongo
 import pyautogui
 import time
 import random
-import pyotp
 import uuid
 import re
-from bs4 import BeautifulSoup
-from bson import ObjectId
-from exchangelib import Credentials, Account
+import pickle
 
+from bs4 import BeautifulSoup
+from exchangelib import Credentials, Account
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
@@ -37,6 +46,27 @@ phone_table = db['phone']
 email_table = db['emails']
 cookies_table = db['cookies']
 via_share_table = db['via_share']
+
+creds = None
+# The file token.pickle stores the user's access and refresh tokens, and is
+# created automatically when the authorization flow completes for the first
+# time.
+if os.path.exists('token.pickle'):
+    with open('token.pickle', 'rb') as token:
+        creds = pickle.load(token)
+# If there are no (valid) credentials available, let the user log in.
+if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+    else:
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+    with open('token.pickle', 'wb') as token:
+        pickle.dump(creds, token)
+
+gmail_service = build('gmail', 'v1', credentials=creds)
 
 
 def random_interval():
@@ -217,6 +247,68 @@ def get_out_look(email_outlook, email_password):
                 return href, otp_code
 
 
+def get_emails(target):
+    while True:
+        # request a list of all the messages
+        result = gmail_service.users().messages().list(userId='me', labelIds=["UNREAD", "INBOX"],
+                                                       maxResults=3).execute()
+
+        # We can also pass maxResults to get any number of emails. Like this:
+        # result = service.users().messages().list(maxResults=200, userId='me').execute()
+        messages = result.get('messages')
+
+        # messages is a list of dictionaries where each dictionary contains a message id.
+
+        # iterate through all the messages
+        if messages:
+            for msg in messages:
+                # Get the message from its id
+                txt = gmail_service.users().messages().get(userId='me', id=msg['id']).execute()
+
+                # mark email is read
+                gmail_service.users().messages().modify(userId='me', id=msg["id"],
+                                                        body={'removeLabelIds': ['UNREAD']}).execute()
+                # Use try-except to avoid any Errors
+                try:
+                    # Get value of 'payload' from dictionary 'txt'
+                    payload = txt['payload']
+                    headers = payload['headers']
+                    subject = sender = None
+                    # Look for Subject and Sender Email in the headers
+                    for d in headers:
+                        if d['name'] == 'Subject':
+                            subject = d['value']
+                        if d['name'] == 'From':
+                            sender = d['value']
+
+                    # The Body of the message is in Encrypted format. So, we have to decode it.
+                    # Get the data and decode it with base 64 decoder.
+                    parts = payload.get('parts')[0]
+                    data = parts['body']['data']
+                    data = data.replace("-", "+").replace("_", "/")
+                    decoded_data = base64.b64decode(data)
+                    #             print(decoded_data)
+                    # Now, the data obtained is in lxml. So, we will parse
+                    # it with BeautifulSoup library
+                    soup = BeautifulSoup(decoded_data, "lxml")
+                    body = soup.body()
+                    if subject and sender:
+                        # Printing the subject, sender's email and message
+                        print("Subject: ", subject)
+                        print("From: ", sender)
+                        if sender == 'Facebook <security@facebookmail.com>' and target in str(body):
+                            bodies = str(body).split('\r\n')
+                            result = filter(lambda x: 'confirmcontact' in x, bodies)
+                            result = next(result)
+                            return result[result.index('https'):]
+
+                except Exception as ex:
+                    gmail_service.users().messages().modify(userId='me', id=msg["id"],
+                                                            body={'addLabelIds': ['UNREAD']}).execute()
+                    logger.error(f"get email errors: {ex}")
+        time.sleep(5)
+
+
 def get_email():
     # check email is access able
     while True:
@@ -229,16 +321,36 @@ def get_email():
                 try:
                     credentials = Credentials(email_outlook, email_password)
                     account = Account(email_outlook, credentials=credentials, autodiscover=True)
-                    myquery = { "_id": email['_id'] }
-                    newvalues = { "$set": { "used": True } }
+                    myquery = {"_id": email['_id']}
+                    newvalues = {"$set": {"used": True}}
                     email_table.update_one(myquery, newvalues)
                     logger.debug(f"email is ready: {email_outlook}")
                     return email_outlook, email_password
                 except Exception as ex:
-                    myquery = { "_id": email['_id'] }
-                    newvalues = { "$set": { "failed": True, "used": True } }
+                    myquery = {"_id": email['_id']}
+                    newvalues = {"$set": {"failed": True, "used": True}}
                     email_table.update_one(myquery, newvalues)
                     logger.error(f"email is not accessible: {email_outlook}")
+
+
+def get_email_cenationtshirt():
+    # check email is access able
+    while True:
+        uid = str(uuid.uuid1()).replace('-', '')
+        random_name = f"{uid}@cenationtshirt.club"
+        email = email_table.find_one({"used": False, "email": random_name})
+        if email is None:
+            new_email = {
+                "_id": str(uuid.uuid1()),
+                "email": random_name,
+                "password": "",
+                "used": False,
+                "failed": False,
+                "created_date": datetime.datetime.now()
+            }
+            email_table.insert_one(new_email)
+            logger.debug(f"email is ready: {random_name}")
+            return random_name, ""
 
 
 def get_fb_id(cookie_id):
