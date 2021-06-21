@@ -1,6 +1,6 @@
 @echo off
 
-Set "SrcDir=E:\Projects\thinh\facebook-tools\ffmpeg\Nhac"
+Set "SrcDir=C:\Nhac"
 Set "ExtLst=*.mp3"
 
 Set "i=0"
