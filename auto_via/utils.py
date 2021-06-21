@@ -230,6 +230,7 @@ def get_out_look(email_outlook, email_password):
     credentials = Credentials(email_outlook, email_password)
     account = Account(email_outlook, credentials=credentials, autodiscover=True)
     while True:
+        time.sleep(5)
         for item in account.inbox.all().order_by('-datetime_received')[:5]:
             if item.sender.email_address == 'security@facebookmail.com':
                 print(item.datetime_received)

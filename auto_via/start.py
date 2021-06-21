@@ -227,7 +227,7 @@ class AutoVia:
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
-        self.email_outlook, self.email_password = get_email_cenationtshirt()
+        self.email_outlook, self.email_password = get_email()
         print(self.email_outlook, self.email_password)
         contact_x, contact_y = waiting_for("contact.PNG")
         time.sleep(2)
@@ -245,7 +245,7 @@ class AutoVia:
         if not check_exist("email_already_used.PNG"):
             waiting_for("add_new_email_success.PNG")
             # click_to("close_dialog.PNG")
-            href = get_emails(self.email_outlook)
+            href = get_out_look(self.email_outlook, self.email_password)
             pyautogui.click(x=1738, y=517)
             pyautogui.hotkey('ctrl', 't', interval=1)
             clipboard.copy(href)
