@@ -15,4 +15,4 @@ FOR /f "tokens=5 delims==_" %%i in (height.txt) do @set height=%%i
 echo width=%width%
 echo height=%height%
 del width.txt && del height.txt
-ffmpeg -i %1 -i "%SrcDir%\%rand%.mp3" -vf "[0:v]crop=in_w*0.86:in_h*0.86,scale=%width%:%height%,setpts=1/1.15*PTS" -af "[1:a]atempo=1.15" -map "0:0" -map "1:0" -crf 18 -shortest done/%1 -y
+ffmpeg -i %1 -i "%SrcDir%\%rand%.mp3" -vf "[0:v]crop=in_w*0.86:in_h*0.86,scale=%width%:%height%,setpts=1/1.15*PTS" -af "[1:a]atempo=1.15" -map "0:0" -map "1:0" -preset ultrafast -crf 24 -shortest done/%1 -y

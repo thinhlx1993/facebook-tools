@@ -7,7 +7,8 @@ import pyotp
 
 from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
-    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session
+    logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session, \
+    get_email_cenationtshirt, gmail_service, get_emails
 
 
 class AutoVia:
@@ -226,7 +227,7 @@ class AutoVia:
         click_to("setting_icon.PNG", confidence=0.85)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
-        self.email_outlook, self.email_password = get_email()
+        self.email_outlook, self.email_password = get_email_cenationtshirt()
         print(self.email_outlook, self.email_password)
         contact_x, contact_y = waiting_for("contact.PNG")
         time.sleep(2)
@@ -236,7 +237,7 @@ class AutoVia:
         paste_text(self.email_outlook)
         click_to("add_new_email.PNG")
 
-        waiting_for("nhap lai mat khau.PNG", waiting_time=20)
+        waiting_for("nhap lai mat khau.PNG", waiting_time=30)
         if check_exist("nhap lai mat khau.PNG"):
             paste_text("Minh1234@")
             click_to("send_password.PNG")
@@ -244,10 +245,10 @@ class AutoVia:
         if not check_exist("email_already_used.PNG"):
             waiting_for("add_new_email_success.PNG")
             # click_to("close_dialog.PNG")
-            href, otp_code = get_out_look(self.email_outlook, self.email_password)
+            href = get_emails(self.email_outlook)
             pyautogui.click(x=1738, y=517)
-            clipboard.copy(href)
             pyautogui.hotkey('ctrl', 't', interval=1)
+            clipboard.copy(href)
             pyautogui.hotkey('ctrl', 'v', interval=1)
             pyautogui.press('enter')
             return True
@@ -309,9 +310,11 @@ class AutoVia:
 
     def reset_cookies(self):
         # clear cookies
-        myquery = {"_id": self.cookie['_id']}
-        newvalues = {"$set": {"used": False}}
-        cookies_table.update_one(myquery, newvalues)
+        if self.cookie is not None:
+            logger.debug(f"reset cookies: {self.cookie['_id']}")
+            myquery = {"_id": self.cookie['_id']}
+            newvalues = {"$set": {"used": False}}
+            cookies_table.update_one(myquery, newvalues)
 
     def save_results(self):
         pyautogui.hotkey('ctrl', 'w')
@@ -337,42 +340,46 @@ class AutoVia:
         via_share_table.insert_one(insert_dict)
 
     def start_job(self):
-        worker.change_ip()
-        worker.show_meta_data()
+        try:
+            worker.change_ip()
+            worker.show_meta_data()
 
-        # get cookies
-        status = worker.import_cookies()
-        worker.show_meta_data()
-        if not status:
-            self.reset_cookies()
-            return False
+            # get cookies
+            status = worker.import_cookies()
+            worker.show_meta_data()
+            if not status:
+                self.reset_cookies()
+                return False
 
-        worker.check_dark_light_theme()
-        worker.show_meta_data()
-        worker.change_language()
-        worker.show_meta_data()
+            worker.check_dark_light_theme()
+            worker.show_meta_data()
+            worker.change_language()
+            worker.show_meta_data()
 
-        # change phone and forgot password
-        status = worker.change_phone()
-        worker.show_meta_data()
-        if not status:
-            self.reset_cookies()
-            return False
+            # change phone and forgot password
+            status = worker.change_phone()
+            worker.show_meta_data()
+            if not status:
+                self.reset_cookies()
+                return False
 
-        # update current email
-        status = worker.change_email()
-        worker.show_meta_data()
-        if not status:
-            self.reset_cookies()
-            return False
+            # update current email
+            status = worker.change_email()
+            worker.show_meta_data()
+            if not status:
+                self.reset_cookies()
+                return False
 
-        worker.remove_old_contact()
-        worker.show_meta_data()
-        worker.change_2fa_code()
-        worker.show_meta_data()
-        worker.save_results()
-        worker.clear_metadata()
-        return True
+            worker.remove_old_contact()
+            worker.show_meta_data()
+            worker.change_2fa_code()
+            worker.show_meta_data()
+            worker.save_results()
+            worker.clear_metadata()
+            return True
+        except Exception as ex:
+            print(ex)
+            worker.reset_cookies()
 
 
 if __name__ == '__main__':
