@@ -8,7 +8,7 @@ import pyotp
 from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
     logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session, \
-    get_email_cenationtshirt, gmail_service, get_emails
+    get_email_cenationtshirt, get_emails
 
 
 class AutoVia:
