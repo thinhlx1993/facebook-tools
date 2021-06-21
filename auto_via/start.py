@@ -245,7 +245,7 @@ class AutoVia:
         if not check_exist("email_already_used.PNG"):
             waiting_for("add_new_email_success.PNG")
             # click_to("close_dialog.PNG")
-            href = get_out_look(self.email_outlook, self.email_password)
+            href, otp = get_out_look(self.email_outlook, self.email_password)
             pyautogui.click(x=1738, y=517)
             pyautogui.hotkey('ctrl', 't', interval=1)
             clipboard.copy(href)
