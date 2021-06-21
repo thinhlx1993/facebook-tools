@@ -42,6 +42,7 @@ class AutoVia:
         pyautogui.click(hma_x, hma_y, button='right', interval=3)
         click_to("change_ip_address.png", interval=3)
         waiting_for("change_ip_success.PNG")
+        click_to("google.PNG")
 
     def import_cookies(self):
         # while True:
@@ -343,6 +344,7 @@ class AutoVia:
         try:
             worker.change_ip()
             worker.show_meta_data()
+            time.sleep(10)
 
             # get cookies
             status = worker.import_cookies()
@@ -386,7 +388,6 @@ if __name__ == '__main__':
     while True:
         st = time.time()
         worker = AutoVia()
-        time.sleep(10)
         worker.start_job()
         et = time.time()
         print(f"Time consuming {(et - st)/60} min")
