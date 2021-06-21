@@ -339,21 +339,23 @@ def get_email():
 def get_email_cenationtshirt():
     # check email is access able
     while True:
-        uid = str(uuid.uuid1()).replace('-', '')
-        random_name = f"{uid}@cenationtshirt.club"
-        email = email_table.find_one({"used": False, "email": random_name})
-        if email is None:
-            new_email = {
-                "_id": str(uuid.uuid1()),
-                "email": random_name,
-                "password": "",
-                "used": False,
-                "failed": False,
-                "created_date": datetime.datetime.now()
-            }
-            email_table.insert_one(new_email)
-            logger.debug(f"email is ready: {random_name}")
-            return random_name, ""
+        with open("old_email/T3LwDx0wBn-1.txt") as file:
+            line = random.choice(file.readlines())
+            line = line.split('@')[0] + str(random.randint(0, 10000))
+            random_name = f"{line}@cenationtshirt.club"
+            email = email_table.find_one({"used": False, "email": random_name})
+            if email is None:
+                new_email = {
+                    "_id": str(uuid.uuid1()),
+                    "email": random_name,
+                    "password": "",
+                    "used": False,
+                    "failed": False,
+                    "created_date": datetime.datetime.now()
+                }
+                email_table.insert_one(new_email)
+                logger.debug(f"email is ready: {random_name}")
+                return random_name, ""
 
 
 def get_fb_id(cookie_id):

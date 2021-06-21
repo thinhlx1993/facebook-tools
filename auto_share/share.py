@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # scheduler = scheduler_table.find_one({"shared": False, "scheduler_time": {"$lte": datetime.now().timestamp()}})
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-    video_id = "142490444518406"
+    video_id = "327111005540926"
     print(f"share video {video_id}")
     time.sleep(2)
     pyautogui.hotkey('winleft', 'd')
