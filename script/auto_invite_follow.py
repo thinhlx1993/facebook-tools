@@ -105,8 +105,8 @@ if __name__ == '__main__':
                 time.sleep(1)
                 if not check_exist("invite.PNG", region=(850, 200, 600, 800)):
                     waiting += 1
-            if check_exist("close_invite.PNG", region=(850, 200, 600, 800)):
-                click_to("close_invite.PNG", region=(850, 200, 600, 800))
+            if check_exist("close_invite.PNG", region=(850, 200, 600, 800), confidence=0.95):
+                click_to("close_invite.PNG", region=(850, 200, 600, 800), confidence=0.95)
         pyautogui.moveTo(x=1635, y=655, duration=0.5)
         pyautogui.click(x=1635, y=655)
         pyautogui.scroll(-1500)
