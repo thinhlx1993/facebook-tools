@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # scheduler = scheduler_table.find_one({"shared": False, "scheduler_time": {"$lte": datetime.now().timestamp()}})
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-    video_id = "2069950596481235"
+    video_id = "548253049512685"
     print(f"share video {video_id}")
     time.sleep(2)
     pyautogui.hotkey('winleft', 'd')
@@ -71,7 +71,8 @@ if __name__ == '__main__':
             click_to("post_success.PNG", confidence=0.8, waiting_time=20)
             spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
             if spam:
-                pyautogui.hotkey('ctrl', 'w')
-                pyautogui.press('enter')
-            click_to("dark_logo.PNG", confidence=0.9)
+                pyautogui.hotkey('alt', 'f4')
+                # time.sleep(1)
+                # pyautogui.press('enter')
+            # click_to("dark_logo.PNG", confidence=0.9)
         # time.sleep(7200)
