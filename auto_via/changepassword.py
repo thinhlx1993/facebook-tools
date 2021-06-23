@@ -59,11 +59,12 @@ class AutoVia:
         paste_text(self.fb_id)
         pyautogui.press('tab')
         paste_text(self.old_password)
-        click_to("sign_in_btn.PNG")
-        time.sleep(2)
+        click_to("sign_in_btn.PNG", confidence=0.9)
+        time.sleep(5)
+        if not check_exist("2fa_require.PNG"):
+            click_to("tieng_viet_sign_in.PNG", confidence=0.8)
 
         secret_key = self.old_secret_key.strip().replace(' ', '')
-        click_to("tieng_viet_sign_in.PNG", waiting_time=20, confidence=0.8)
         click_to('sign_in_code.PNG')
         totp = pyotp.TOTP(secret_key).now()
         paste_text(totp)
@@ -348,9 +349,9 @@ class AutoVia:
 
     def start_job(self):
         try:
-            # worker.change_ip()
-            # worker.show_meta_data()
-            # time.sleep(10)
+            worker.change_ip()
+            worker.show_meta_data()
+            time.sleep(10)
             # get cookies
             worker.log_in()
             worker.show_meta_data()
@@ -376,14 +377,20 @@ class AutoVia:
 
 if __name__ == '__main__':
     # while True:
-    st = time.time()
-    worker = AutoVia(
-        fb_id='100066940531383',
-        old_password='satthu111',
-        old_secret_key='TUAWECJTENTZTDNGNRIW2ISFLB75AMOP',
-        old_email_outlook='mattielyncwdo@outlook.com',
-        old_email_password='xjp56cRqs'
-    )
-    worker.start_job()
-    et = time.time()
-    print(f"Time consuming {(et - st)/60} min")
+    with open("via_new.txt", encoding='utf-8') as vias:
+        for via in vias.readlines():
+            via = via.strip().split('|')
+            # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
+            fb_id, old_password, old_secret_key, old_email_outlook, old_email_password = via
+            # print(fb_id, old_password, old_secret_key, old_email_outlook, old_email_password)
+            st = time.time()
+            worker = AutoVia(
+                fb_id=fb_id,
+                old_password=old_password,
+                old_secret_key=old_secret_key,
+                old_email_outlook=old_email_outlook,
+                old_email_password=old_email_password
+            )
+            worker.start_job()
+            et = time.time()
+            print(f"Time consuming {(et - st) / 60} min")
