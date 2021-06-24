@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # scheduler = scheduler_table.find_one({"shared": False, "scheduler_time": {"$lte": datetime.now().timestamp()}})
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-    video_id = "950079065838851"
+    video_id = "168482831855382"
     print(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
@@ -61,10 +61,10 @@ if __name__ == '__main__':
 
         while True:
             try:
-                groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.75)
+                groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
                 groups = list(groups)
                 group = random.choice(groups)
-                pyautogui.click(group, duration=2)
+                pyautogui.click(group, duration=0.5)
                 break
             except Exception as ex:
                 pass
@@ -74,7 +74,7 @@ if __name__ == '__main__':
             title = get_title()
             paste_text(title)
             time.sleep(5)
-            click_to("post.PNG", confidence=0.8, duration=2, interval=2)
+            click_to("post.PNG", confidence=0.8, duration=1, interval=1)
             click_to("post_success.PNG", confidence=0.8, waiting_time=20)
             # spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
             # if spam:
