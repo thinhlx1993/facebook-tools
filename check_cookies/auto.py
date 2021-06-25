@@ -2,6 +2,7 @@ import pyautogui
 import pyperclip
 import os
 import time
+from utils import click_to, waiting_for, deciscion
 
 
 if os.path.isfile("pass.txt"):
@@ -18,54 +19,31 @@ with open("New-236.txt", encoding='utf-8') as file:
             print(f"cookies: {line}")
             print(f"passed : {passed}")
             print(f"failed : {failed}")
-            while True:
-                app_btn = pyautogui.locateOnScreen('btn/app.png')
-                if app_btn:
-                    print("click app btn")
-                    pyautogui.click(app_btn)  # Find where button.png appears on the screen and click it.
-                    left, top, width, height = app_btn
-                    break
-                if pyautogui.locateOnScreen('btn/import.png'):
-                    print("found import btn")
-                    break
-                
-            while True:
-                import_btn = pyautogui.locateOnScreen('btn/import.png')
-                if import_btn:
-                    print("click import btn")
-                    pyperclip.copy(line)
-                    pyautogui.click(left-200, top+160)
-                    pyautogui.hotkey('ctrlleft', 'v')
-                    pyautogui.click(import_btn) # Find where button.png appears on the screen and click it.
-                    break
-                    
+            click_to("app.png")
+            import_x, import_y = waiting_for("import.png")
+            print("click import btn")
+            pyautogui.click(import_x-200, import_y+160)
+            pyperclip.copy(line)
+            pyautogui.hotkey('ctrlleft', 'v')
+            click_to('import.png')
             count = 0
             while True:
-                check_page = pyautogui.locateOnScreen("btn/check_page.PNG")
-                if check_page:
-                    print("check page")
-                    pyautogui.click(check_page)
-                    time.sleep(0.5)
-                    
+                click_to("check_page.PNG")
+
                 # time.sleep(1.5)
-                if pyautogui.locateOnScreen("btn/pass_3.PNG") or \
-                  pyautogui.locateOnScreen("btn/pass_6.PNG") or \
-                  count > 2:
+                if deciscion(["pass_3.PNG", "pass_6.PNG"]) or count > 5:
                     print("passed")
                     with open("pass.txt", "a", encoding='utf-8') as myfile:
                         myfile.write(line + '\n')
                         passed += 1
                         break
                         
-                if pyautogui.locateOnScreen("btn/failed1.PNG") or \
-                    pyautogui.locateOnScreen("btn/failed5.PNG") or \
-                    pyautogui.locateOnScreen("btn/lock.PNG"):
+                if deciscion(["failed1.PNG", "failed5.PNG", 'lock.PNG']):
                     print("failed")
                     with open("failed.txt", "a", encoding='utf-8') as myfile:
                         myfile.write(line + '\n')
                         failed += 1
                         break
-                    break
 
                 count += 1
                 print(f"retry {count}")
