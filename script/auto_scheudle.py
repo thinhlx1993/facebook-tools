@@ -35,7 +35,7 @@ if __name__ == '__main__':
         title = waiting_for("title.png")
         title_x, title_y = title
         pyautogui.click(title_x + 50, title_y)
-        filename_without_ext = os.path.splitext(filename)[0]
+        filename_without_ext = os.path.splitext(filename)[0] + " #Pansy Shop"
         # fix title
         if '-' in filename_without_ext:
             filename_without_ext = filename_without_ext.split('-')[1]
