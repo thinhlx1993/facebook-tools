@@ -5,7 +5,7 @@ if os.path.isfile("input.txt"):
     os.remove("input.txt")
 
 
-page_name = "AKULBALAJIOFFICIAL.html"
+page_name = "Unbox Factory.html"
 html_doc = open(f"../template/{page_name}", encoding="utf-8")
 soup = BeautifulSoup(html_doc, 'html.parser')
 
@@ -23,15 +23,18 @@ for parent in soup.find_all(class_='n851cfcs'):
                 break
         if view_count and href:
             if "M" in view_count:
-                with open(f"AKULBALAJIOFFICIAL.txt", 'a') as file:
-                    file.write(f"{href}-{view_count} \n")
-                    file.close()
-                print(href, view_count)
-            elif "K" in view_count:
-                view_count = view_count.replace("K", "").replace("Views", "")
+                view_count = view_count.replace("M", "").replace("Views", "")
                 view_count = float(view_count)
-                if view_count > 100:
-                    print(href, view_count)
-                    with open(f"AKULBALAJIOFFICIAL.txt", 'a') as file:
-                        file.write(f"{href}-{view_count}K Views \n")
+                if view_count >= 1:
+                    with open(f"input.txt", 'a') as file:
+                        file.write(f"{href}-{view_count}M Views \n")
                         file.close()
+                    print(href, view_count)
+            # elif "K" in view_count:
+            #     view_count = view_count.replace("K", "").replace("Views", "")
+            #     view_count = float(view_count)
+            #     if view_count > 100:
+            #         print(href, view_count)
+            #         with open(f"input.txt", 'a') as file:
+            #             file.write(f"{href}-{view_count}K Views \n")
+            #             file.close()

@@ -8,7 +8,7 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 
 def auto_share():
-    scheduler = scheduler_table.find_one({"shared": False, "scheduler_time": {"$lte": datetime.now().timestamp()}})
+    scheduler = scheduler_table.find_one({"shared": False})
     if scheduler:
         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
         video_id = scheduler['_id']

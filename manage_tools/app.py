@@ -177,8 +177,10 @@ def get_scheduler():
     page = int(request.args.get("page", 1))
     page_size = int(request.args.get("page_size", 10))
     video_id = request.args.get('video_id', '')
+    shared = request.args.get('shared', '')
     finder = {
-        "video_id": {"$regex": video_id}
+        "video_id": {"$regex": video_id},
+        "shared": True if shared == "1" else False
     }
 
     data = mongo.db.scheduler.find(finder).sort([('_id', DESCENDING)]).skip(page_size * (page - 1)).limit(page_size)
