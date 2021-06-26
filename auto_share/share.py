@@ -8,6 +8,7 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 
 def auto_share():
+    print("start share")
     scheduler = scheduler_table.find_one({"shared": False})
     if scheduler:
         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
@@ -88,8 +89,8 @@ def auto_share():
 
 
 if __name__ == '__main__':
-    auto_share()
+    # auto_share()
     schedule.every(2).hours.at(":00").do(auto_share)
     while True:
         schedule.run_pending()
-        time.sleep(60)
+        time.sleep(1)

@@ -113,7 +113,7 @@ def get_title():
     with open("title.txt") as file:
         lines = [line.strip() for line in file.readlines() if line.strip() != ""]
         title = random.choice(lines)
-        print(title)
+        logger.info(title)
         return title
 
 
