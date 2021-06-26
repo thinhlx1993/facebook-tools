@@ -12,7 +12,7 @@ if __name__ == '__main__':
     click_to("start_invite_group.PNG")
     while True:
         waiting_for("check_box.PNG")
-        number_check_box = click_many("check_box.PNG", confidence=1)
+        number_check_box = click_many("check_box.PNG", confidence=0.95)
         number_invited += number_check_box
         print(f"number invited: {number_invited}")
         pyautogui.moveTo(1035, 751)
