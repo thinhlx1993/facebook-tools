@@ -14,7 +14,10 @@ if __name__ == '__main__':
     dir_path = r"C:\code\facebook-tools\script\upload"
     while True:
         try:
-            start_date = pyautogui.prompt('Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: 13/6/2021 12:00')
+            default_date = datetime.strptime(datetime.now(), '%d/%m/%Y %H:%M')
+            start_date = pyautogui.prompt(f'Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: {default_date}')
+            if start_date == "":
+                start_date = default_date
             date_time_obj = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
             date_time_obj_ts = date_time_obj.timestamp()
             break
@@ -38,7 +41,7 @@ if __name__ == '__main__':
         filename_without_ext = os.path.splitext(filename)[0]
         # fix title
         if '-' in filename_without_ext:
-            filename_without_ext = filename_without_ext.split('-')[1]
+            filename_without_ext = filename_without_ext.split('-')[1] + " #PansyShop #Crafting #Relaxing"
         pyautogui.typewrite(filename_without_ext)
         click_to("next.png")
         click_to("later.PNG", waiting_time=2)
@@ -49,24 +52,24 @@ if __name__ == '__main__':
         # change date
         pyautogui.click(schedule_x + 30, schedule_y, interval=0.5)
         date = date_obj.strftime("%d/%m/%Y")
-        print(date)
+        logger.info(f"current date {date}")
         pyautogui.typewrite(date, interval=0.2)
 
         # change hour
         pyautogui.click(schedule_x + 120, schedule_y, interval=0.5)
         hour = date_obj.strftime("%H")
-        print(hour)
+        logger.info(f"current hour {hour}")
         pyautogui.typewrite(hour, interval=0.2)
 
         # change time
         pyautogui.click(schedule_x + 130, schedule_y, interval=0.5)
         minute = date_obj.strftime("%M")
-        print(minute)
+        logger.info(f"current minute {minute}")
         pyautogui.typewrite(minute, interval=0.2)
         click_to("finish.png")
         waiting_for("done.png")
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
-        date_time_obj_ts += 7200
+        date_time_obj_ts += 10800
         move_to_uploaded = f"C:\\code\\facebook-tools\\script\\uploaded\\{filename}"
         if not os.path.isfile(move_to_uploaded):
             os.rename(f"{dir_path}\\{filename}", move_to_uploaded)
