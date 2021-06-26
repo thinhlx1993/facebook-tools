@@ -156,8 +156,8 @@ def scheduler_share():
         return jsonify(msg='failed', error=error.messages)
 
     date_time_obj = datetime.strptime(content.get('scheduler_date'), "%d/%m/%Y %H:%M")
-    if date_time_obj < datetime.now():
-        return jsonify(msg='failed check datetime')
+    # if date_time_obj < datetime.now():
+    #     return jsonify(msg='failed check datetime')
 
     new_scheduler = {
         "_id": str(uuid.uuid4()),

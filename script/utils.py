@@ -39,12 +39,12 @@ def click_to(btn, region=None, waiting_time=1000):
         time.sleep(0.2)
 
 
-def click_many(btn, region=None):
+def click_many(btn, region=None, confidence=0.8):
     print(f"Click many {btn}")
-    elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)
-    number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=.8, region=region)))
+    elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
+    number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)))
     for ret in elements:
-        pyautogui.click(ret, interval=random_interval())
+        pyautogui.click(ret, interval=random_interval(), duration=0.1)
     return number_element
 
 
