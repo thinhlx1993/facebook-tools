@@ -11,7 +11,7 @@ def auto_share():
     scheduler = scheduler_table.find_one({"shared": False})
     if scheduler:
         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-        video_id = scheduler['_id']
+        video_id = scheduler['video_id']
         logger.info(f"share video {video_id}")
         # time.sleep(2)
         # pyautogui.hotkey('winleft', 'd')
@@ -88,6 +88,7 @@ def auto_share():
 
 
 if __name__ == '__main__':
+    auto_share()
     schedule.every(2).hours.at(":00").do(auto_share)
     while True:
         schedule.run_pending()
