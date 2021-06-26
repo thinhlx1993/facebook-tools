@@ -4,7 +4,7 @@ import schedule
 import pyautogui
 from datetime import datetime
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
-    relative_position, get_title, scheduler_table
+    relative_position, get_title, scheduler_table, logger
 
 
 def auto_share():
@@ -12,13 +12,13 @@ def auto_share():
     if scheduler:
         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
         video_id = scheduler['_id']
-        print(f"share video {video_id}")
+        logger.info(f"share video {video_id}")
         # time.sleep(2)
         # pyautogui.hotkey('winleft', 'd')
         # time.sleep(1)
         bar_x, bar_y = relative_position(0, 1000)
         width, height = relative_position(1920, 80)
-        print(bar_x, bar_y, width, height)
+        logger.info(bar_x, bar_y, width, height)
         browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
         # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
         for browser in browsers:
@@ -83,6 +83,7 @@ def auto_share():
                     pyautogui.hotkey('ctrl', 'f4')
                     time.sleep(1)
                     pyautogui.press('enter')
+                    logger.info("limited")
                 # click_to("dark_logo.PNG", confidence=0.9)
 
 

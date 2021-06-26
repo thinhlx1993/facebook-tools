@@ -14,7 +14,7 @@ from bson import ObjectId
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
 # fh.setLevel(logging.DEBUG)
