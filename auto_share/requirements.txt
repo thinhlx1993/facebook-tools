@@ -1,2 +1,2 @@
-rdpy
 pyautogui
+schedule
