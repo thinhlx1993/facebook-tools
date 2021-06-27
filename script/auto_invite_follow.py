@@ -110,5 +110,4 @@ if __name__ == '__main__':
         pyautogui.moveTo(x=1635, y=655, duration=0.5)
         pyautogui.click(x=1635, y=655)
         pyautogui.scroll(-800)
-        pyautogui.scroll(-800)
         time.sleep(1)
