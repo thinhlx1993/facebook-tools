@@ -14,13 +14,13 @@ from bson import ObjectId
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-# logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-# fh.setLevel(logging.DEBUG)
+fh.setLevel(logging.INFO)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-# ch.setLevel(logging.ERROR)
+ch.setLevel(logging.INFO)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)

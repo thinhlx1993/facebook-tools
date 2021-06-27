@@ -84,6 +84,8 @@ def auto_share():
                     pyautogui.hotkey('ctrl', 'f4')
                     time.sleep(1)
                     pyautogui.press('enter')
+                    time.sleep(1)
+                    pyautogui.hotkey('ctrl', 'f4')
                     logger.info("limited")
                 # click_to("dark_logo.PNG", confidence=0.9)
 
