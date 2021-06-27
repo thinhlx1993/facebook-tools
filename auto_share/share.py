@@ -19,7 +19,7 @@ def auto_share():
         # time.sleep(1)
         bar_x, bar_y = relative_position(0, 1000)
         width, height = relative_position(1920, 80)
-        logger.info(bar_x, bar_y, width, height)
+        print(bar_x, bar_y, width, height)
         browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
         # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
         for browser in browsers:
