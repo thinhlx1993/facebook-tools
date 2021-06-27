@@ -100,13 +100,13 @@ def watch_videos():
     for browser in browsers:
         pyautogui.click(browser)
         click_to("dark_logo.PNG", confidence=0.9)
-        pyautogui.click(relative_position(300, 54))
-        paste_text(f"facebook.com/watch")
-        pyautogui.hotkey('enter')
-        time.sleep(2)
+        # pyautogui.click(relative_position(300, 54))
+        # paste_text(f"facebook.com/watch")
+        # pyautogui.hotkey('enter')
+        click_to("start_btn.PNG")
         waiting_for("dark_logo.PNG", confidence=0.9)
 
-        for i in range(20):
+        for i in range(10):
             time.sleep(1)
             playbtn = check_exist("playbtn.PNG", confidence=0.85)
             if playbtn:
@@ -125,9 +125,9 @@ def watch_videos():
 
 
 if __name__ == '__main__':
-    auto_share()
-    # schedule.every(2).hours.at(":00").do(auto_share)
-    # schedule.every(1).hours.at(":30").do(watch_videos)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    # auto_share()
+    schedule.every(2).hours.at(":00").do(auto_share)
+    schedule.every(1).hours.at(":30").do(watch_videos)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
