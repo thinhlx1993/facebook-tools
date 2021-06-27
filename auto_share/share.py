@@ -90,9 +90,44 @@ def auto_share():
                 # click_to("dark_logo.PNG", confidence=0.9)
 
 
+def watch_videos():
+    logger.info("Start watch video")
+    bar_x, bar_y = relative_position(0, 1000)
+    width, height = relative_position(1920, 80)
+    print(bar_x, bar_y, width, height)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
+    # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
+    for browser in browsers:
+        pyautogui.click(browser)
+        click_to("dark_logo.PNG", confidence=0.9)
+        pyautogui.click(relative_position(300, 54))
+        paste_text(f"facebook.com/watch")
+        pyautogui.hotkey('enter')
+        time.sleep(2)
+        waiting_for("dark_logo.PNG", confidence=0.9)
+
+        for i in range(20):
+            time.sleep(1)
+            playbtn = check_exist("playbtn.PNG", confidence=0.85)
+            if playbtn:
+                pyautogui.moveTo(playbtn)
+                pyautogui.click(playbtn)
+            pyautogui.moveTo(relative_position(1027, 549), duration=1)
+            pyautogui.moveTo(relative_position(800, 649), duration=1)
+            playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
+            if playbtn:
+                pyautogui.moveTo(playbtn)
+                pyautogui.click(playbtn)
+
+        if random.choice([0, 1]):
+            click_to("like_btn.PNG", confidence=0.9, interval=3)
+        click_to("dark_logo.PNG", confidence=0.9)
+
+
 if __name__ == '__main__':
-    # auto_share()
+    # watch_videos()
     schedule.every(2).hours.at(":00").do(auto_share)
+    schedule.every(1).hours.at(":30").do(watch_videos)
     while True:
         schedule.run_pending()
         time.sleep(1)
