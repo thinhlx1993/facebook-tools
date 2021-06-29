@@ -106,14 +106,15 @@ class AutoVia:
 
     @staticmethod
     def change_language():
-        click_to("cookies_alive_1.PNG", confidence=0.95)
-        if check_exist("not_in_fun_screen_light.PNG", confidence=0.85):
-            click_to("not_in_fun_screen_light.PNG")
+        # click_to("cookies_alive_1.PNG", confidence=0.95)
+        # if check_exist("not_in_fun_screen_light.PNG", confidence=0.85):
+        #     click_to("not_in_fun_screen_light.PNG")
         if not check_exist("is_vietnam.PNG"):
-            click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-            click_to("setting_icon.PNG", confidence=0.85)
-            click_to("change_language.PNG", confidence=0.85)
-            time.sleep(2)
+            # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
+            # click_to("setting_icon.PNG", confidence=0.85)
+            # click_to("change_language.PNG", confidence=0.85)
+            click_to("change_language_1.PNG", confidence=0.8)
+            waiting_for("cookies_alive_1.PNG")
             pyautogui.scroll(-2000)
             deciscion(["vietnam.PNG", "plus_language.PNG"], confidence=0.7, region=(0, 500, 1920, 500))
             if check_exist("vietnam.PNG", region=(0, 500, 1920, 500), confidence=0.7):
@@ -130,10 +131,11 @@ class AutoVia:
         waiting_for("cookies_alive_1.PNG")
 
     def change_phone(self):
-        click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("cookies_alive_1.PNG")
+        # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        click_to("settings_page.PNG", confidence=0.8)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         contact = waiting_for("contact.PNG")
@@ -222,10 +224,11 @@ class AutoVia:
         return False
 
     def change_email(self):
-        click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("cookies_alive_1.PNG")
+        # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        click_to("settings_page.PNG", confidence=0.8)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         self.email_outlook, self.email_password = get_email()
@@ -260,10 +263,11 @@ class AutoVia:
 
     @staticmethod
     def remove_old_contact():
-        click_to("cookies_alive_1.PNG")
-        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("cookies_alive_1.PNG")
+        # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        click_to("settings_page.PNG", confidence=0.8)
         x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
         pyautogui.click(x, y)
         contact = waiting_for("contact.PNG")
@@ -275,9 +279,10 @@ class AutoVia:
             pyautogui.press('f5')
 
     def change_2fa_code(self):
-        click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
-        click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        # click_to("setting_icon.PNG", confidence=0.85)
+        click_to("settings_page.PNG", confidence=0.8)
         # x, y, btn_idx = deciscion(['account_proteted.PNG'], confidence=0.7)
         # pyautogui.click(x, y, interval=1)
         click_to('account_proteted.PNG', confidence=0.9)

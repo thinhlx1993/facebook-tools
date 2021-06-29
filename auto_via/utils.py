@@ -186,7 +186,7 @@ def get_code(session):
                         phone_table.insert_one(res_json)
                         return data_json['messages'][0]['otp']
                 current_time = time.time()
-                if current_time - st > 60:
+                if current_time - st > 120:
                     # waiting for 2 min
                     cancel_session(session)
                     return None
