@@ -75,7 +75,7 @@ class AutoVia:
                 if index_btn == 0 or \
                         index_btn == 3:
                     click_to(btns[index_btn], interval=3)
-                    self.fb_id = get_fb_id(self.cookie['_id'])
+                    self.fb_id = self.cookie['cookie'].split('|')[0]
                     logger.debug(f"facebook id: {self.fb_id}")
                     if self.fb_id is None:
                         pyautogui.hotkey('ctrl', 'w')
@@ -314,6 +314,18 @@ class AutoVia:
         x, y, _ = deciscion(["2fa_enabled.PNG", "otp_done.PNG", 'input_otp_success_1.PNG'])
         pyautogui.click(x, y, interval=1)
 
+    def sign_out_sessions(self):
+        click_to("settings_page.PNG", confidence=0.8)
+        click_to('account_proteted.PNG', confidence=0.9)
+        click_to("xem_them.PNG", confidence=0.8, waiting_time=20)
+        while True:
+            if check_exist("logout_all_devices.PNG", confidence=0.8):
+                click_to("logout_all_devices.PNG", confidence=0.8)
+                break
+            pyautogui.scroll(-100)
+            time.sleep(0.5)
+        click_to("sign_out.PNG")
+
     def reset_cookies(self):
         # clear cookies
         if self.cookie is not None:
@@ -383,6 +395,7 @@ class AutoVia:
             worker.show_meta_data()
             worker.save_results()
             worker.clear_metadata()
+            worker.sign_out_sessions()
             return True
         except Exception as ex:
             print(ex)

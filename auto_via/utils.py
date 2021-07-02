@@ -77,7 +77,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
                 click_to("passowrd_input_txt.PNG")
                 paste_text("Minh1234@")
                 click_to("input_password_next.PNG", confidence=0.7)
-        time.sleep(0.2)
+        time.sleep(0.3)
 
 
 def click_many(btn, region=None, confidence=0.8, log=True):
