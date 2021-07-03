@@ -402,7 +402,6 @@ class AutoVia:
             worker.show_meta_data()
 
             # remove old contact
-            worker.remove_old_contact()
 
             # change phone and forgot password
             status = worker.change_phone()
@@ -424,9 +423,10 @@ class AutoVia:
             worker.save_results()
             worker.clear_metadata()
             worker.sign_out_sessions()
+            worker.remove_old_contact()
 
             # set mail email
-            worker.set_mail_contact()
+            # worker.set_mail_contact()
             return True
         except Exception as ex:
             print(ex)
