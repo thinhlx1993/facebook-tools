@@ -70,27 +70,34 @@ class AutoVia:
                 click_to("next_long.PNG", waiting_time=5, confidence=0.7)
                 click_to("next_long_1.PNG", waiting_time=5, confidence=0.7)
 
-                buttons = ['locked.PNG', "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", "cookies_alive_1.PNG"]
-                _, _, index_btn = deciscion(buttons, confidence=0.95)
-                if index_btn == 3 or \
-                        index_btn == 4:
-                    click_to(buttons[index_btn], interval=1)
-                    self.fb_id = self.cookie['cookie'].split('|')[0]
-                    logger.debug(f"facebook id: {self.fb_id}")
-                    if self.fb_id is None:
-                        pyautogui.hotkey('ctrl', 'w')
-                        return False
+                # check point detect
+                pyautogui.click(x=264, y=50, interval=2)
+                pyautogui.hotkey('ctrl', 'c')
+                fb_link = clipboard.paste()
+                if 'checkpoint' not in fb_link:
+                    buttons = ['locked.PNG', "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", "cookies_alive_1.PNG"]
+                    _, _, index_btn = deciscion(buttons, confidence=0.95)
+                    if index_btn == 3 or \
+                            index_btn == 4:
+                        click_to(buttons[index_btn], interval=1)
+                        self.fb_id = self.cookie['cookie'].split('|')[0]
+                        logger.debug(f"facebook id: {self.fb_id}")
+                        if self.fb_id is None:
+                            pyautogui.hotkey('ctrl', 'w')
+                            return False
 
-                    # check fb_id is not exist on database
-                    exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
-                    if not exist_fb_id:
-                        click_to(buttons[index_btn])
-                        return True
+                        # check fb_id is not exist on database
+                        exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
+                        if not exist_fb_id:
+                            click_to(buttons[index_btn])
+                            return True
+                        else:
+                            # clear cookies
+                            myquery = {"_id": self.cookie['_id']}
+                            newvalues = {"$set": {"used": True, "failed": False}}
+                            cookies_table.update_one(myquery, newvalues)
                     else:
-                        # clear cookies
-                        myquery = {"_id": self.cookie['_id']}
-                        newvalues = {"$set": {"used": True, "failed": False}}
-                        cookies_table.update_one(myquery, newvalues)
+                        cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
                 else:
                     cookies_table.update_one({"_id": self.cookie['_id']}, {"$set": {"failed": True, "used": True}})
             else:
