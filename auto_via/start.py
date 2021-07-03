@@ -330,14 +330,15 @@ class AutoVia:
     def sign_out_sessions(self):
         click_to("settings_page.PNG", confidence=0.8)
         click_to('account_proteted.PNG', confidence=0.9)
-        click_to("xem_them.PNG", confidence=0.8, waiting_time=20)
-        while True:
-            if check_exist("logout_all_devices.PNG", confidence=0.8):
-                click_to("logout_all_devices.PNG", confidence=0.8)
-                break
-            pyautogui.scroll(-300)
-            time.sleep(0.5)
-        click_to("sign_out.PNG")
+        if waiting_for("xem_them.PNG", waiting_time=20):
+            click_to("xem_them.PNG", confidence=0.8)
+            while True:
+                if check_exist("logout_all_devices.PNG", confidence=0.8):
+                    click_to("logout_all_devices.PNG", confidence=0.8)
+                    break
+                pyautogui.scroll(-300)
+                time.sleep(0.5)
+            click_to("sign_out.PNG")
 
     def reset_cookies(self):
         # clear cookies
