@@ -340,6 +340,18 @@ class AutoVia:
                 time.sleep(0.5)
             click_to("sign_out.PNG")
 
+    def set_mail_contact(self):
+        click_to("settings_page.PNG", confidence=0.8)
+        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
+        pyautogui.click(x, y)
+        contact = waiting_for("contact.PNG")
+        if contact:
+            contact_x, contact_y = contact
+            time.sleep(1)
+            click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7,
+                     check_close=False)
+            click_to("chon_lam_email_chinh.PNG")
+
     def reset_cookies(self):
         # clear cookies
         if self.cookie is not None:
@@ -389,6 +401,9 @@ class AutoVia:
             worker.change_language()
             worker.show_meta_data()
 
+            # remove old contact
+            worker.remove_old_contact()
+
             # change phone and forgot password
             status = worker.change_phone()
             worker.show_meta_data()
@@ -403,13 +418,15 @@ class AutoVia:
                 self.reset_cookies()
                 return False
 
-            worker.remove_old_contact()
             worker.show_meta_data()
             worker.change_2fa_code()
             worker.show_meta_data()
             worker.save_results()
             worker.clear_metadata()
             worker.sign_out_sessions()
+
+            # set mail email
+            worker.set_mail_contact()
             return True
         except Exception as ex:
             print(ex)
