@@ -267,6 +267,7 @@ class AutoVia:
             clipboard.copy(href)
             pyautogui.hotkey('ctrl', 'v', interval=1)
             pyautogui.press('enter')
+            waiting_for("cookies_alive_1.PNG")
             return True
         else:
             click_to("close_dialog.PNG")
