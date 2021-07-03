@@ -325,11 +325,22 @@ def get_email():
                 try:
                     credentials = Credentials(email_outlook, email_password)
                     account = Account(email_outlook, credentials=credentials, autodiscover=True)
-                    myquery = {"_id": email['_id']}
-                    newvalues = {"$set": {"used": True}}
-                    email_table.update_one(myquery, newvalues)
-                    logger.debug(f"email is ready: {email_outlook}")
-                    return email_outlook, email_password
+                    email_ok = True
+                    for item in account.inbox.all().order_by('-datetime_received')[:50]:
+                        if item.sender.email_address == 'security@facebookmail.com':
+                            myquery = {"_id": email['_id']}
+                            newvalues = {"$set": {"failed": True, "used": True}}
+                            email_table.update_one(myquery, newvalues)
+                            logger.error(f"email is not accessible: {email_outlook}")
+                            email_ok = False
+                            break
+
+                    if email_ok:
+                        myquery = {"_id": email['_id']}
+                        newvalues = {"$set": {"used": True}}
+                        email_table.update_one(myquery, newvalues)
+                        logger.debug(f"email is ready: {email_outlook}")
+                        return email_outlook, email_password
                 except Exception as ex:
                     myquery = {"_id": email['_id']}
                     newvalues = {"$set": {"failed": True, "used": True}}
