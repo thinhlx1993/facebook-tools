@@ -5,7 +5,7 @@ import clipboard
 import pyautogui
 import pyotp
 
-from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
+from utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
     logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session, \
     get_email_cenationtshirt, get_emails
@@ -70,11 +70,11 @@ class AutoVia:
                 click_to("next_long.PNG", waiting_time=5, confidence=0.7)
                 click_to("next_long_1.PNG", waiting_time=5, confidence=0.7)
 
-                btns = ["cookies_alive_1.PNG", "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", 'locked.PNG']
-                _, _, index_btn = deciscion(btns, confidence=0.85)
-                if index_btn == 0 or \
-                        index_btn == 3:
-                    click_to(btns[index_btn], interval=3)
+                buttons = ['locked.PNG', "cookies_failed.PNG", 'cookies_failed_1.PNG', "dark_logo.PNG", "cookies_alive_1.PNG"]
+                _, _, index_btn = deciscion(buttons, confidence=0.95)
+                if index_btn == 3 or \
+                        index_btn == 4:
+                    click_to(buttons[index_btn], interval=1)
                     self.fb_id = self.cookie['cookie'].split('|')[0]
                     logger.debug(f"facebook id: {self.fb_id}")
                     if self.fb_id is None:
@@ -84,7 +84,7 @@ class AutoVia:
                     # check fb_id is not exist on database
                     exist_fb_id = via_share_table.find_one({"fb_id": self.fb_id})
                     if not exist_fb_id:
-                        click_to(btns[index_btn])
+                        click_to(buttons[index_btn])
                         return True
                     else:
                         # clear cookies
@@ -209,9 +209,14 @@ class AutoVia:
                 otp_code = get_code(session)
                 if otp_code is not None:
                     pyautogui.click(x=1767, y=520, interval=1)  # click to space
-                    click_to("forgot_password_input_otp.PNG")
+                    buttons = ['forgot_password_input_otp.PNG', 'forgot_password_input_otp_1.PNG']
+                    _, _, btn_index = deciscion(buttons, confidence=0.8)
+                    click_to(buttons[btn_index])
                     paste_text(otp_code)
-                    click_to("forgot_password_next.PNG")
+                    buttons = ["forgot_password_next.PNG", 'forgot_password_next_1.PNG']
+                    _, _, btn_index = deciscion(buttons, confidence=0.8)
+                    click_to(buttons[btn_index])
+
                     click_to("new_password_inp.PNG")
                     paste_text("Minh1234@")
                     click_to("forgot_password_next.PNG", interval=5)
@@ -322,7 +327,7 @@ class AutoVia:
             if check_exist("logout_all_devices.PNG", confidence=0.8):
                 click_to("logout_all_devices.PNG", confidence=0.8)
                 break
-            pyautogui.scroll(-100)
+            pyautogui.scroll(-300)
             time.sleep(0.5)
         click_to("sign_out.PNG")
 

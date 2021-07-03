@@ -52,7 +52,7 @@ via_share_table = db['via_share']
 
 
 def random_interval():
-    return random.uniform(0.5, 2)
+    return random.uniform(0.5, 1.5)
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
@@ -65,7 +65,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
         start_count += 1
         if ret:
             btn_x, btn_y = ret
-            pyautogui.moveTo(btn_x, btn_y, duration=0.5)
+            pyautogui.moveTo(btn_x, btn_y, duration=0.7)
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
             break
@@ -186,8 +186,8 @@ def get_code(session):
                         phone_table.insert_one(res_json)
                         return data_json['messages'][0]['otp']
                 current_time = time.time()
-                if current_time - st > 120:
-                    # waiting for 2 min
+                if current_time - st > 200:
+                    # waiting for 5 min
                     cancel_session(session)
                     return None
         except Exception as ex:
@@ -219,7 +219,7 @@ def get_out_look(email_outlook, email_password):
                 for tag in all_tags:
                     # href="https://www.facebook.com/confirmcontact.php?c=60029&z=0&gfid=AQDLZ-4fI-MohTeh-Ls"
                     href = tag.get('href')
-                    if 'confirmcontact' in href:
+                    if 'confirmcontact' in href and email_outlook in str(item.body):
                         print(href)
                         break
 
