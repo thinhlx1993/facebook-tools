@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # Create a VideoCapture object and read from input file
     # If the input is the camera, pass 0 instead of the video file name
     file_name = "Oddly Satisfying Videos"
-    cap = cv2.VideoCapture('downloaded/Daily Dose of Satisfaction/1 Hour Oddly Satisfying Videos- Calming with Satisfy Relaxing Music-mHZ0sXvBshY.mkv')
+    cap = cv2.VideoCapture('downloaded/Daily Dose of Satisfaction/1 Hour Oddly Satisfying Videos- Calming with Satisfy Relaxing Music-whPY5mFhpAs.mkv')
     fps = cap.get(cv2.CAP_PROP_FPS)
 
     prev_frame = None
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     frame_height = int(cap.get(4))
 
     # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-    start_index = 40
+    start_index = 60
     file_out = f'images/{file_name} Episode {start_index + 1}.avi'
     print(f"file out {file_out}")
     out = cv2.VideoWriter(file_out, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), fps, (frame_width, frame_height))
