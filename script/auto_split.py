@@ -49,7 +49,8 @@ if __name__ == '__main__':
         # Create a VideoCapture object and read from input file
         # If the input is the camera, pass 0 instead of the video file name
         file_name = "Oddly Satisfying Videos"
-        cap = cv2.VideoCapture(f'downloaded/Daily Dose of Satisfaction/{file}')
+        input_file = f'downloaded/Daily Dose of Satisfaction/{file}'
+        cap = cv2.VideoCapture(input_file)
         fps = cap.get(cv2.CAP_PROP_FPS)
 
         prev_frame = None
@@ -118,3 +119,5 @@ if __name__ == '__main__':
 
         # Closes all the frames
         cv2.destroyAllWindows()
+
+        os.rename(input_file, f'split/Daily Dose of Satisfaction/{file}')
