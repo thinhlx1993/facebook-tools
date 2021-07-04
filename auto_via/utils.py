@@ -28,7 +28,7 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 logger = logging.getLogger('application')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('app.log')
+fh = logging.FileHandler('app.log', 'w', 'utf-8')
 # fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
@@ -149,11 +149,13 @@ def get_new_phone():
                 res_json['_id'] = str(uuid.uuid4())
                 res_json['api_type'] = 'get_new_phone'
                 phone_table.insert_one(res_json)
+                logger.info(f"Get new phone: {res_json['data']['phone_number']}")
                 return res_json['data']['phone_number'], res_json['data']['session']
-            time.sleep(2)
+            time.sleep(5)
 
 
 def get_exist_phone(phone_number):
+    logger.info("Get exist phone")
     api_uri = f"https://otpsim.com/api/phones/request?token=8c4be439c12d0e53fd21bfb25cd07b46&service=7&number={phone_number}"
     res = requests.get(api_uri)
     if res.status_code == 200:

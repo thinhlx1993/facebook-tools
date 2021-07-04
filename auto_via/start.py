@@ -362,7 +362,7 @@ class AutoVia:
 
     def save_results(self):
         pyautogui.hotkey('ctrl', 'w')
-        with open("output.txt", 'a', encoding='utf-8') as output_file:
+        with open("old_via/via-4-7.txt", 'a', encoding='utf-8') as output_file:
             output_file.write(f"{self.fb_id}|Minh1234@|{self.secret_key}|{self.email_outlook}|{self.email_password}|{self.phone_number}\n")
             output_file.close()
 
