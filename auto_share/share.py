@@ -13,7 +13,7 @@ def auto_share():
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
     # video_id = scheduler['video_id']
-    video_id = "348049076708364"
+    video_id = "403726987621485"
     logger.info(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
@@ -104,6 +104,7 @@ def watch_videos():
         # pyautogui.click(relative_position(300, 54))
         # paste_text(f"facebook.com/watch")
         # pyautogui.hotkey('enter')
+        waiting_for("start_btn.PNG", confidence=0.9, waiting_time=20)
         if check_exist("start_btn.PNG"):
             click_to("start_btn.PNG")
             waiting_for("dark_logo.PNG", confidence=0.9)
