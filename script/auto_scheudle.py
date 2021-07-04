@@ -4,8 +4,7 @@ import pyautogui
 from datetime import datetime
 import clipboard
 
-from utils import logger, click_to, click_many, check_exist, waiting_for
-
+from utils import logger, click_to, click_many, check_exist, waiting_for, paste_text, get_title
 
 os.makedirs('uploaded', exist_ok=True)
 
@@ -14,10 +13,10 @@ if __name__ == '__main__':
     dir_path = r"C:\code\facebook-tools\script\upload"
     while True:
         try:
-            default_date = datetime.strptime(datetime.now(), '%d/%m/%Y %H:%M')
-            start_date = pyautogui.prompt(f'Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: {default_date}')
-            if start_date == "":
-                start_date = default_date
+            # default_date = datetime.strptime(datetime.now(), '%d/%m/%Y %H:%M')
+            start_date = pyautogui.prompt(f'Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: d/m/YYYY H:M')
+            # if start_date == "":
+            #     start_date = default_date
             date_time_obj = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
             date_time_obj_ts = date_time_obj.timestamp()
             break
@@ -38,11 +37,15 @@ if __name__ == '__main__':
         title = waiting_for("title.png")
         title_x, title_y = title
         pyautogui.click(title_x + 50, title_y)
-        filename_without_ext = os.path.splitext(filename)[0] + " #Pansy Shop"
+        filename_without_ext = os.path.splitext(filename)[0] + " #Crafting #Relaxing"
         # fix title
         if '-' in filename_without_ext:
-            filename_without_ext = filename_without_ext.split('-')[1] + " #PansyShop #Crafting #Relaxing"
-        pyautogui.typewrite(filename_without_ext)
+            filename_without_ext = filename_without_ext.split('-')[1]
+        paste_text(filename_without_ext)
+        description = get_title()
+        pyautogui.click(title_x + 50, title_y+70)
+        paste_text(description)
+
         click_to("next.png")
         click_to("later.PNG", waiting_time=2)
         click_to("schedule.PNG")
@@ -69,7 +72,7 @@ if __name__ == '__main__':
         click_to("finish.png")
         waiting_for("done.png")
         click_to("close_success.PNG", region=(1000, 200, 300, 400))
-        date_time_obj_ts += 10800
+        date_time_obj_ts += 7200
         move_to_uploaded = f"C:\\code\\facebook-tools\\script\\uploaded\\{filename}"
         if not os.path.isfile(move_to_uploaded):
             os.rename(f"{dir_path}\\{filename}", move_to_uploaded)
