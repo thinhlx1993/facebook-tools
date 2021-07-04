@@ -1,3 +1,4 @@
+import clipboard
 import pyautogui
 import logging
 import time
@@ -61,3 +62,16 @@ def waiting_for(btn, region=None):
         if ret:
             x, y = ret
             return x, y
+
+
+def paste_text(inp_text):
+    clipboard.copy(inp_text)
+    pyautogui.hotkey('ctrl', 'v', interval=0.2)
+
+
+def get_title():
+    with open("title.txt") as file:
+        lines = [line.strip() for line in file.readlines() if line.strip() != ""]
+        title = random.choice(lines)
+        logger.info(title)
+        return title

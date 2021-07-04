@@ -4,8 +4,7 @@ import pyautogui
 from datetime import datetime
 import clipboard
 
-from utils import logger, click_to, click_many, check_exist, waiting_for
-
+from utils import logger, click_to, click_many, check_exist, waiting_for, paste_text, get_title
 
 os.makedirs('uploaded', exist_ok=True)
 
@@ -42,7 +41,11 @@ if __name__ == '__main__':
         # fix title
         if '-' in filename_without_ext:
             filename_without_ext = filename_without_ext.split('-')[1] + " #PansyShop #Crafting #Relaxing"
-        pyautogui.typewrite(filename_without_ext)
+        paste_text(filename_without_ext)
+        description = get_title()
+        pyautogui.click(title_x + 50, title_y+70)
+        paste_text(description)
+
         click_to("next.png")
         click_to("later.PNG", waiting_time=2)
         click_to("schedule.PNG")
