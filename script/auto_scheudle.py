@@ -14,10 +14,10 @@ if __name__ == '__main__':
     dir_path = r"C:\code\facebook-tools\script\upload"
     while True:
         try:
-            default_date = datetime.strptime(datetime.now(), '%d/%m/%Y %H:%M')
-            start_date = pyautogui.prompt(f'Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: {default_date}')
-            if start_date == "":
-                start_date = default_date
+            # default_date = datetime.strptime(datetime.now(), '%d/%m/%Y %H:%M')
+            start_date = pyautogui.prompt(f'Nhập thời gian bắt đầu lên lịch. \nChú ý định dạng kiểu: d/m/YYYY H:M')
+            # if start_date == "":
+            #     start_date = default_date
             date_time_obj = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
             date_time_obj_ts = date_time_obj.timestamp()
             break
