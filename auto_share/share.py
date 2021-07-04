@@ -104,25 +104,26 @@ def watch_videos():
         # pyautogui.click(relative_position(300, 54))
         # paste_text(f"facebook.com/watch")
         # pyautogui.hotkey('enter')
-        click_to("start_btn.PNG")
-        waiting_for("dark_logo.PNG", confidence=0.9)
+        if check_exist("start_btn.PNG"):
+            click_to("start_btn.PNG")
+            waiting_for("dark_logo.PNG", confidence=0.9)
 
-        for i in range(10):
-            time.sleep(1)
-            playbtn = check_exist("playbtn.PNG", confidence=0.85)
-            if playbtn:
-                pyautogui.moveTo(playbtn)
-                pyautogui.click(playbtn)
-            pyautogui.moveTo(relative_position(1027, 549), duration=1)
-            pyautogui.moveTo(relative_position(800, 649), duration=1)
-            playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
-            if playbtn:
-                pyautogui.moveTo(playbtn)
-                pyautogui.click(playbtn)
+            for i in range(20):
+                time.sleep(1)
+                playbtn = check_exist("playbtn.PNG", confidence=0.85)
+                if playbtn:
+                    pyautogui.moveTo(playbtn)
+                    pyautogui.click(playbtn)
+                pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                pyautogui.moveTo(relative_position(800, 649), duration=1)
+                playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
+                if playbtn:
+                    pyautogui.moveTo(playbtn)
+                    pyautogui.click(playbtn)
 
-        if random.choice([0, 1]):
-            click_to("like_btn.PNG", confidence=0.9, interval=3)
-        click_to("dark_logo.PNG", confidence=0.9)
+            if random.choice([0, 1]):
+                click_to("like_btn.PNG", confidence=0.9, interval=3)
+            click_to("dark_logo.PNG", confidence=0.9)
 
 
 if __name__ == '__main__':
