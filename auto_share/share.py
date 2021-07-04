@@ -126,8 +126,8 @@ def watch_videos():
 
 
 if __name__ == '__main__':
-    auto_share()
-    # watch_videos()
+    # auto_share()
+    watch_videos()
     # schedule.every(2).hours.at(":00").do(auto_share)
     # schedule.every(1).hours.at(":30").do(watch_videos)
     # while True:
