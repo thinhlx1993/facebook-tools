@@ -13,7 +13,7 @@ def auto_share():
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
     # video_id = scheduler['video_id']
-    video_id = "403726987621485"
+    video_id = "872233206733499"
     logger.info(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
