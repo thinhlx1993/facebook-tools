@@ -21,7 +21,7 @@ with open("input.txt", encoding='utf-8') as file:
                 click_to("import.png")
 
             left, top = waiting_for("import.png")
-            pyautogui.click(left - 200, top + 160)
+            pyautogui.click(left, top + 160)
             paste_text(line)
             click_to("import.png")
             click_to("check_page.PNG")
