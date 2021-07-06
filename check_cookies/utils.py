@@ -1,26 +1,19 @@
 import clipboard
-import requests
 import logging
-import pymongo
 import pyautogui
 import time
 import random
-import pyotp
-import uuid
-import re
-from bs4 import BeautifulSoup
-from bson import ObjectId
 
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-# fh.setLevel(logging.DEBUG)
+fh.setLevel(logging.INFO)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-# ch.setLevel(logging.ERROR)
+ch.setLevel(logging.INFO)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -28,15 +21,6 @@ ch.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(fh)
 logger.addHandler(ch)
-
-
-# client = pymongo.MongoClient("mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-# db = client.test
-# phone_table = db['phone']
-# email_table = db['emails']
-# cookies_table = db['cookies']
-# via_share_table = db['via_share']
-# scheduler_table = db['scheduler']
 
 
 def random_interval():
@@ -113,7 +97,7 @@ def get_title():
     with open("title.txt") as file:
         lines = [line.strip() for line in file.readlines() if line.strip() != ""]
         title = random.choice(lines)
-        print(title)
+        logger.info(title)
         return title
 
 
