@@ -9,7 +9,7 @@ def inviting():
     while True:
         # waiting_for("send_invite_group.PNG")
         time.sleep(1)
-        click_many("check_box.PNG", confidence=0.95)
+        click_many("check_box.PNG", confidence=0.98)
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
         if check_exist("da_chon.PNG"):
@@ -31,6 +31,6 @@ def inviting():
 
 if __name__ == '__main__':
     number_invited = 0
-    click_to("start_invite_group.PNG")
+    # click_to("start_invite_group.PNG")
     inviting()
     click_to("send_invite_group.PNG")
