@@ -12,20 +12,21 @@ def inviting():
         click_many("check_box.PNG", confidence=0.95)
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
-        x, y = waiting_for("da_chon.PNG", confidence=0.9)
-        img = pyautogui.screenshot(region=(x - 50, y - 30, 200, 50))
-        # img.show()
-        # custom_config = r'--oem 3 --psm 6'
-        texts = pytesseract.image_to_string(img)
-        for text in texts.split(' '):
-            try:
-                text = text.strip()
-                number_invited = int(text)
-                print(f"number invited: {number_invited}")
-                if number_invited > 300:
-                    return True
-            except:
-                pass
+        if check_exist("da_chon.PNG"):
+            x, y = waiting_for("da_chon.PNG", confidence=0.9)
+            img = pyautogui.screenshot(region=(x - 50, y - 30, 200, 50))
+            # img.show()
+            # custom_config = r'--oem 3 --psm 6'
+            texts = pytesseract.image_to_string(img)
+            for text in texts.split(' '):
+                try:
+                    text = text.strip()
+                    number_invited = int(text)
+                    print(f"number invited: {number_invited}")
+                    if number_invited > 300:
+                        return True
+                except:
+                    pass
 
 
 if __name__ == '__main__':
