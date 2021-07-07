@@ -63,6 +63,7 @@ def waiting_for(btn, region=None, confidence=.8, waiting_time=100):
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
             return ret
+    return None
 
 
 def paste_text(inp_text):
