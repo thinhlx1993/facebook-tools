@@ -31,6 +31,6 @@ def inviting():
 
 if __name__ == '__main__':
     number_invited = 0
-    # click_to("start_invite_group.PNG")
+    click_to("start_invite_group.PNG")
     inviting()
     click_to("send_invite_group.PNG")
