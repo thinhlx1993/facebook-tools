@@ -14,7 +14,7 @@ def inviting():
         pyautogui.scroll(-700)
         if check_exist("da_chon.PNG"):
             x, y = waiting_for("da_chon.PNG", confidence=.8)
-            img = pyautogui.screenshot(region=(x - 50, y - 30, 200, 50))
+            img = pyautogui.screenshot(region=(x - 150, y - 30, 200, 50))
             # img.show()
             # custom_config = r'--oem 3 --psm 6'
             texts = pytesseract.image_to_string(img)
@@ -31,21 +31,6 @@ def inviting():
 
 if __name__ == '__main__':
     number_invited = 0
-    # click_to("start_invite_group.PNG")
-    # inviting()
-    # click_to("send_invite_group.PNG")
-    if check_exist("da_chon.PNG"):
-        x, y = waiting_for("da_chon.PNG", confidence=.8)
-        img = pyautogui.screenshot(region=(x - 150, y - 30, 200, 50))
-        # img.show()
-        # custom_config = r'--oem 3 --psm 6'
-        texts = pytesseract.image_to_string(img)
-        for text in texts.split(' '):
-            try:
-                text = text.strip()
-                number_invited = int(text)
-                print(f"number invited: {number_invited}")
-                # if number_invited > 300:
-                    # return True
-            except:
-                pass
+    click_to("start_invite_group.PNG")
+    inviting()
+    click_to("send_invite_group.PNG")
