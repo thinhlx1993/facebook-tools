@@ -18,19 +18,20 @@ def inviting():
             # img.show()
             # custom_config = r'--oem 3 --psm 6'
             texts = pytesseract.image_to_string(img)
-            for text in texts.split(' '):
-                try:
-                    text = text.strip()
-                    number_invited = int(text)
-                    print(f"number invited: {number_invited}")
-                    if number_invited > 300:
-                        return True
-                except:
-                    pass
+            if texts:
+                for text in texts.split(' '):
+                    try:
+                        text = text.strip()
+                        number_invited = int(text)
+                        print(f"number invited: {number_invited}")
+                        if number_invited > 300:
+                            return True
+                    except:
+                        pass
 
 
 if __name__ == '__main__':
     number_invited = 0
-    click_to("start_invite_group.PNG")
+    # click_to("start_invite_group.PNG")
     inviting()
     click_to("send_invite_group.PNG")

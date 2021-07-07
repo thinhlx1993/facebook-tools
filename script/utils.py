@@ -55,13 +55,14 @@ def check_exist(btn, region=None):
     return exist
 
 
-def waiting_for(btn, region=None, confidence=.8):
+def waiting_for(btn, region=None, confidence=.8, waiting_time=100):
     print(f"Watiing for {btn}")
-    while True:
+    start_count = 0
+    while start_count < waiting_time:
+        start_count += 1
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
-            x, y = ret
-            return x, y
+            return ret
 
 
 def paste_text(inp_text):
