@@ -13,7 +13,7 @@ def inviting():
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
         if check_exist("da_chon.PNG"):
-            x, y = waiting_for("da_chon.PNG", confidence=0.9)
+            x, y = waiting_for("da_chon.PNG", confidence=.8)
             img = pyautogui.screenshot(region=(x - 50, y - 30, 200, 50))
             # img.show()
             # custom_config = r'--oem 3 --psm 6'
