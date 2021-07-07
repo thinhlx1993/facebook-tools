@@ -7,7 +7,7 @@ import pytesseract
 
 def inviting():
     while True:
-        waiting_for("send_invite_group.PNG")
+        # waiting_for("send_invite_group.PNG")
         time.sleep(1)
         click_many("check_box.PNG", confidence=0.95)
         pyautogui.moveTo(1035, 751)
