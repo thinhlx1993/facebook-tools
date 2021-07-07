@@ -1,26 +1,19 @@
 import clipboard
-import requests
 import logging
-import pymongo
 import pyautogui
 import time
 import random
-import pyotp
-import uuid
-import re
-from bs4 import BeautifulSoup
-from bson import ObjectId
 
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('app.log')
-# fh.setLevel(logging.DEBUG)
+fh = logging.FileHandler('app.log', 'w', 'utf-8')
+fh.setLevel(logging.INFO)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-# ch.setLevel(logging.ERROR)
+ch.setLevel(logging.INFO)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -28,15 +21,6 @@ ch.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(fh)
 logger.addHandler(ch)
-
-
-# client = pymongo.MongoClient("mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-# db = client.test
-# phone_table = db['phone']
-# email_table = db['emails']
-# cookies_table = db['cookies']
-# via_share_table = db['via_share']
-# scheduler_table = db['scheduler']
 
 
 def random_interval():
@@ -90,14 +74,18 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
     return None
 
 
-def deciscion(btns, region=None, confidence=0.8):
-    while True:
+def deciscion(btns, region=None, confidence=0.8, waiting_time=20):
+    start_count = 0
+    while start_count < waiting_time:
+        start_count += 1
         logger.debug(f"Waiting for {btns}")
         for btn_index, btn in enumerate(btns):
             ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
             if ret:
                 x, y = ret
                 return x, y, btn_index
+        time.sleep(0.2)
+    return None
 
 
 def typeing_text(inp_text):
@@ -113,7 +101,7 @@ def get_title():
     with open("title.txt") as file:
         lines = [line.strip() for line in file.readlines() if line.strip() != ""]
         title = random.choice(lines)
-        print(title)
+        logger.info(title)
         return title
 
 
