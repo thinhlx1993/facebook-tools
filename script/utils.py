@@ -55,10 +55,10 @@ def check_exist(btn, region=None):
     return exist
 
 
-def waiting_for(btn, region=None):
+def waiting_for(btn, region=None, confidence=.8):
     print(f"Watiing for {btn}")
     while True:
-        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=.8, region=region)
+        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
             x, y = ret
             return x, y
