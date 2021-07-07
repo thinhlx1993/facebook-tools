@@ -12,7 +12,7 @@ def inviting():
         click_many("check_box.PNG", confidence=0.98)
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
-        da_chon_btn = waiting_for("da_chon.PNG", confidence=.8, waiting_time=20)
+        da_chon_btn = check_exist("da_chon.PNG")
         if da_chon_btn:
             x, y = da_chon_btn
             img = pyautogui.screenshot(region=(x - 150, y - 30, 200, 50))
