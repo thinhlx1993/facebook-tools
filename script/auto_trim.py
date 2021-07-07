@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from image_similarity_measures.quality_metrics import ssim
@@ -17,7 +18,9 @@ if __name__ == '__main__':
 
         cap = cv2.VideoCapture(f"{root_folder}/{file}")
         fps = cap.get(cv2.CAP_PROP_FPS)
-
+        time_per_frame = 1/fps
+        start_time = 0
+        counting = False
         prev_frame = None
         similar = None
         # Check if camera opened successfully
@@ -32,7 +35,7 @@ if __name__ == '__main__':
         file_out = f"{root_folder}/done/{os.path.splitext(file)[0]}.mp4"
         out = cv2.VideoWriter(file_out, cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), fps, (frame_width, frame_height))
 
-        scale_percent = 25  # percent of original img size
+        scale_percent = 10  # percent of original img size
         width = int(frame_width * scale_percent / 100)
         height = int(frame_height * scale_percent / 100)
         dim = (width, height)
@@ -45,24 +48,33 @@ if __name__ == '__main__':
             ret, frame = cap.read()
             # convert the images to grayscale
             if ret:
-                if total_frame % fps*2 == 0:
-                    # Display the resulting frame
-                    # cv2.imshow('Frame', frame)
-                    if prev_frame is not None:
-                        origin_frame = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
-                        prev_img = cv2.resize(prev_frame, dim, interpolation=cv2.INTER_AREA)
-                        similar = ssim(origin_frame, prev_img)
+                current_time = datetime.datetime.utcfromtimestamp(total_frame/fps).strftime("%H:%M:%S")
+                # Display the resulting frame
+
+                if prev_frame is not None:
+                    frame = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+                    # print(frame.shape)
+                    # prev_img = cv2.resize(prev_frame, dim, interpolation=cv2.INTER_AREA)
+                    if prev_frame.shape[0] == 108:
+                        similar = ssim(frame, prev_frame)
                         # prev_frame_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
                         # original_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                         # similar = compare_images(frame, prev_frame, 'demo')
                         print("SSIM: %.2f FILE_OUT: %s Time %.1f" % (similar, file_out, round(total_frame/(fps*60), 1)))
-                    prev_frame = frame
+                prev_frame = frame
 
                 if similar:
-                    if similar >= 0.85 and number_frame/fps < 5:
+                    if similar >= 0.9 and number_frame/fps < 10:
                         number_frame += 1
+                        if number_frame == 1:
+                            print(f"start counting {current_time}")
+                            counting = True
                         out.write(frame)
+                        # cv2.imshow('Frame', frame)
                     if similar < 0.85:
+                        if counting == True:
+                            counting = False
+                            # print(f"end counting {current_time}")
                         number_frame = 0
                         print(total_frame/fps)
 
@@ -70,10 +82,6 @@ if __name__ == '__main__':
                 # Press Q on keyboard to  exit
                 if cv2.waitKey(25) & 0xFF == ord('q'):
                     break
-
-            # Break the loop
-            else:
-                break
 
         # When everything done, release the video capture object
         cap.release()
