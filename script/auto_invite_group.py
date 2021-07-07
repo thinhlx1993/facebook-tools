@@ -12,10 +12,10 @@ def inviting():
         click_many("check_box.PNG", confidence=0.98)
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
-        da_chon_btn = check_exist("da_chon.PNG")
+        da_chon_btn = check_exist("da_chon.PNG", confidence=.7)
         if da_chon_btn:
-            x, y = da_chon_btn
-            img = pyautogui.screenshot(region=(x - 150, y - 30, 200, 50))
+            x, y, w, h = da_chon_btn
+            img = pyautogui.screenshot(region=(x - 150, y, 350, 20))
             # img.show()
             # custom_config = r'--oem 3 --psm 6'
             texts = pytesseract.image_to_string(img)
@@ -36,3 +36,11 @@ if __name__ == '__main__':
     click_to("start_invite_group.PNG")
     inviting()
     click_to("send_invite_group.PNG")
+    # da_chon_btn = check_exist("da_chon.PNG", confidence=.7)
+    # if da_chon_btn:
+    #     x, y,w,h = da_chon_btn
+    #     img = pyautogui.screenshot(region=(x - 150, y, 350, 20))
+    #     img.show()
+    #     # custom_config = r'--oem 3 --psm 6'
+    #     texts = pytesseract.image_to_string(img)
+    #     print(texts)

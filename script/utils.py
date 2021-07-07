@@ -49,8 +49,8 @@ def click_many(btn, region=None, confidence=0.8):
     return number_element
 
 
-def check_exist(btn, region=None):
-    exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
+def check_exist(btn, region=None, confidence=0.8):
+    exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     print(f"Check exist {btn} result {exist}")
     return exist
 
