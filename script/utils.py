@@ -24,7 +24,7 @@ logger.addHandler(ch)
 
 
 def random_interval():
-    return random.uniform(0, 1)
+    return random.uniform(0, 0.5)
 
 
 def click_to(btn, region=None, waiting_time=1000):
