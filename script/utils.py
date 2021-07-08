@@ -24,7 +24,7 @@ logger.addHandler(ch)
 
 
 def random_interval():
-    return random.uniform(0, 1)
+    return random.uniform(0, 0.5)
 
 
 def click_to(btn, region=None, waiting_time=1000):
@@ -49,19 +49,21 @@ def click_many(btn, region=None, confidence=0.8):
     return number_element
 
 
-def check_exist(btn, region=None):
-    exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
+def check_exist(btn, region=None, confidence=0.8):
+    exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     print(f"Check exist {btn} result {exist}")
     return exist
 
 
-def waiting_for(btn, region=None):
+def waiting_for(btn, region=None, confidence=.8, waiting_time=100):
     print(f"Watiing for {btn}")
-    while True:
-        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=.8, region=region)
+    start_count = 0
+    while start_count < waiting_time:
+        start_count += 1
+        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
-            x, y = ret
-            return x, y
+            return ret
+    return None
 
 
 def paste_text(inp_text):
