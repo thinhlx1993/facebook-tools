@@ -2,10 +2,10 @@ import pyperclip
 import os
 from check_cookies.utils import *
 
-if os.path.isfile("pass.txt"):
-    os.remove("pass.txt")
-if os.path.isfile("failed.txt"):
-    os.remove("failed.txt")
+# if os.path.isfile("pass.txt"):
+#     os.remove("pass.txt")
+# if os.path.isfile("failed.txt"):
+#     os.remove("failed.txt")
 
 failed = 0
 passed = 0

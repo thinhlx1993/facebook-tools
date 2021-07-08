@@ -13,7 +13,7 @@ def auto_share():
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
     # video_id = scheduler['video_id']
-    video_id = "330077975463229"
+    video_id = "521818192441720"
     logger.info(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
@@ -32,14 +32,14 @@ def auto_share():
         time.sleep(2)
         waiting_for("dark_logo.PNG", confidence=0.9)
 
-        for i in range(50):
+        for i in range(20):
             time.sleep(1)
             playbtn = check_exist("playbtn.PNG", confidence=0.85)
             if playbtn:
                 pyautogui.moveTo(playbtn)
                 pyautogui.click(playbtn)
-            # pyautogui.moveTo(relative_position(1027, 549), duration=1)
-            # pyautogui.moveTo(relative_position(800, 649), duration=1)
+            pyautogui.moveTo(relative_position(1027, 549), duration=1)
+            pyautogui.moveTo(relative_position(800, 649), duration=1)
             playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
             if playbtn:
                 pyautogui.moveTo(playbtn)
@@ -75,7 +75,7 @@ def auto_share():
 
         post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
         if post_btn:
-            title = "How to make the woman statue from metal screws"
+            title = "Walnut logs Side Table from discarded wood chips. Awesome wood project"
             paste_text(title)
             time.sleep(5)
             click_to("post.PNG", confidence=0.8, duration=1, interval=3)
@@ -129,7 +129,7 @@ def watch_videos():
 
 if __name__ == '__main__':
     auto_share()
-    # # watch_videos()
+    # watch_videos()
     # schedule.every(3).hours.at(":00").do(auto_share)
     # schedule.every(1).hours.at(":30").do(watch_videos)
     # while True:
