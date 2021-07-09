@@ -13,7 +13,7 @@ def auto_share():
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
     # video_id = scheduler['video_id']
-    video_id = "521818192441720"
+    video_id = "412019530004287"
     logger.info(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
@@ -75,7 +75,7 @@ def auto_share():
 
         post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
         if post_btn:
-            title = "Walnut logs Side Table from discarded wood chips. Awesome wood project"
+            title = "How to Make Bigfoot bike. Terrific DIY project ever"
             paste_text(title)
             time.sleep(5)
             click_to("post.PNG", confidence=0.8, duration=1, interval=3)
@@ -130,8 +130,8 @@ def watch_videos():
 if __name__ == '__main__':
     auto_share()
     # watch_videos()
-    # schedule.every(3).hours.at(":00").do(auto_share)
-    # schedule.every(1).hours.at(":30").do(watch_videos)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    schedule.every(2).hours.at(":00").do(auto_share)
+    schedule.every(1).hours.at(":30").do(watch_videos)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
