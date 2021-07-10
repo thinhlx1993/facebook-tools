@@ -13,7 +13,7 @@ def auto_share():
     # if scheduler:
     # scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
     # video_id = scheduler['video_id']
-    video_id = "412019530004287"
+    video_id = "652094622414134"
     logger.info(f"share video {video_id}")
     # time.sleep(2)
     # pyautogui.hotkey('winleft', 'd')
@@ -109,14 +109,14 @@ def watch_videos():
             click_to("start_btn.PNG")
             waiting_for("dark_logo.PNG", confidence=0.9)
 
-            for i in range(20):
+            for i in range(50):
                 time.sleep(1)
                 playbtn = check_exist("playbtn.PNG", confidence=0.85)
                 if playbtn:
                     pyautogui.moveTo(playbtn)
                     pyautogui.click(playbtn)
-                pyautogui.moveTo(relative_position(1027, 549), duration=1)
-                pyautogui.moveTo(relative_position(800, 649), duration=1)
+                # pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                # pyautogui.moveTo(relative_position(800, 649), duration=1)
                 playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
                 if playbtn:
                     pyautogui.moveTo(playbtn)
