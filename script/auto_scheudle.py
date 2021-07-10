@@ -37,15 +37,22 @@ if __name__ == '__main__':
         title = waiting_for("title.png")
         title_x, title_y = title
         pyautogui.click(title_x + 50, title_y)
-        filename_without_ext = os.path.splitext(filename)[0] + " #Crafting #Relaxing"
+        description = get_title()
+        filename_without_ext = f"{os.path.splitext(filename)[0]} {description} #Crafting #Relaxing"
         # fix title
         if '-' in filename_without_ext:
             filename_without_ext = filename_without_ext.split('-')[1]
         paste_text(filename_without_ext)
-        description = get_title()
         pyautogui.click(title_x + 50, title_y+70)
-        paste_text(description)
+        paste_text(filename_without_ext)
 
+        # set language
+        click_to("chon_ngon_ngu.PNG")
+        waiting_for("chon_ngon_ngu_1.PNG")
+        paste_text("Thai")
+        click_to("tieng_thai.PNG")
+
+        # len lich
         click_to("next.png")
         click_to("later.PNG", waiting_time=2)
         click_to("schedule.PNG")
