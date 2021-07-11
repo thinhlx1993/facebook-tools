@@ -147,9 +147,9 @@ def start_watch():
 
 if __name__ == '__main__':
     # auto_share()
-    start_watch()
-    # schedule.every(2).hours.at(":00").do(start_share)
-    # schedule.every(1).hours.at(":30").do(start_watch)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    # start_watch()
+    schedule.every(3).hours.at(":00").do(start_share)
+    schedule.every(1).hours.at(":30").do(start_watch)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
