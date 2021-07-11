@@ -25,7 +25,7 @@ def auto_share():
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
         pyautogui.click(browser)
-        click_to("dark_logo.PNG", confidence=0.9)
+        # click_to("dark_logo.PNG", confidence=0.9)
         pyautogui.click(relative_position(300, 54))
         paste_text(f"fb.com/{video_id}")
         pyautogui.hotkey('enter')
@@ -128,10 +128,10 @@ def watch_videos():
 
 
 if __name__ == '__main__':
-    auto_share()
+    # auto_share()
     # watch_videos()
-    # schedule.every(2).hours.at(":00").do(auto_share)
-    # schedule.every(1).hours.at(":30").do(watch_videos)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    schedule.every(2).hours.at(":00").do(auto_share)
+    schedule.every(1).hours.at(":30").do(watch_videos)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
