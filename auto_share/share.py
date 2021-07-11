@@ -26,7 +26,7 @@ def auto_share():
     for browser in browsers:
         pyautogui.click(browser)
         click_many("close_btn.PNG")
-        # click_to("dark_logo.PNG", confidence=0.9)
+        click_to("dark_logo.PNG", confidence=0.9)
         pyautogui.click(relative_position(300, 54))
         paste_text(f"fb.com/{video_id}")
         pyautogui.hotkey('enter')
