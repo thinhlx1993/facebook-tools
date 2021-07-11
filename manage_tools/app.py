@@ -162,6 +162,7 @@ def scheduler_share():
     new_scheduler = {
         "_id": str(uuid.uuid4()),
         "video_id": content.get('video_id'),
+        "title": content.get('title'),
         "scheduler_time": date_time_obj.timestamp(),
         "create_date": datetime.now().timestamp(),
         "shared": False

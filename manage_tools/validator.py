@@ -19,3 +19,4 @@ class CookiesSchema(Schema):
 class SchedulerSchema(Schema):
     video_id = fields.Str(required=True)
     scheduler_date = fields.Str(required=True)
+    title = fields.Str(required=True)
