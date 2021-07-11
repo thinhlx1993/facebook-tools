@@ -14,13 +14,13 @@ from bson import ObjectId
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-logger.setLevel(logging.INFO)
+# logger.setLevel(logging.INFO)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-fh.setLevel(logging.INFO)
+# fh.setLevel(logging.INFO)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+# ch.setLevel(logging.INFO)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -43,7 +43,7 @@ def random_interval():
     return random.uniform(0.5, 2)
 
 
-def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True, duration=0.0):
+def click_to(btn, confidence=0.8, region=None, waiting_time=200, interval=None, check_close=True, duration=0.0):
     logger.debug(f"Click to {btn}")
     start_count = 0
     while start_count < waiting_time:
@@ -76,7 +76,7 @@ def check_exist(btn, region=None, confidence=0.8):
     return exist
 
 
-def waiting_for(btn, region=None, confidence=0.8, waiting_time=1000):
+def waiting_for(btn, region=None, confidence=0.8, waiting_time=200):
     logger.debug(f"Waiting for {btn}")
     start_count = 0
     while start_count < waiting_time:
