@@ -25,6 +25,7 @@ def auto_share():
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
         pyautogui.click(browser)
+        click_many("close_btn.PNG")
         # click_to("dark_logo.PNG", confidence=0.9)
         pyautogui.click(relative_position(300, 54))
         paste_text(f"fb.com/{video_id}")
@@ -100,6 +101,7 @@ def watch_videos():
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
         pyautogui.click(browser)
+        click_many("close_btn.PNG")
         click_to("dark_logo.PNG", confidence=0.9)
         # pyautogui.click(relative_position(300, 54))
         # paste_text(f"facebook.com/watch")
@@ -127,11 +129,27 @@ def watch_videos():
             click_to("dark_logo.PNG", confidence=0.9)
 
 
+def start_share():
+    logger.info("Start share")
+    try:
+        auto_share()
+    except Exception as ex:
+        logger.error(ex)
+
+
+def start_watch():
+    logger.info("Start share")
+    try:
+        watch_videos()
+    except Exception as ex:
+        logger.error(ex)
+
+
 if __name__ == '__main__':
     # auto_share()
     # watch_videos()
-    schedule.every(2).hours.at(":00").do(auto_share)
-    schedule.every(1).hours.at(":30").do(watch_videos)
+    schedule.every(2).hours.at(":00").do(start_share)
+    schedule.every(1).hours.at(":30").do(start_watch)
     while True:
         schedule.run_pending()
         time.sleep(1)
