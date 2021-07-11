@@ -1,13 +1,13 @@
 from bs4 import BeautifulSoup
 import os
 
-out_put = "links/Pyke_Sharme.txt"
+out_put = "links/Pansy_Shop.txt"
 
 if os.path.isfile(out_put):
     os.remove(out_put)
 
 
-page_name = "Pyke Sharme _ Facebook.html"
+page_name = "Pansy Shop.html"
 html_doc = open(f"../template/{page_name}", encoding="utf-8")
 soup = BeautifulSoup(html_doc, 'html.parser')
 

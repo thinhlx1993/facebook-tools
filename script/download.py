@@ -19,7 +19,8 @@ if os.path.isfile(f"links/{page_name}.txt"):
                 try:
                     info_dict = ydl.extract_info(link, download=False)
                     video_title = info_dict.get('title', None)
-                    ydl_opts = {'outtmpl': f'downloaded/{page_name}/{views}-{video_title}', 'format': '22/best'}
+                    ext = info_dict.get('ext', None)
+                    ydl_opts = {'outtmpl': f'downloaded/{page_name}/{views}-{video_title}'}
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([link])
                 except Exception as ex:
