@@ -1,4 +1,7 @@
+import sys
+
 import clipboard
+import keyboard
 import pyautogui
 import logging
 import time
@@ -27,11 +30,20 @@ def random_interval():
     return random.uniform(0, 0.5)
 
 
+def check_exit_program():
+    if keyboard.is_pressed('esc'):
+        print("Key ESC Down")
+        # result = pyautogui.confirm(text='Bam Ok de thoat', title='Thoat chuong trinh?', buttons=['OK', 'Cancel'])
+        # if result == "OK":
+        sys.exit()
+
+
 def click_to(btn, region=None, waiting_time=1000):
     print(f"Click to {btn}")
     start_count = 0
 
     while start_count < waiting_time:
+        check_exit_program()
         ret = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
         start_count += 1
         if ret:
@@ -45,6 +57,7 @@ def click_many(btn, region=None, confidence=0.8):
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)))
     for ret in elements:
+        check_exit_program()
         pyautogui.click(ret, interval=random_interval(), duration=0.1)
     return number_element
 
@@ -60,6 +73,7 @@ def waiting_for(btn, region=None, confidence=.8, waiting_time=100):
     start_count = 0
     while start_count < waiting_time:
         start_count += 1
+        check_exit_program()
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
             return ret

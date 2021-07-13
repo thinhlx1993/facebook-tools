@@ -1,8 +1,10 @@
+import sys
 import time
 import pyautogui
 from utils import logger, click_to, click_many, check_exist, waiting_for
 import pytesseract
 # pip install paddlepaddle==2.0.0 -i https://mirror.baidu.com/pypi/simple
+import keyboard  # using module keyboard
 
 
 def inviting():
@@ -32,7 +34,7 @@ def inviting():
 
 
 if __name__ == '__main__':
-    # number_invited = 0
+    # number_invited = 0s
     click_to("start_invite_group.PNG")
     inviting()
     click_to("send_invite_group.PNG")
