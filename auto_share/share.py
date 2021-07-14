@@ -2,19 +2,18 @@ import random
 import time
 import schedule
 import pyautogui
-from datetime import datetime
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger
 
 
 def auto_share():
-    print("start share")
+    logger.debug("start share")
     scheduler = scheduler_table.find_one({"shared": False})
     if scheduler:
         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
         video_id = scheduler['video_id']
         # video_id = "652094622414134"
-        logger.info(f"share video {video_id}")
+        logger.debug(f"share video {video_id}")
         # time.sleep(2)
         # pyautogui.hotkey('winleft', 'd')
         # time.sleep(1)
@@ -133,7 +132,7 @@ def watch_videos():
 
 
 def start_share():
-    logger.info("Start share")
+    logger.debug("Start share")
     try:
         auto_share()
     except Exception as ex:
@@ -141,7 +140,7 @@ def start_share():
 
 
 def start_watch():
-    logger.info("Start share")
+    logger.debug("Start share")
     try:
         watch_videos()
     except Exception as ex:
@@ -149,6 +148,7 @@ def start_watch():
 
 
 if __name__ == '__main__':
+    logger.info("start share video")
     # auto_share()
     # start_watch()
     schedule.every(2).hours.at(":00").do(start_share)
