@@ -158,17 +158,17 @@ def scheduler_share():
     date_time_obj = datetime.strptime(content.get('scheduler_date'), "%d/%m/%Y %H:%M")
     # if date_time_obj < datetime.now():
     #     return jsonify(msg='failed check datetime')
+    for _ in content.get("number"):
+        new_scheduler = {
+            "_id": str(uuid.uuid4()),
+            "video_id": content.get('video_id'),
+            "title": content.get('title'),
+            "scheduler_time": date_time_obj.timestamp(),
+            "create_date": datetime.now().timestamp(),
+            "shared": False
+        }
 
-    new_scheduler = {
-        "_id": str(uuid.uuid4()),
-        "video_id": content.get('video_id'),
-        "title": content.get('title'),
-        "scheduler_time": date_time_obj.timestamp(),
-        "create_date": datetime.now().timestamp(),
-        "shared": False
-    }
-
-    result = mongo.db.scheduler.insert_one(new_scheduler)
+        result = mongo.db.scheduler.insert_one(new_scheduler)
     return jsonify(msg='success')
 
 
