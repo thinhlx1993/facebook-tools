@@ -2,7 +2,7 @@ import random
 import time
 import schedule
 import pyautogui
-from .utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
+from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger
 
 
@@ -148,6 +148,7 @@ def start_watch():
 
 
 if __name__ == '__main__':
+    logger.info("start share video")
     # auto_share()
     # start_watch()
     schedule.every(2).hours.at(":00").do(start_share)
