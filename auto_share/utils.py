@@ -1,26 +1,20 @@
 import clipboard
-import requests
 import logging
 import pymongo
 import pyautogui
 import time
 import random
-import pyotp
-import uuid
-import re
-from bs4 import BeautifulSoup
-from bson import ObjectId
 
 
 # create logger with 'spam_application'
 logger = logging.getLogger('application')
-# logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
 fh = logging.FileHandler('app.log')
-# fh.setLevel(logging.INFO)
+fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
-# ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
