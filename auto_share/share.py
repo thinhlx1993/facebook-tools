@@ -8,28 +8,28 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 def auto_share():
     logger.debug("start share")
-    scheduler = scheduler_table.find_one({"shared": False})
-    if scheduler:
-        scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
-        video_id = scheduler['video_id']
-        # video_id = "652094622414134"
-        logger.debug(f"share video {video_id}")
-        # time.sleep(2)
-        # pyautogui.hotkey('winleft', 'd')
-        # time.sleep(1)
-        bar_x, bar_y = relative_position(0, 1000)
-        width, height = relative_position(1920, 80)
-        print(bar_x, bar_y, width, height)
-        browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
-        # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
-        for browser in browsers:
+    # time.sleep(2)
+    # pyautogui.hotkey('winleft', 'd')
+    # time.sleep(1)
+    bar_x, bar_y = relative_position(0, 1000)
+    width, height = relative_position(1920, 80)
+    print(bar_x, bar_y, width, height)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
+    # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
+    for browser in browsers:
+        scheduler = scheduler_table.find_one({"shared": False})
+        if scheduler:
+            scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
+            video_id = scheduler['video_id']
+            # video_id = "652094622414134"
+            logger.debug(f"share video {video_id}")
+
             pyautogui.click(browser)
             click_many("close_btn.PNG")
             click_to("dark_logo.PNG", confidence=0.9)
             pyautogui.click(relative_position(300, 54))
             paste_text(f"fb.com/{video_id}")
             pyautogui.hotkey('enter')
-            time.sleep(2)
             waiting_for("dark_logo.PNG", confidence=0.9)
 
             for i in range(50):
