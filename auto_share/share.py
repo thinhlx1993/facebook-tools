@@ -143,14 +143,16 @@ def start_share():
     logger.debug("Start share")
     try:
         auto_share()
+        logger.debug("Done share")
     except Exception as ex:
         logger.error(ex)
 
 
 def start_watch():
-    logger.debug("Start share")
+    logger.debug("Start watch")
     try:
         watch_videos()
+        logger.debug("Done watch")
     except Exception as ex:
         logger.error(ex)
 
