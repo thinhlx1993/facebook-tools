@@ -40,8 +40,8 @@ if __name__ == '__main__':
         description = get_title()
         filename_without_ext = f"{os.path.splitext(filename)[0]}. {description} #Crafting #Relaxing"
         # fix title
-        if '-' in filename_without_ext:
-            filename_without_ext = filename_without_ext.split('-')[1]
+        if 'Views -' in filename_without_ext:
+            filename_without_ext = filename_without_ext.split('Views -')[1]
 
         filename_without_ext = filename_without_ext.replace('+outtro', '')
         paste_text(filename_without_ext)
