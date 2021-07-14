@@ -42,6 +42,8 @@ if __name__ == '__main__':
         # fix title
         if '-' in filename_without_ext:
             filename_without_ext = filename_without_ext.split('-')[1]
+
+        filename_without_ext = filename_without_ext.replace('+outtro', '')
         paste_text(filename_without_ext)
         pyautogui.click(title_x + 50, title_y+70)
         paste_text(filename_without_ext)

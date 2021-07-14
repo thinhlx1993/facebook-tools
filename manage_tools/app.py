@@ -184,7 +184,7 @@ def get_scheduler():
         "shared": True if shared == "1" else False
     }
 
-    data = mongo.db.scheduler.find(finder).sort([('_id', DESCENDING)]).skip(page_size * (page - 1)).limit(page_size)
+    data = mongo.db.scheduler.find(finder)
     return jsonify(data=list(data))
 
 
