@@ -47,15 +47,23 @@ def auto_share():
 
             # click share buttons
             buttons = ['share_btn_1.PNG', 'share_btn.PNG']
-            share_x, share_y, idx = deciscion(buttons)
-            pyautogui.click(share_x, share_y, interval=1)
+            result = deciscion(buttons)
+            if result:
+                share_x, share_y, idx = result
+                pyautogui.click(share_x, share_y, interval=1)
+            else:
+                break
 
             # click options or share to a group
             buttons = ["options.PNG", "share_to_group.PNG"]
-            share_x, share_y, idx = deciscion(buttons)
-            pyautogui.click(share_x, share_y, interval=1)
-            if idx == 0:
-                click_to("share_to_group.PNG", confidence=0.9, interval=1)
+            result = deciscion(buttons)
+            if result:
+                share_x, share_y, idx = result
+                pyautogui.click(share_x, share_y, interval=1)
+                if idx == 0:
+                    click_to("share_to_group.PNG", confidence=0.9, interval=1)
+            else:
+                break
 
             waiting_for("public_group.PNG", confidence=0.85)
             pyautogui.moveTo(relative_position(1027, 549), duration=1)

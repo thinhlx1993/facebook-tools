@@ -51,9 +51,10 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
             pyautogui.moveTo(btn_x, btn_y, duration=duration)
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
-            break
+            return True
 
         time.sleep(0.2)
+    return None
 
 
 def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
@@ -97,6 +98,7 @@ def deciscion(btns, region=None, confidence=0.8, waiting_time=50):
             if ret:
                 x, y = ret
                 return x, y, btn_index
+    return None
 
 
 def typeing_text(inp_text):
