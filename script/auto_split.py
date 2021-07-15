@@ -42,7 +42,7 @@ def compare_images(imageA, imageB, title):
 
 if __name__ == '__main__':
     root_dir = "downloaded/Daily Dose of Satisfaction"
-    start_index = 80
+    start_index = 105
     for file in os.listdir(root_dir):
         # load the images -- the original, the original + contrast,
         # and the original + photoshop
@@ -50,6 +50,7 @@ if __name__ == '__main__':
         # If the input is the camera, pass 0 instead of the video file name
         file_name = "Oddly Satisfying Videos"
         input_file = f'downloaded/Daily Dose of Satisfaction/{file}'
+        print(input_file)
         cap = cv2.VideoCapture(input_file)
         fps = cap.get(cv2.CAP_PROP_FPS)
 
@@ -89,10 +90,10 @@ if __name__ == '__main__':
                     # prev_frame_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
                     # original_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                     # similar = compare_images(frame, prev_frame, 'demo')
-                    print("SSIM: %.2f FILE_OUT: %s Time %.1f" % (similar, file_out, round(total_frame/(fps*60), 1)))
+                    # print("SSIM: %.2f FILE_OUT: %s Time %.1f" % (similar, file_out, round(total_frame/(fps*60), 1)))
 
                 if similar:
-                    if similar < 0.9 and number_frame/(fps*60) > 3:
+                    if similar < 0.9 and number_frame/(fps*60) > 4:
                         # 3 minutes
                         print('='*50)
                         number_frame = 0
