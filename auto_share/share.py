@@ -100,6 +100,8 @@ def auto_share():
                     pyautogui.hotkey('ctrl', 'f4')
                     logger.info("limited")
                 # click_to("dark_logo.PNG", confidence=0.9)
+                else:
+                    click_to("dark_logo.PNG", confidence=0.9)
 
 
 def watch_videos():
