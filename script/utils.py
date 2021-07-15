@@ -1,11 +1,12 @@
 import sys
-
+import ssl
 import clipboard
 import keyboard
 import pyautogui
 import logging
 import time
 import random
+import pymongo
 
 
 # create logger with 'spam_application'
@@ -26,58 +27,83 @@ logger.addHandler(fh)
 logger.addHandler(ch)
 
 
+client = pymongo.MongoClient("mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+                             ssl=True,ssl_cert_reqs=ssl.CERT_NONE)
+db = client.test
+phone_table = db['phone']
+email_table = db['emails']
+cookies_table = db['cookies']
+via_share_table = db['via_share']
+scheduler_table = db['scheduler']
+
+
 def random_interval():
-    return random.uniform(0, 0.5)
+    return random.uniform(0.5, 2)
 
 
-def check_exit_program():
-    if keyboard.is_pressed('esc'):
-        print("Key ESC Down")
-        # result = pyautogui.confirm(text='Bam Ok de thoat', title='Thoat chuong trinh?', buttons=['OK', 'Cancel'])
-        # if result == "OK":
-        sys.exit()
-
-
-def click_to(btn, region=None, waiting_time=1000):
-    print(f"Click to {btn}")
+def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, check_close=True, duration=0.0):
+    logger.debug(f"Click to {btn}")
     start_count = 0
-
     while start_count < waiting_time:
-        check_exit_program()
-        ret = pyautogui.locateOnScreen(f"btn/{btn}", confidence=.8, region=region)
+        ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
         if ret:
-            pyautogui.click(ret, interval=random_interval())
-            break
+            btn_x, btn_y = ret
+            pyautogui.moveTo(btn_x, btn_y, duration=duration)
+            interval = random_interval() if interval is None else interval
+            pyautogui.click(btn_x, btn_y, interval=interval)
+            return True
+
         time.sleep(0.2)
+    return None
 
 
-def click_many(btn, region=None, confidence=0.8):
-    print(f"Click many {btn}")
+def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
+    if log:
+        logger.debug(f"Click many {btn}")
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)))
     for ret in elements:
-        check_exit_program()
-        pyautogui.click(ret, interval=random_interval(), duration=0.1)
+        pyautogui.moveTo(ret, duration=duration)
+        pyautogui.click(ret, interval=random_interval(), duration=duration)
     return number_element
 
 
 def check_exist(btn, region=None, confidence=0.8):
     exist = pyautogui.locateOnScreen(f"btn/{btn}", confidence=confidence, region=region)
-    print(f"Check exist {btn} result {exist}")
+    # logger.debug(f"Check exist {btn} result {exist}")
     return exist
 
 
-def waiting_for(btn, region=None, confidence=.8, waiting_time=100):
-    print(f"Watiing for {btn}")
+def waiting_for(btn, region=None, confidence=0.8, waiting_time=50):
+    logger.debug(f"Waiting for {btn}")
     start_count = 0
     while start_count < waiting_time:
         start_count += 1
-        check_exit_program()
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
-            return ret
+            x, y = ret
+            return x, y
+
+        time.sleep(0.2)
     return None
+
+
+def deciscion(btns, region=None, confidence=0.8, waiting_time=50):
+    start_count = 0
+    while start_count < waiting_time:
+        start_count += 1
+        logger.debug(f"Waiting for {btns}")
+        for btn_index, btn in enumerate(btns):
+            ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
+            if ret:
+                x, y = ret
+                return x, y, btn_index
+    return None
+
+
+def typeing_text(inp_text):
+    pyautogui.typewrite(inp_text, interval=0.2)
 
 
 def paste_text(inp_text):
@@ -91,3 +117,12 @@ def get_title():
         title = random.choice(lines)
         logger.info(title)
         return title
+
+
+def relative_position(x, y):
+    default_width = 1920
+    default_height = 1080
+    ratio_x = x/default_width
+    ratio_y = y/default_height
+    width, height = pyautogui.size()
+    return int(ratio_x*width), int(ratio_y*height)
