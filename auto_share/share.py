@@ -55,7 +55,7 @@ def auto_share():
                 break
 
             # click options or share to a group
-            buttons = ["options.PNG", "share_to_group.PNG"]
+            buttons = ["share_to_group.PNG", "options.PNG"]
             result = deciscion(buttons)
             if result:
                 share_x, share_y, idx = result

@@ -42,7 +42,7 @@ def compare_images(imageA, imageB, title):
 
 if __name__ == '__main__':
     root_dir = "downloaded/Daily Dose of Satisfaction"
-    start_index = 105
+    start_index = 0
     for file in os.listdir(root_dir):
         # load the images -- the original, the original + contrast,
         # and the original + photoshop
