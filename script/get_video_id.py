@@ -64,7 +64,7 @@ if __name__ == '__main__':
         if not status:
             break
         pyautogui.scroll(-500)
-        time.sleep(1)
-        pyautogui.scroll(-500)
-        time.sleep(1)
-        pyautogui.scroll(-150)
+        time.sleep(5)
+        # pyautogui.scroll(-500)
+        # time.sleep(1)
+        # pyautogui.scroll(-150)
