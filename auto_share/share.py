@@ -2,6 +2,7 @@ import random
 import time
 import schedule
 import pyautogui
+import pytesseract
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger
 
@@ -60,7 +61,7 @@ def auto_share():
             if result:
                 share_x, share_y, idx = result
                 pyautogui.click(share_x, share_y, interval=1)
-                if idx == 0:
+                if idx == 1:
                     click_to("share_to_group.PNG", confidence=0.9, interval=1)
             else:
                 break
@@ -71,15 +72,26 @@ def auto_share():
             scroll_time = random.choice([1, 2, 3, 4])
             pyautogui.scroll(-200*scroll_time)
 
-            while True:
+            retry_time = 0
+            while retry_time < 5:
                 try:
                     groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
                     groups = list(groups)
                     group = random.choice(groups)
-                    pyautogui.click(group, duration=0.5)
-                    break
+                    left, top, width, height = group
+                    img = pyautogui.screenshot(region=(left - 620, top, width + 600, height - 10))
+                    group_name = pytesseract.image_to_string(img).strip()
+                    groups_shared = scheduler.get('groups_shared', [])
+                    if group_name not in groups_shared:
+                        groups_shared.append(group_name)
+                        scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
+                        pyautogui.click(group, duration=0.5)
+                        break
+                    else:
+                        retry_time += 1
+
                 except Exception as ex:
-                    pass
+                    logger.error(f"Share group failed {ex}")
 
             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
             if post_btn:
