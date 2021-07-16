@@ -43,7 +43,7 @@ def get_videos():
                     for _ in range(2):
                         new_scheduler = {
                             "_id": str(uuid.uuid4()),
-                            "video_id": video_id,
+                            "video_id": str(video_id),
                             "scheduler_time": datetime.now().timestamp(),
                             "create_date": datetime.now().timestamp(),
                             "shared": False
