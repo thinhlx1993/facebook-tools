@@ -90,13 +90,13 @@ def auto_share():
                         break
                 retry_time += 1
 
-            if retry_time >= 5:
-                # can not find the group. break
-                logger.error("can not find the group. break")
-                continue
+            # if retry_time >= 5:
+            #     # can not find the group. break
+            #     logger.error("can not find the group. break")
+            #     continue
 
             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
-            if post_btn:
+            if post_btn and retry_time < 5:
                 title = scheduler['title'] if 'title' in scheduler else get_title()
                 paste_text(title)
                 time.sleep(5)
