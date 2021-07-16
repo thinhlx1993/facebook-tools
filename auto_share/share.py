@@ -74,9 +74,9 @@ def auto_share():
 
             retry_time = 0
             while retry_time < 5:
-                try:
-                    groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
-                    groups = list(groups)
+                groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
+                groups = list(groups)
+                if len(groups) > 0:
                     group = random.choice(groups)
                     left, top, width, height = group
                     img = pyautogui.screenshot(region=(left - 620, top, width + 600, height - 10))
@@ -87,14 +87,11 @@ def auto_share():
                         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
                         pyautogui.click(group, duration=0.5)
                         break
-                    else:
-                        retry_time += 1
-
-                except Exception as ex:
-                    logger.error(f"Share group failed {ex}")
+                retry_time += 1
 
             if retry_time >= 5:
                 # can not find the group. break
+                logger.error("can not find the group. break")
                 break
 
             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
@@ -174,10 +171,10 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    # auto_share()
+    auto_share()
     # start_watch()
-    schedule.every(2).hours.at(":00").do(start_share)
-    schedule.every(1).hours.at(":30").do(start_watch)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # schedule.every(2).hours.at(":00").do(start_share)
+    # schedule.every(1).hours.at(":30").do(start_watch)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
