@@ -113,7 +113,7 @@ def auto_share():
                     logger.info("limited")
                 # click_to("dark_logo.PNG", confidence=0.9)
                 else:
-                    click_many("close_btn.PNG")
+                    # click_many("close_btn.PNG")
                     click_to("dark_logo.PNG", confidence=0.9)
 
 
