@@ -80,7 +80,7 @@ def auto_share():
                 if len(groups) > 0:
                     group = random.choice(groups)
                     left, top, width, height = group
-                    img = pyautogui.screenshot(region=(left - 620, top, width + 600, height - 10))
+                    img = pyautogui.screenshot(region=(left-625, top-5, width+600, height-8))
                     group_name = pytesseract.image_to_string(img).strip()
                     logger.info(f"found group name: {group_name}")
                     groups_shared = scheduler.get('groups_shared', [])
