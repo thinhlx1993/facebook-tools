@@ -48,7 +48,7 @@ def auto_share():
 
             # click share buttons
             buttons = ['share_btn_1.PNG', 'share_btn.PNG']
-            result = deciscion(buttons)
+            result = deciscion(buttons, confidence=0.9)
             if result:
                 share_x, share_y, idx = result
                 pyautogui.click(share_x, share_y, interval=1)
@@ -57,7 +57,7 @@ def auto_share():
 
             # click options or share to a group
             buttons = ["share_to_group.PNG", "options.PNG"]
-            result = deciscion(buttons)
+            result = deciscion(buttons, confidence=0.9)
             if result:
                 share_x, share_y, idx = result
                 pyautogui.click(share_x, share_y, interval=1)
@@ -173,7 +173,7 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    auto_share()
+    # auto_share()
     # start_watch()
     schedule.every(2).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
