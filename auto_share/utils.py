@@ -102,7 +102,7 @@ def deciscion(btns, region=None, confidence=0.8, waiting_time=200):
 
 
 def typeing_text(inp_text):
-    pyautogui.typewrite(inp_text, interval=0.2)
+    pyautogui.typewrite(inp_text)
 
 
 def paste_text(inp_text):
