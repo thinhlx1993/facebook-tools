@@ -1,5 +1,6 @@
 import random
 import time
+from datetime import datetime
 import schedule
 import pyautogui
 import pytesseract
@@ -8,10 +9,11 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 
 def auto_share():
+    current_hour = datetime.now().hour
+    if current_hour % 2 != 0:
+        return
+
     logger.debug("start share")
-    # time.sleep(2)
-    # pyautogui.hotkey('winleft', 'd')
-    # time.sleep(1)
     bar_x, bar_y = relative_position(0, 1000)
     width, height = relative_position(1920, 80)
     print(bar_x, bar_y, width, height)
@@ -80,7 +82,13 @@ def auto_share():
                 if len(groups) > 0:
                     group = random.choice(groups)
                     left, top, width, height = group
-                    img = pyautogui.screenshot(region=(left-625, top-5, width+600, height-8))
+                    width += 600
+                    height -= 8
+                    left -= 625
+                    top -= 5
+                    width, height = relative_position(width, height)
+                    left, top = relative_position(left, top)
+                    img = pyautogui.screenshot(region=(left, top, width, height))
                     group_name = pytesseract.image_to_string(img).strip()
                     logger.info(f"found group name: {group_name}")
                     groups_shared = scheduler.get('groups_shared', [])
@@ -176,7 +184,7 @@ if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
     start_watch()
-    schedule.every(2).hours.at(":00").do(start_share)
+    schedule.every(1).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
     while True:
         schedule.run_pending()
