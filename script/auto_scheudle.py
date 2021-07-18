@@ -4,7 +4,7 @@ import pyautogui
 from datetime import datetime
 import clipboard
 
-from utils import logger, click_to, click_many, check_exist, waiting_for, paste_text, get_title
+from utils import logger, click_to, click_many, check_exist, waiting_for, typeing_text, get_title
 
 os.makedirs('uploaded', exist_ok=True)
 
@@ -38,20 +38,20 @@ if __name__ == '__main__':
         title_x, title_y = title
         pyautogui.click(title_x + 50, title_y)
         description = get_title()
-        filename_without_ext = f"{os.path.splitext(filename)[0]}. {description} #Crafting #Relaxing"
+        filename_without_ext = f"{os.path.splitext(filename)[0]}. {description} #Crafting #DIY"
         # fix title
         if 'Views -' in filename_without_ext:
             filename_without_ext = filename_without_ext.split('Views-')[1]
 
         filename_without_ext = filename_without_ext.replace('+outtro', '')
-        paste_text(filename_without_ext)
+        typeing_text(filename_without_ext)
         pyautogui.click(title_x + 50, title_y+70)
-        paste_text(filename_without_ext)
+        typeing_text(filename_without_ext)
 
         # set language
         click_to("chon_ngon_ngu.PNG")
         waiting_for("chon_ngon_ngu_1.PNG")
-        paste_text("Thai")
+        typeing_text("Thai")
         click_to("tieng_thai.PNG")
 
         # len lich
