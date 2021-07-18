@@ -189,7 +189,7 @@ def start_watch():
 if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
-    start_watch()
+    # start_watch()
     schedule.every(1).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
     while True:
