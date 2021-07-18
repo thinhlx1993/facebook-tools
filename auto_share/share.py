@@ -113,7 +113,7 @@ def auto_share():
                     logger.info("limited")
                 # click_to("dark_logo.PNG", confidence=0.9)
                 else:
-                    click_many("close_btn.PNG")
+                    # click_many("close_btn.PNG")
                     click_to("dark_logo.PNG", confidence=0.9)
 
 
@@ -174,7 +174,7 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    auto_share()
+    # auto_share()
     # start_watch()
     schedule.every(2).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
