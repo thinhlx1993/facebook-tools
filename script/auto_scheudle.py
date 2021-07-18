@@ -24,11 +24,10 @@ if __name__ == '__main__':
             pyautogui.alert('Lỗi, Kiểm tra lại định dạng của thời gian bắt đầu')
 
     for filename in os.listdir(dir_path):
-        clipboard.copy(f"{dir_path}\\{filename}")
         click_to("create_new.png")
         click_to("upload_new_video.png")
         time.sleep(2)
-        pyautogui.hotkey("ctrl", "v")
+        typeing_text(f"{dir_path}\\{filename}")
         click_to("open.PNG")
         click_to("upload_done.png")
         click_many("close_step.png")
