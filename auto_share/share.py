@@ -20,9 +20,15 @@ def auto_share():
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
-        scheduler = scheduler_table.find_one({"shared": False})
+        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}})
         if scheduler:
-            scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"shared": True}})
+            share_number = scheduler.get("share_number", 1)
+            share_number -= 1
+            update_data = {"share_number": share_number}
+            if share_number == 0:
+                update_data['shared'] = True
+
+            scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
             video_id = scheduler['video_id']
             # video_id = "652094622414134"
             logger.debug(f"share video {video_id}")

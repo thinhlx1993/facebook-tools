@@ -40,15 +40,15 @@ def get_videos():
                     print(f"exist video id: {video_id}")
                 elif not exist_scheduler:
                     exist_number = 0
-                    for _ in range(2):
-                        new_scheduler = {
-                            "_id": str(uuid.uuid4()),
-                            "video_id": str(video_id),
-                            "scheduler_time": datetime.now().timestamp(),
-                            "create_date": datetime.now().timestamp(),
-                            "shared": False
-                        }
-                        result = scheduler_table.insert_one(new_scheduler)
+                    new_scheduler = {
+                        "_id": str(uuid.uuid4()),
+                        "video_id": str(video_id),
+                        "scheduler_time": datetime.now().timestamp(),
+                        "create_date": datetime.now().timestamp(),
+                        "shared": False,
+                        "share_number": 2
+                    }
+                    result = scheduler_table.insert_one(new_scheduler)
                     print(f"new video id: {video_id}")
             except Exception as ex:
                 pass
