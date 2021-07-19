@@ -80,7 +80,7 @@ def auto_share():
             time.sleep(2)
             scroll_time = random.choice([1, 2, 3, 4])
             pyautogui.scroll(-200*scroll_time)
-            time.sleep(2)
+            time.sleep(10)
             waiting_for("public_group.PNG")
             retry_time = 0
             while retry_time < 5:
