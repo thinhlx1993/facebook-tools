@@ -1,3 +1,4 @@
+import os
 import random
 import time
 from datetime import datetime
@@ -96,6 +97,12 @@ def auto_share():
                     left, top = relative_position(left, top)
                     img = pyautogui.screenshot(region=(left, top, width, height))
                     group_name = pytesseract.image_to_string(img).strip()
+                    try:
+                        os.makedirs("debug", exist_ok=True)
+                        img.save(f"debug/{group_name}.PNG")
+                    except Exception as ex:
+                        pass
+
                     logger.info(f"found group name: {group_name}")
                     groups_shared = scheduler.get('groups_shared', [])
                     if group_name not in groups_shared:
@@ -103,6 +110,7 @@ def auto_share():
                         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
                         pyautogui.click(group, duration=0.5)
                         break
+
                 retry_time += 1
 
             # if retry_time >= 5:
