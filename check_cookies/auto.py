@@ -9,7 +9,7 @@ from check_cookies.utils import *
 
 failed = 0
 passed = 0
-with open("new6-7.txt", encoding='utf-8') as file:
+with open("input.txt", encoding='utf-8') as file:
     for line in file.readlines():
         line = line.strip()
         if line != "":
