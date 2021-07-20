@@ -1,6 +1,7 @@
 import json
 import uuid
 
+import pymongo
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -158,6 +159,11 @@ def scheduler_share():
     date_time_obj = datetime.strptime(content.get('scheduler_date'), "%d/%m/%Y %H:%M")
     # if date_time_obj < datetime.now():
     #     return jsonify(msg='failed check datetime')
+    exist_scheduler = mongo.db.scheduler.find_one({"video_id": content.get('video_id')})
+    if exist_scheduler:
+        mongo.db.scheduler.update_one({"_id": exist_scheduler['_id']}, {"share_number": int(content.get("number"))})
+        return jsonify(msg='updated')
+
     new_scheduler = {
         "_id": str(uuid.uuid4()),
         "video_id": content.get('video_id'),
@@ -184,7 +190,7 @@ def get_scheduler():
         "shared": True if shared == "1" else False
     }
 
-    data = mongo.db.scheduler.find(finder)
+    data = mongo.db.scheduler.find(finder).sort("create_date", pymongo.DESCENDING).skip(page).limit(page_size)
     return jsonify(data=list(data))
 
 
