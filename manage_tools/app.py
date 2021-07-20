@@ -161,7 +161,7 @@ def scheduler_share():
     #     return jsonify(msg='failed check datetime')
     exist_scheduler = mongo.db.scheduler.find_one({"video_id": content.get('video_id')})
     if exist_scheduler:
-        mongo.db.scheduler.update_one({"_id": exist_scheduler['_id']}, {"share_number": int(content.get("number"))})
+        mongo.db.scheduler.update_one({"_id": exist_scheduler['_id']}, {"$set": {"share_number": int(content.get("number"))}})
         return jsonify(msg='updated')
 
     new_scheduler = {
