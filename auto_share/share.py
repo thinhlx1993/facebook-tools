@@ -62,7 +62,7 @@ def auto_share():
                 share_x, share_y, idx = result
                 pyautogui.click(share_x, share_y, interval=1)
             else:
-                break
+                continue
 
             # click options or share to a group
             buttons = ["share_to_group.PNG", "options.PNG"]
@@ -73,7 +73,7 @@ def auto_share():
                 if idx == 1:
                     click_to("share_to_group.PNG", confidence=0.9, interval=1)
             else:
-                break
+                continue
 
             waiting_for("public_group.PNG", confidence=0.85)
             pyautogui.moveTo(relative_position(1027, 549), duration=1)
@@ -201,7 +201,7 @@ def start_watch():
 if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
-    # start_watch()
+    start_watch()
     schedule.every(1).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
     while True:
