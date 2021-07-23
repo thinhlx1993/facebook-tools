@@ -47,6 +47,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
     while start_count < waiting_time:
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         start_count += 1
+        check_exit_program()
         if ret:
             btn_x, btn_y = ret
             pyautogui.moveTo(btn_x, btn_y, duration=duration)
@@ -81,6 +82,7 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=50):
     start_count = 0
     while start_count < waiting_time:
         start_count += 1
+        check_exit_program()
         ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)
         if ret:
             x, y = ret
