@@ -15,11 +15,11 @@ def run(table_data, window):
         link, like, status = row
         if status != 'Downloaded':
             logger.info(f"start download {link}")
-            time.sleep(5)
+            time.sleep(1)
             pyautogui.click(relative_position(300, 54))
+            pyautogui.hotkey("ctrl", "a")
             pyautogui.typewrite(link)
             pyautogui.hotkey('enter')
-            time.sleep(5)
             waiting_for("logo.PNG")
             retry_time = 0
             while retry_time < 5:
