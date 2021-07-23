@@ -21,7 +21,9 @@ def run(table_data, window):
             pyautogui.hotkey('enter')
             time.sleep(5)
             waiting_for("logo.PNG")
-            while True:
+            retry_time = 0
+            while retry_time < 5:
+                retry_time += 1
                 pyautogui.moveTo(relative_position(1027, 549), duration=1)
                 pyautogui.click(relative_position(1027, 549))
                 time.sleep(5)
