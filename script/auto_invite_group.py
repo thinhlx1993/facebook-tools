@@ -11,7 +11,7 @@ def inviting():
     while True:
         # waiting_for("send_invite_group.PNG")
         time.sleep(1)
-        click_many("check_box.PNG", confidence=0.98)
+        click_many("check_box.PNG", confidence=0.98, duration=0.1)
         pyautogui.moveTo(1035, 751)
         pyautogui.scroll(-700)
         check_exit_program()
