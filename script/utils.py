@@ -38,7 +38,7 @@ scheduler_table = db['scheduler']
 
 
 def random_interval():
-    return random.uniform(0.1, 0.5)
+    return random.uniform(0.1, 0.2)
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, check_close=True, duration=0.0):
