@@ -35,8 +35,9 @@ def run(table_data, window):
                     x, y, btn_index = deciscion(buttons)
                     if btn_index == 1:
                         pyautogui.click(x, y)
-                    waiting_box_x, waiting_box_y = waiting_for("waiting_box.PNG", waiting_time=10)
-                    if waiting_box_x is not None:
+                    waiting_box = waiting_for("waiting_box.PNG", waiting_time=10)
+                    if waiting_box is not None:
+                        waiting_box_x, waiting_box_y = waiting_box
                         pyautogui.click(waiting_box_x, waiting_box_y)
                     filename_box = waiting_for("filename_box.PNG")
                     if filename_box:
