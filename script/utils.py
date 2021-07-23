@@ -126,3 +126,8 @@ def relative_position(x, y):
     ratio_y = y/default_height
     width, height = pyautogui.size()
     return int(ratio_x*width), int(ratio_y*height)
+
+
+def check_exit_program():
+    if keyboard.is_pressed('esc'):
+        sys.exit()
