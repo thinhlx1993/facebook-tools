@@ -130,4 +130,5 @@ def relative_position(x, y):
 
 def check_exit_program():
     if keyboard.is_pressed('esc'):
+        print("keyboard pressed")
         sys.exit()
