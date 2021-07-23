@@ -4,7 +4,7 @@ import re
 import json
 import threading
 import PySimpleGUI as sg
-from downloader import run, download_one
+from downloader import run
 from bs4 import BeautifulSoup
 import os
 
@@ -64,8 +64,8 @@ if __name__ == '__main__':
               [sg.Button('Start download'),
                sg.Button('Remove link'),
                sg.Input(key='file_browser', enable_events=True, visible=False), sg.FileBrowse(button_text="Load HTML file", enable_events=True),
-               sg.Button('Cancel'),
-               sg.Button('Remove All Links')]]
+               sg.Button('Remove All Links'),
+               sg.Button('Cancel')]]
 
     # Create the Window
     window = sg.Window('Douyin Downloader', layout)
@@ -75,8 +75,8 @@ if __name__ == '__main__':
         event, values = window.read()
         print('You entered ', values)
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
-            browserExe = "movies.exe"
-            os.system("taskkill /f /im " + browserExe)
+            # browserExe = "movies.exe"
+            # os.system("taskkill /f /im " + browserExe)
             break
         elif event == 'Get Links Online':
             sg.Popup('Bat dau lay links videos. Vui long khong dong cua so!', keep_on_top=True, title="Chu y!")
@@ -93,11 +93,6 @@ if __name__ == '__main__':
             table_data += crawl_movie(values['file_browser'])
             window.Element('table').Update(values=table_data)
             window.Element('table').Update(select_rows=[0])
-        elif event == 'Download':
-            idx = values['table'][0]
-            table_data = window.Element('table').Get()
-            thread = threading.Thread(target=download_one, args=(table_data, idx, window,), daemon=True)
-            thread.start()
         elif event == 'Remove link':
             removed = values['table']
             table_data = window.Element('table').Get()
