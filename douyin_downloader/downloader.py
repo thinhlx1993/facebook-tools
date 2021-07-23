@@ -55,28 +55,3 @@ def run(table_data, window):
                             click_to("yes.PNG")
                         pyautogui.hotkey('ctrl', 'w')
                         break
-
-
-def download_one(table_data, idx, window):
-    row = table_data[idx]
-    link_season = row[0]
-    episode_name = row[1].replace(":", "")
-    link_episode = row[2]
-    webbrowser.open(link_episode)
-    while True:
-        if pyautogui.locateOnScreen(f"buttons/logo.PNG"):
-            break
-
-    btn = pyautogui.locateOnScreen("buttons/restore_page.PNG")
-    if btn:
-        pyautogui.click(292, 54)
-
-    os.makedirs("downloaded", exist_ok=True)
-    download_status = download(episode_name)
-    pyautogui.click(1033, 97)
-    pyautogui.hotkey('ctrl', 'w')
-    window.write_event_value('-THREAD-', [idx, download_status])  # put a message into queue for GUI
-
-# if __name__ == '__main__':
-#     downloader = Downloader()
-#     downloader.start_download('https://theofficetv.com/series/2658-the-cosby-show/seasons/1/episodes/1')
