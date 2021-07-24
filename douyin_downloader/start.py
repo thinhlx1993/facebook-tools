@@ -4,15 +4,15 @@ import re
 import json
 import threading
 import PySimpleGUI as sg
+import pyautogui
+
 from downloader import run
 from bs4 import BeautifulSoup
 import os
+from utils import logger
 
-regex = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$'''
 retry_time = 0
+stop_threads = False
 
 
 def crawl_movie(page_name):
@@ -62,6 +62,7 @@ if __name__ == '__main__':
                         vertical_scroll_only=False,
                         num_rows=24, key='table')],
               [sg.Button('Start download'),
+               sg.Button('Pause'),
                sg.Button('Remove link'),
                sg.Input(key='file_browser', enable_events=True, visible=False), sg.FileBrowse(button_text="Load HTML file", enable_events=True),
                sg.Button('Remove All Links'),
@@ -73,7 +74,8 @@ if __name__ == '__main__':
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read()
-        print('You entered ', values)
+        print(f'{event} You entered {values}')
+        print('event', event)
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
             # browserExe = "movies.exe"
             # os.system("taskkill /f /im " + browserExe)
@@ -83,24 +85,34 @@ if __name__ == '__main__':
             x = threading.Thread(target=crawl_movie, args=(values[0], window, ))
             x.start()
         elif event == 'Start download':
+            window.Element('Start download').Update(text="Downloading")
+            stop_threads = False
+            current_index = 0
+            if len(values['table']) > 0:
+                current_index = values['table'][0]
             table_data = window.Element('table').Get()
-            thread = threading.Thread(target=run, args=(table_data, window,), daemon=True)
+            thread = threading.Thread(target=run, args=(table_data, current_index, window, lambda: stop_threads,), daemon=True)
             thread.start()
         elif event == 'Remove All Links':
             window.Element('table').Update(values=[])
+        elif event == 'Pause':
+            window.Element('Start download').Update(text="Resume")
+            stop_threads = True
         elif event == 'file_browser':
-            table_data = window.Element('table').Get()
-            table_data += crawl_movie(values['file_browser'])
-            window.Element('table').Update(values=table_data)
-            window.Element('table').Update(select_rows=[0])
+            if os.path.isfile(values['file_browser']):
+                table_data = window.Element('table').Get()
+                table_data += crawl_movie(values['file_browser'])
+                window.Element('table').Update(values=table_data)
+                window.Element('table').Update(select_rows=[0])
         elif event == 'Remove link':
             removed = values['table']
             table_data = window.Element('table').Get()
-            for item in removed:
+            for item in reversed(removed):
                 table_data.pop(item)
             window.Element('table').Update(values=table_data)
         elif event == '-THREAD-':
             idx, download_status = values['-THREAD-']
+            logger.debug(f"download status: {idx} {download_status} {len(table_data)}")
             table_data = window.Element('table').Get()
             if download_status:
                 table_data[idx][-1] = 'Downloaded'
@@ -108,6 +120,9 @@ if __name__ == '__main__':
                 table_data[idx][-1] = 'Error'
             window.Element('table').Update(values=table_data, select_rows=[idx])
             window.Refresh()
+            if idx == len(table_data) - 1:
+                window.Element('Start download').Update(text="Start download")
+                pyautogui.alert("Download complete")
         elif event == 'GetLinksSuccessfully':
             with open("movies.json") as json_file:
                 data = json.load(json_file)
