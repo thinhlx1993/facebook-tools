@@ -15,7 +15,14 @@ retry_time = 0
 stop_threads = False
 
 
-def crawl_movie(page_name):
+def crawl_movie(page_name, filter_number):
+
+    try:
+        filter_number = int(filter_number)
+    except Exception as ex:
+        logger.error(ex)
+        filter_number = 0
+
     if not os.path.isfile(page_name):
         return []
 
@@ -35,8 +42,19 @@ def crawl_movie(page_name):
             # print(span.text)
             video_like = span.text
 
-        if video_href:
-            print(f"{video_href}-{video_like} Likes")
+        # convert to int
+        try:
+            factor = 1
+            if 'w' in video_like:
+                video_like = video_like.replace('w', '')
+                factor = 1000
+            video_like = int(video_like) * factor
+        except Exception as ex:
+            logger.error(ex)
+            video_like = 0
+
+        if video_href and video_like >= filter_number:
+            logger.info(f"{video_href}-{video_like} Likes")
             table_data.append([
                 video_href,
                 video_like,
@@ -53,7 +71,8 @@ if __name__ == '__main__':
     # All the stuff inside your window.
     headings = ['links', 'likes', 'status']  # the text of the headings
 
-    layout = [[sg.Table(values=[],
+    layout = [[sg.Text('Likes must greater than'), sg.InputText("0", key="input_number")],
+              [sg.Table(values=[],
                         headings=headings,
                         display_row_numbers=True,
                         justification='right',
@@ -101,7 +120,7 @@ if __name__ == '__main__':
         elif event == 'file_browser':
             if os.path.isfile(values['file_browser']):
                 table_data = window.Element('table').Get()
-                table_data += crawl_movie(values['file_browser'])
+                table_data += crawl_movie(values['file_browser'], values['input_number'])
                 window.Element('table').Update(values=table_data)
                 window.Element('table').Update(select_rows=[0])
         elif event == 'Remove link':
