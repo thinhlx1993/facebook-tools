@@ -37,7 +37,7 @@ scheduler_table = db['scheduler']
 
 
 def random_interval():
-    return random.uniform(0.5, 2)
+    return random.uniform(0.1, 0.5)
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, check_close=True, duration=0.0):
@@ -57,7 +57,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
     return None
 
 
-def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
+def click_many(btn, region=None, confidence=0.8, log=True, duration=0.2):
     if log:
         logger.debug(f"Click many {btn}")
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)

@@ -32,13 +32,13 @@ def run(table_data, current_index, window, stop):
                         return True
 
                     retry_time += 1
-                    pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                    pyautogui.moveTo(relative_position(1027, 549))
                     pyautogui.click(relative_position(1027, 549))
                     time.sleep(3)
-                    pyautogui.moveTo(relative_position(800, 649), duration=1)
+                    pyautogui.moveTo(relative_position(800, 649))
                     download_btn = waiting_for("download_btn.PNG")
                     if download_btn:
-                        pyautogui.click(download_btn, duration=0.5)
+                        pyautogui.click(download_btn)
                         buttons = ["filename_box.PNG", "download_btn.PNG"]
                         x, y, btn_index = deciscion(buttons)
                         if btn_index == 1:
