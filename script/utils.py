@@ -59,7 +59,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
     return None
 
 
-def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
+def click_many(btn, region=None, confidence=0.8, log=True, duration=0.2):
     if log:
         logger.debug(f"Click many {btn}")
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
