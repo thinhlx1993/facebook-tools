@@ -35,7 +35,7 @@ def run(table_data, current_index, window, stop):
                     pyautogui.moveTo(relative_position(1027, 549), duration=0.2)
                     time.sleep(1)
                     pyautogui.click(relative_position(1027, 549), duration=0.2)
-                    time.sleep(3)
+                    time.sleep(1)
                     pyautogui.moveTo(relative_position(800, 649), duration=0.2)
                     download_btn = waiting_for("download_btn.PNG")
                     if download_btn:
