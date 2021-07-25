@@ -32,10 +32,11 @@ def run(table_data, current_index, window, stop):
                         return True
 
                     retry_time += 1
-                    pyautogui.moveTo(relative_position(1027, 549))
-                    pyautogui.click(relative_position(1027, 549))
+                    pyautogui.moveTo(relative_position(1027, 549), duration=0.2)
+                    time.sleep(1)
+                    pyautogui.click(relative_position(1027, 549), duration=0.2)
                     time.sleep(3)
-                    pyautogui.moveTo(relative_position(800, 649))
+                    pyautogui.moveTo(relative_position(800, 649), duration=0.2)
                     download_btn = waiting_for("download_btn.PNG")
                     if download_btn:
                         pyautogui.click(download_btn)
@@ -62,6 +63,7 @@ def run(table_data, current_index, window, stop):
                             if waiting_for("no.PNG", waiting_time=10):
                                 click_to("no.PNG")
                                 click_to("cancel.PNG")
+                            click_to("logo.PNG")
                             pyautogui.hotkey('ctrl', 'w')
                             break
                 download_status = True if retry_time < 5 else False
