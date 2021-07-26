@@ -13,7 +13,7 @@ from utils import logger
 
 retry_time = 0
 stop_threads = False
-
+pyautogui.FAILSAFE = False
 
 def crawl_movie(page_name, filter_number):
 

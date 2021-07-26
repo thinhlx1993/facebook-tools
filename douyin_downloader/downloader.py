@@ -27,17 +27,20 @@ def run(table_data, current_index, window, stop):
                 pyautogui.hotkey('enter')
                 waiting_for("logo.PNG")
                 retry_time = 0
+                download_btn = None
                 while retry_time < 5:
                     if stop():
                         return True
 
                     retry_time += 1
-                    pyautogui.moveTo(relative_position(1027, 549), duration=0.2)
-                    time.sleep(1)
-                    pyautogui.click(relative_position(1027, 549), duration=0.2)
-                    time.sleep(1)
-                    pyautogui.moveTo(relative_position(800, 649), duration=0.2)
-                    download_btn = waiting_for("download_btn.PNG")
+                    for _ in range(3):
+                        pyautogui.moveTo(relative_position(1027, 549), duration=0.2)
+                        pyautogui.click(relative_position(1027, 549), duration=0.2)
+                        pyautogui.moveTo(relative_position(800, 649), duration=0.2)
+                        download_btn = check_exist("download_btn.PNG")
+                        if download_btn:
+                            break
+
                     if download_btn:
                         pyautogui.click(download_btn)
                         buttons = ["filename_box.PNG", "download_btn.PNG"]
