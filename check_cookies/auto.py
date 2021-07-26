@@ -1,6 +1,6 @@
 import pyperclip
 import os
-from check_cookies.utils import *
+from utils import *
 
 # if os.path.isfile("pass.txt"):
 #     os.remove("pass.txt")
