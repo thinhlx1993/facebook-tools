@@ -11,8 +11,8 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 def auto_share():
     current_hour = datetime.now().hour
-    # if current_hour % 2 != 0:
-    #     return
+    if current_hour % 2 != 0:
+        return
 
     logger.debug("start share")
     bar_x, bar_y = relative_position(0, 1000)
