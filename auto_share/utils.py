@@ -1,7 +1,10 @@
 import ssl
+import sys
 
 import clipboard
 import logging
+
+import keyboard
 import pymongo
 import pyautogui
 import time
@@ -37,6 +40,8 @@ scheduler_table = db['scheduler']
 
 
 def random_interval():
+    if keyboard.is_pressed('esc'):
+        sys.exit()
     return random.uniform(0.5, 2)
 
 
@@ -48,7 +53,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
         start_count += 1
         if ret:
             btn_x, btn_y = ret
-            pyautogui.moveTo(btn_x, btn_y, duration=duration)
+            # pyautogui.moveTo(btn_x, btn_y, duration=duration)
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
             return True
@@ -63,7 +68,7 @@ def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
     elements = pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)))
     for ret in elements:
-        pyautogui.moveTo(ret, duration=duration)
+        # pyautogui.moveTo(ret, duration=duration)
         pyautogui.click(ret, interval=random_interval(), duration=duration)
     return number_element
 

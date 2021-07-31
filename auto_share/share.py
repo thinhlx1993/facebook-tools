@@ -75,15 +75,15 @@ def auto_share():
             else:
                 continue
 
-            waiting_for("public_group.PNG", confidence=0.85)
-            pyautogui.moveTo(relative_position(1027, 549), duration=1)
-            time.sleep(2)
-            scroll_time = random.choice([1, 2, 3, 4])
-            pyautogui.scroll(-200*scroll_time)
-            time.sleep(10)
-            waiting_for("public_group.PNG")
             retry_time = 0
             while retry_time < 5:
+                waiting_for("public_group.PNG", confidence=0.85)
+                pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                time.sleep(2)
+                scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
+                pyautogui.scroll(-100 * scroll_time)
+                time.sleep(2)
+                waiting_for("public_group.PNG")
                 groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
                 groups = list(groups)
                 if len(groups) > 0:
@@ -162,22 +162,27 @@ def watch_videos():
             click_to("start_btn.PNG")
             waiting_for("dark_logo.PNG", confidence=0.9)
 
-            for i in range(50):
-                time.sleep(1)
-                playbtn = check_exist("playbtn.PNG", confidence=0.85)
-                if playbtn:
-                    pyautogui.moveTo(playbtn)
-                    pyautogui.click(playbtn)
-                # pyautogui.moveTo(relative_position(1027, 549), duration=1)
-                # pyautogui.moveTo(relative_position(800, 649), duration=1)
-                playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
-                if playbtn:
-                    pyautogui.moveTo(playbtn)
-                    pyautogui.click(playbtn)
-
-            if random.choice([0, 1]):
-                click_to("like_btn.PNG", confidence=0.9, interval=3)
-            click_to("dark_logo.PNG", confidence=0.9)
+    time.sleep(60)
+    # for i in range(50):
+    #     time.sleep(1)
+    #     playbtn = check_exist("playbtn.PNG", confidence=0.85)
+    #     if playbtn:
+    #         pyautogui.moveTo(playbtn)
+    #         pyautogui.click(playbtn)
+    #     # pyautogui.moveTo(relative_position(1027, 549), duration=1)
+    #     # pyautogui.moveTo(relative_position(800, 649), duration=1)
+    #     playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
+    #     if playbtn:
+    #         pyautogui.moveTo(playbtn)
+    #         pyautogui.click(playbtn)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9,
+                                           region=(bar_x, bar_y, width, height))
+    # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
+    for browser in browsers:
+        pyautogui.click(browser)
+        if random.choice([0, 1]):
+            click_to("like_btn.PNG", confidence=0.9, interval=1, waiting_time=10)
+        click_to("dark_logo.PNG", confidence=0.9, waiting_time=10)
 
 
 def start_share():
@@ -200,8 +205,8 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    auto_share()
-    # start_watch()
+    # auto_share()
+    # watch_videos()
     schedule.every(1).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
     while True:
