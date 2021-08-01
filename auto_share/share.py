@@ -13,8 +13,8 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 
 def auto_share():
     current_hour = datetime.now().hour
-    if current_hour % 2 != 0:
-        return
+    # if current_hour % 2 != 0:
+    #     return
 
     logger.debug("start share")
     bar_x, bar_y = relative_position(0, 1000)
@@ -23,8 +23,10 @@ def auto_share():
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
-        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
-        if scheduler:
+        scheduler = scheduler_table.find({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
+        scheduler = list(scheduler)
+        if len(scheduler) > 0:
+            scheduler = scheduler[0]
             share_number = scheduler.get("share_number", 1)
             share_number -= 1
             update_data = {"share_number": share_number}
@@ -204,7 +206,7 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    # auto_share()
+    auto_share()
     # watch_videos()
     schedule.every(1).hours.at(":00").do(start_share)
     schedule.every(1).hours.at(":30").do(start_watch)
