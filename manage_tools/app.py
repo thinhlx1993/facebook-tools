@@ -148,7 +148,7 @@ def update_cookies(cookie_id):
 
 
 @app.route("/scheduler", methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def scheduler_share():
     try:
         content = request.get_json()
@@ -179,7 +179,7 @@ def scheduler_share():
 
 
 @app.route("/scheduler", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_scheduler():
     page = int(request.args.get("page", 1))
     page_size = int(request.args.get("page_size", 10))
