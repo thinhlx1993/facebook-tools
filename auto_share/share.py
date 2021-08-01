@@ -88,36 +88,36 @@ def auto_share():
                 time.sleep(2)
                 groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
                 groups = list(groups)
-                if len(groups) > 0:
-                    for group in groups:
-                        # group = random.choice(groups)
-                        left, top, _, height = group
-                        height -= 8
-                        top -= 5
-                        exist = check_exist("nhom_cong_khai.PNG")
-                        if exist:
-                            public_x, public_y, _, _ = exist
-                            width = left - public_x
-                            width, height = relative_position(width, height)
-                            left, top = relative_position(left, top)
-                            img = pyautogui.screenshot(region=(public_x, top, width, height))
-                            group_name = pytesseract.image_to_string(img).strip()
+                # if len(groups) > 0:
+                for group in groups:
+                    # group = random.choice(groups)
+                    left, top, _, height = group
+                    height -= 8
+                    top -= 5
+                    exist = check_exist("nhom_cong_khai.PNG")
+                    if exist:
+                        public_x, public_y, _, _ = exist
+                        width = left - public_x
+                        width, height = relative_position(width, height)
+                        left, top = relative_position(left, top)
+                        img = pyautogui.screenshot(region=(public_x, top, width, height))
+                        group_name = pytesseract.image_to_string(img).strip()
 
-                            try:
-                                os.makedirs("debug", exist_ok=True)
-                                img.save(f"debug/{group_name}.PNG")
-                            except Exception as ex:
-                                pass
+                        try:
+                            os.makedirs("debug", exist_ok=True)
+                            img.save(f"debug/{group_name}.PNG")
+                        except Exception as ex:
+                            pass
 
-                            logger.info(f"found group name: {group_name}")
+                        logger.info(f"found group name: {group_name}")
 
-                            groups_shared = scheduler.get('groups_shared', [])
-                            if group_name not in groups_shared:
-                                groups_shared.append(group_name)
-                                scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
-                                pyautogui.click(group, duration=0.5)
-                                shared = True
-                                break
+                        groups_shared = scheduler.get('groups_shared', [])
+                        if group_name not in groups_shared:
+                            groups_shared.append(group_name)
+                            scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
+                            pyautogui.click(group, duration=0.5)
+                            shared = True
+                            break
 
                 retry_time += 1
 
