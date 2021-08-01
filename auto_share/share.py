@@ -2,6 +2,8 @@ import os
 import random
 import time
 from datetime import datetime
+
+import pymongo
 import schedule
 import pyautogui
 import pytesseract
@@ -21,7 +23,7 @@ def auto_share():
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
-        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", -1)
+        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
         if scheduler:
             share_number = scheduler.get("share_number", 1)
             share_number -= 1

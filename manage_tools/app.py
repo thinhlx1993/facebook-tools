@@ -190,7 +190,7 @@ def get_scheduler():
         "shared": True if shared == "1" else False
     }
 
-    data = mongo.db.scheduler.find(finder).sort("create_date", pymongo.DESCENDING).skip(page).limit(page_size)
+    data = mongo.db.scheduler.find(finder).sort("create_date", pymongo.ASCENDING).skip(page).limit(page_size)
     return jsonify(data=list(data))
 
 
