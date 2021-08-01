@@ -78,12 +78,11 @@ def auto_share():
             retry_time = 0
             while retry_time < 5:
                 waiting_for("public_group.PNG", confidence=0.85)
-                pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                pyautogui.moveTo(relative_position(1027, 549))
                 time.sleep(2)
                 scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
-                pyautogui.scroll(-100 * scroll_time)
+                pyautogui.scroll(100 * scroll_time)
                 time.sleep(2)
-                waiting_for("public_group.PNG")
                 groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
                 groups = list(groups)
                 if len(groups) > 0:
