@@ -21,7 +21,7 @@ def auto_share():
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
     # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
     for browser in browsers:
-        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}})
+        scheduler = scheduler_table.find_one({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", -1)
         if scheduler:
             share_number = scheduler.get("share_number", 1)
             share_number -= 1
