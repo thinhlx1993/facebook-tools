@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # and the original + photoshop
     # Create a VideoCapture object and read from input file
     # If the input is the camera, pass 0 instead of the video file name
-    root_folder = """split"""
+    root_folder = """downloaded/FamiliadeCalibre"""
     for file in os.listdir(root_folder):
         file_ext = os.path.splitext(file)[1]
         if file_ext != '.mp4':
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         fps = cap.get(cv2.CAP_PROP_FPS)
         print(f"fps: {fps}")
         time_per_frame = 1/fps
-        start_time = "00:00:00"
+        start_time = 0
         counting = False
         prev_frame = None
         similar = None
@@ -43,8 +43,9 @@ if __name__ == '__main__':
         width = int(frame_width * scale_percent / 100)
         height = int(frame_height * scale_percent / 100)
         dim = (width, height)
-        number_frame = 0
+        start_frame = 0
         is_full_sense = False
+        keep_ratio = 0.85
         total_frame = 0
         times = []
         # Read until video is completed
@@ -53,7 +54,6 @@ if __name__ == '__main__':
             ret, frame = cap.read()
             # convert the images to grayscale
             if ret:
-                current_time = datetime.datetime.utcfromtimestamp(total_frame/fps).strftime("%H:%M:%S")
                 # Display the resulting frame
 
                 frame_resize = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
@@ -68,26 +68,29 @@ if __name__ == '__main__':
                 prev_frame = frame_resize
 
                 if similar:
-                    if similar >= 0.85:
-                        # if number_frame/fps < 5:
-                        number_frame += 1
-                        # print(number_frame)
-                        if number_frame == 1 and not counting:
-                            # print(f"start counting {current_time}")
-                            counting = True
-                            # out.write(frame)
-                            # cv2.imshow('Frame', frame_resize)
-                        elif number_frame == 150 and counting:
-                            counting = False
-                            times.append([start_time, current_time])
-                            print(f"{start_time}, {current_time}")
-                    if similar < 0.85:
+                    # if similar >= 0.85:
+                    #     # if number_frame/fps < 5:
+                    #     number_frame += 1
+                    #     # print(number_frame)
+                    #     if number_frame == 1 and not counting:
+                    #         # print(f"start counting {current_time}")
+                    #         counting = True
+                    #         # out.write(frame)
+                    #         # cv2.imshow('Frame', frame_resize)
+                    #     elif number_frame == 10*int(fps) and counting:
+                    #         counting = False
+                    #         times.append([start_time, current_time])
+                    #         print(f"{start_time}, {current_time}")
+                    if similar < 0.85 and ((total_frame - start_frame) > 5 * fps):
                         if counting:
                             counting = False
-                            # print(f"end counting {current_time}")
-                        start_time = current_time
-                        number_frame = 0
-                        # print(total_frame/fps)
+                        current_time_format = datetime.datetime.utcfromtimestamp(total_frame / fps).strftime("%H:%M:%S")
+                        remove_frame = (start_frame + (keep_ratio * (total_frame - start_frame))) / fps
+                        current_time_remove = datetime.datetime.utcfromtimestamp(remove_frame).strftime("%H:%M:%S")
+                        start_time_format = datetime.datetime.utcfromtimestamp(start_frame / fps).strftime("%H:%M:%S")
+                        times.append([start_time_format, current_time_remove])
+                        print(f"{start_time_format}, {current_time_remove}, {current_time_format}")
+                        start_frame = total_frame
 
                 total_frame += 1
                 # Press Q on keyboard to  exit
@@ -107,7 +110,10 @@ if __name__ == '__main__':
                 myfile.write(f"file {output_filename}\n")
 
         cmd = ["ffmpeg", "-f", "concat", "-i", "concatenate.txt", "-c", "copy", file_out, "-y"]
-        output = subprocess.check_output(cmd).decode("utf-8").strip()
+        try:
+            output = subprocess.check_output(cmd).decode("utf-8").strip()
+        except:
+            pass
 
         for file_tmp in os.listdir('tmp'):
             os.remove(f"tmp/{file_tmp}")
