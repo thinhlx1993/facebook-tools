@@ -48,7 +48,8 @@ class AutoVia:
         pyautogui.moveTo(hma_x, hma_y)
         pyautogui.click(hma_x, hma_y, button='right', interval=3)
         click_to("change_ip_address.png", interval=3)
-        waiting_for("change_ip_success.PNG")
+        # waiting_for("change_ip_success.PNG")
+        time.sleep(20)
         click_to("google.PNG")
 
     def log_in(self):
@@ -331,7 +332,7 @@ class AutoVia:
         pyautogui.hotkey('ctrl', 'w')
 
     def save_results(self):
-        with open("change_password.txt", 'a', encoding='utf-8') as output_file:
+        with open("via-share-output.txt", 'a', encoding='utf-8') as output_file:
             output_file.write(f"{self.fb_id}|{self.new_password}|{self.new_secret_key}|{self.new_email_outlook}|{self.new_email_password}\n")
             output_file.close()
 
@@ -377,7 +378,7 @@ class AutoVia:
 
 if __name__ == '__main__':
     # while True:
-    with open("via_new.txt", encoding='utf-8') as vias:
+    with open("via-share.txt", encoding='utf-8') as vias:
         for via in vias.readlines():
             via = via.strip().split('|')
             # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
@@ -385,11 +386,11 @@ if __name__ == '__main__':
             # print(fb_id, old_password, old_secret_key, old_email_outlook, old_email_password)
             st = time.time()
             worker = AutoVia(
-                fb_id=fb_id,
-                old_password=old_password,
-                old_secret_key=old_secret_key,
-                old_email_outlook=old_email_outlook,
-                old_email_password=old_email_password
+                fb_id=fb_id.strip(),
+                old_password=old_password.strip(),
+                old_secret_key=old_secret_key.strip(),
+                old_email_outlook=old_email_outlook.strip(),
+                old_email_password=old_email_password.strip()
             )
             worker.start_job()
             et = time.time()
