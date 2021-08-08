@@ -94,14 +94,12 @@ def auto_share():
                 for group in groups:
                     # group = random.choice(groups)
                     left, top, _, height = group
-                    height -= 8
-                    top -= 5
                     exist = check_exist("nhom_cong_khai.PNG")
                     if exist:
                         public_x, public_y, _, _ = exist
                         width = left - public_x
-                        width, height = relative_position(width, height)
-                        left, top = relative_position(left, top)
+                        # width, height = relative_position(width, height)
+                        # left, top = relative_position(left, top)
                         img = pyautogui.screenshot(region=(public_x, top, width, height))
                         group_name = pytesseract.image_to_string(img).strip()
 
