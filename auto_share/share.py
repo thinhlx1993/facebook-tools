@@ -195,6 +195,8 @@ def watch_videos():
         if random.choice([0, 1]):
             click_to("like_btn.PNG", confidence=0.9, interval=1, waiting_time=10)
         click_to("dark_logo.PNG", confidence=0.9, waiting_time=10)
+        pyautogui.hotkey('ctrl', 'f4')
+        pyautogui.hotkey('windows', 'd')
 
 
 def start_share():
