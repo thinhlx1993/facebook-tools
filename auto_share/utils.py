@@ -42,7 +42,7 @@ scheduler_table = db['scheduler']
 def random_interval():
     if keyboard.is_pressed('esc'):
         sys.exit()
-    return random.uniform(0.1, 0.5)
+    return 0
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, check_close=True, duration=0.0):
@@ -62,7 +62,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
     return None
 
 
-def click_many(btn, region=None, confidence=0.8, log=True, duration=1):
+def click_many(btn, region=None, confidence=0.8, log=True, duration=0):
     if log:
         logger.debug(f"Click many {btn}")
     number_element = len(list(pyautogui.locateAllOnScreen(f"btn/{btn}", confidence=confidence, region=region)))

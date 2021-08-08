@@ -27,7 +27,7 @@ app = Flask(__name__)
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = "89dfkj3478@123!!**(#"  # Change this!
 # app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
-app.config["MONGO_URI"] = "mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/test?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb+srv://facebook:auft.baff1vawn*WEC@cluster0.dtlfk.mongodb.net/test?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE"
 app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
@@ -168,7 +168,7 @@ def scheduler_share():
         "_id": str(uuid.uuid4()),
         "video_id": content.get('video_id'),
         "title": content.get('title'),
-        "scheduler_time": date_time_obj.timestamp(),
+        "scheduler_time": datetime.now().timestamp(),
         "create_date": datetime.now().timestamp(),
         "shared": False,
         "share_number": int(content.get("number"))

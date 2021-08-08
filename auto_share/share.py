@@ -9,6 +9,7 @@ import pyautogui
 import pytesseract
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger
+pyautogui.PAUSE = 0.2
 
 
 def auto_share():
@@ -16,13 +17,13 @@ def auto_share():
     if current_hour % 2 != 0:
         return
 
+    time.sleep(2)
     logger.debug("start share")
-    bar_x, bar_y = relative_position(0, 1000)
-    width, height = relative_position(1920, 80)
-    print(bar_x, bar_y, width, height)
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
-    # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
+    pyautogui.click(1024, 1024)
+    pyautogui.hotkey('windows', 'd')
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
+        st = time.time()
         scheduler = scheduler_table.find({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
         scheduler = list(scheduler)
         if len(scheduler) > 0:
@@ -35,25 +36,35 @@ def auto_share():
 
             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
             video_id = scheduler['video_id']
-            # video_id = "652094622414134"
             logger.debug(f"share video {video_id}")
 
             pyautogui.click(browser)
-            click_many("close_btn.PNG")
-            click_to("dark_logo.PNG", confidence=0.9)
-            pyautogui.click(relative_position(300, 54))
-            typeing_text(f"fb.com/{video_id}")
-            pyautogui.hotkey('enter')
-            waiting_for("dark_logo.PNG", confidence=0.9)
+            pyautogui.press('enter')
+            click_to("signin.PNG", waiting_time=10)
+            # click_to("fullscreen.PNG", waiting_time=10)
+            pyautogui.hotkey('alt', 'space')
+            pyautogui.press('x')
+            # click_many("close_btn.PNG")
+            # click_to("dark_logo.PNG", confidence=0.9)
 
-            for i in range(50):
+            while True:
+                reload_bar = waiting_for("reload_bar.PNG")
+                if reload_bar:
+                    bar_x, bar_y = reload_bar
+                    pyautogui.click(bar_x+100, bar_y)
+                pyautogui.hotkey('ctrl', 'a')
+                paste_text(f"fb.com/{video_id}")
+                pyautogui.hotkey('enter')
+                if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=20):
+                    break
+                time.sleep(5)
+
+            for i in range(60):
                 time.sleep(1)
                 playbtn = check_exist("playbtn.PNG", confidence=0.85)
                 if playbtn:
                     pyautogui.moveTo(playbtn)
                     pyautogui.click(playbtn)
-                # pyautogui.moveTo(relative_position(1027, 549), duration=1)
-                # pyautogui.moveTo(relative_position(800, 649), duration=1)
                 playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
                 if playbtn:
                     pyautogui.moveTo(playbtn)
@@ -64,7 +75,7 @@ def auto_share():
             result = deciscion(buttons, confidence=0.9)
             if result:
                 share_x, share_y, idx = result
-                pyautogui.click(share_x, share_y, interval=1)
+                pyautogui.click(share_x, share_y)
             else:
                 continue
 
@@ -75,7 +86,7 @@ def auto_share():
                 share_x, share_y, idx = result
                 pyautogui.click(share_x, share_y, interval=1)
                 if idx == 1:
-                    click_to("share_to_group.PNG", confidence=0.9, interval=1)
+                    click_to("share_to_group.PNG", confidence=0.9)
             else:
                 continue
 
@@ -140,6 +151,10 @@ def auto_share():
                 else:
                     # click_many("close_btn.PNG")
                     click_to("dark_logo.PNG", confidence=0.9)
+        et = time.time()
+        logger.debug(f"share done time consuming: {round((et - st)/60, 1)}")
+        pyautogui.hotkey('ctrl', 'f4')
+        pyautogui.hotkey('windows', 'd')
 
 
 def watch_videos():
@@ -202,10 +217,10 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    # auto_share()
+    auto_share()
     # watch_videos()
-    schedule.every(1).hours.at(":00").do(start_share)
-    schedule.every(1).hours.at(":00").do(start_watch)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # schedule.every(1).hours.at(":00").do(start_share)
+    # schedule.every(1).hours.at(":00").do(start_watch)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
