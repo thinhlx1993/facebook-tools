@@ -10,7 +10,7 @@ from utils import logger, click_to, click_many, check_exist, waiting_for, typein
 if __name__ == '__main__':
     time.sleep(2)
     for _ in range(100):
-        click_to("groups.PNG")
+        click_to("etc.PNG")
         click_to("out_groups.PNG")
         click_to("confirm_out_groups.PNG")
         pyautogui.click(989, 540)
