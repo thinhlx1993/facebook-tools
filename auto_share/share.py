@@ -7,7 +7,7 @@ import pymongo
 import schedule
 import pyautogui
 import pytesseract
-from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
+from auto_share.utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger
 pyautogui.PAUSE = 0.2
 
@@ -47,22 +47,22 @@ def auto_share():
             # click_many("close_btn.PNG")
             # click_to("dark_logo.PNG", confidence=0.9)
 
-            retry_time = 0
-            while retry_time < 5:
-                retry_time += 1
-                reload_bar = waiting_for("reload_bar.PNG")
-                if reload_bar:
-                    bar_x, bar_y = reload_bar
-                    pyautogui.click(bar_x+100, bar_y)
+            reload_bar = waiting_for("reload_bar.PNG")
+            if reload_bar:
+                bar_x, bar_y = reload_bar
+                pyautogui.click(bar_x+100, bar_y-10)
+                pyautogui.hotkey('ctrl', 'a')
+
+                paste_text('fb.com')
+                pyautogui.hotkey('enter')
+                waiting_for("dark_logo.PNG", waiting_time=10)
+
+                pyautogui.click(bar_x+100, bar_y-10)
                 pyautogui.hotkey('ctrl', 'a')
                 paste_text(f"fb.com/{video_id}")
                 pyautogui.hotkey('enter')
-                if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=20):
-                    break
-                time.sleep(5)
-                logger.error(f"Can not loggin")
 
-            if retry_time < 5:
+            if waiting_for("dark_logo.PNG", waiting_time=25):
                 for i in range(60):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
@@ -167,38 +167,58 @@ def watch_videos():
     if current_hour % 2 == 0:
         return
 
-    bar_x, bar_y = relative_position(0, 1000)
-    width, height = relative_position(1920, 80)
-    print(bar_x, bar_y, width, height)
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9, region=(bar_x, bar_y, width, height))
-    # pyautogui.screenshot("1.png", region=(bar_x, bar_y, width, height))
+    time.sleep(2)
+    logger.debug("start share")
+    pyautogui.click(1024, 1024)
+    pyautogui.hotkey('windows', 'd')
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
-        pyautogui.click(browser)
-        click_many("close_btn.PNG")
-        click_to("dark_logo.PNG", confidence=0.9)
-        # pyautogui.click(relative_position(300, 54))
-        # paste_text(f"facebook.com/watch")
-        # pyautogui.hotkey('enter')
-        waiting_for("start_btn.PNG", confidence=0.9, waiting_time=20)
-        if check_exist("start_btn.PNG"):
-            click_to("start_btn.PNG")
-            waiting_for("dark_logo.PNG", confidence=0.9)
+        st = time.time()
 
-        for i in range(120):
-            time.sleep(1)
-            playbtn = check_exist("playbtn.PNG", confidence=0.85)
-            if playbtn:
-                pyautogui.moveTo(playbtn)
-                pyautogui.click(playbtn)
-            # pyautogui.moveTo(relative_position(1027, 549), duration=1)
-            # pyautogui.moveTo(relative_position(800, 649), duration=1)
-            playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
-            if playbtn:
-                pyautogui.moveTo(playbtn)
-                pyautogui.click(playbtn)
-        if random.choice([0, 1]):
-            click_to("like_btn.PNG", confidence=0.9, interval=1, waiting_time=10)
-        click_to("dark_logo.PNG", confidence=0.9, waiting_time=10)
+        pyautogui.click(browser)
+        pyautogui.press('enter')
+        click_to("signin.PNG", waiting_time=10)
+        # click_to("fullscreen.PNG", waiting_time=10)
+        pyautogui.hotkey('alt', 'space')
+        pyautogui.press('x')
+        # click_many("close_btn.PNG")
+        # click_to("dark_logo.PNG", confidence=0.9)
+
+        retry_time = 0
+        while retry_time < 2:
+            retry_time += 1
+            reload_bar = check_exist("reload_bar.PNG")
+            if reload_bar:
+                bar_x, bar_y, _, _ = reload_bar
+                pyautogui.click(bar_x + 100, bar_y)
+            pyautogui.hotkey('ctrl', 'a')
+
+            paste_text('fb.com')
+            pyautogui.hotkey('enter')
+            if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=10):
+                break
+            time.sleep(5)
+            logger.error(f"Can not log in {browser}")
+
+        start_btn = waiting_for("start_btn.PNG", waiting_time=20)
+        if start_btn:
+            pyautogui.click(start_btn)
+
+            for i in range(60):
+                time.sleep(1)
+                playbtn = check_exist("playbtn.PNG", confidence=0.85)
+                if playbtn:
+                    pyautogui.moveTo(playbtn)
+                    pyautogui.click(playbtn)
+                # pyautogui.moveTo(relative_position(1027, 549), duration=1)
+                # pyautogui.moveTo(relative_position(800, 649), duration=1)
+                playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
+                if playbtn:
+                    pyautogui.moveTo(playbtn)
+                    pyautogui.click(playbtn)
+            if random.choice([0, 1]):
+                click_to("like_btn.PNG", confidence=0.9, interval=1, waiting_time=10)
+            click_to("dark_logo.PNG", confidence=0.9, waiting_time=10)
         pyautogui.hotkey('ctrl', 'f4')
         pyautogui.hotkey('windows', 'd')
 
