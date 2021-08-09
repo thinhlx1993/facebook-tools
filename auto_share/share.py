@@ -88,7 +88,7 @@ def auto_share():
                 scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
                 pyautogui.scroll(100 * scroll_time)
                 time.sleep(2)
-                groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.7)
+                groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.8)
                 groups = list(groups)
                 # if len(groups) > 0:
                 for group in groups:
@@ -144,6 +144,10 @@ def auto_share():
 
 def watch_videos():
     logger.info("Start watch video")
+    current_hour = datetime.now().hour
+    if current_hour % 2 == 0:
+        return
+
     bar_x, bar_y = relative_position(0, 1000)
     width, height = relative_position(1920, 80)
     print(bar_x, bar_y, width, height)
@@ -200,8 +204,8 @@ if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
     # watch_videos()
-    schedule.every(2).hours.at(":30").do(start_watch)
-    # schedule.every(30).minutes.do(start_watch)
+    schedule.every(1).hours.at(":00").do(start_share)
+    schedule.every(1).hours.at(":00").do(start_watch)
     while True:
         schedule.run_pending()
         time.sleep(1)
