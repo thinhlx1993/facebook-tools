@@ -47,7 +47,9 @@ def auto_share():
             # click_many("close_btn.PNG")
             # click_to("dark_logo.PNG", confidence=0.9)
 
-            while True:
+            retry_time = 0
+            while retry_time < 5:
+                retry_time += 1
                 reload_bar = waiting_for("reload_bar.PNG")
                 if reload_bar:
                     bar_x, bar_y = reload_bar
