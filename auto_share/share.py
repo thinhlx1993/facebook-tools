@@ -60,6 +60,7 @@ def auto_share():
                 if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=20):
                     break
                 time.sleep(5)
+                logger.error(f"Can not loggin")
 
             for i in range(60):
                 time.sleep(1)
