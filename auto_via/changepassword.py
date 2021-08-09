@@ -1,16 +1,4 @@
-from utils import logger
-import clipboard
-import requests
-import pymongo
-import pyautogui
-import time
 import random
-import pyotp
-import uuid
-import re
-from bs4 import BeautifulSoup
-from bson import ObjectId
-from exchangelib import Credentials, Account
 from datetime import datetime
 import string
 import time
@@ -20,10 +8,10 @@ import clipboard
 import pyautogui
 import pyotp
 
-from utils import cookies_table, waiting_for, get_fb_id, \
+from auto_via.utils import cookies_table, waiting_for, get_fb_id, \
     click_to, check_exist, deciscion, via_share_table, \
     logger, paste_text, get_code, get_exist_phone, get_new_phone, get_out_look, get_email, click_many, cancel_session, \
-    get_email_cenationtshirt, get_emails
+    get_email_cenationtshirt, get_emails, logger
 
 
 class AutoVia:
@@ -378,12 +366,12 @@ class AutoVia:
 
 if __name__ == '__main__':
     # while True:
-    with open("via-share.txt", encoding='utf-8') as vias:
+    with open("2.csv", encoding='utf-8') as vias:
         for via in vias.readlines():
-            via = via.strip().split('|')
+            via = via.strip().split(',')
             # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
             fb_id, old_password, old_secret_key, old_email_outlook, old_email_password = via
-            # print(fb_id, old_password, old_secret_key, old_email_outlook, old_email_password)
+            print(fb_id, old_password, old_secret_key, old_email_outlook, old_email_password)
             st = time.time()
             worker = AutoVia(
                 fb_id=fb_id.strip(),
