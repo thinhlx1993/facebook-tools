@@ -50,14 +50,15 @@ def auto_share():
             reload_bar = waiting_for("reload_bar.PNG")
             if reload_bar:
                 bar_x, bar_y = reload_bar
-                pyautogui.click(bar_x+100, bar_y-10)
+                bar_y += 10
+                pyautogui.click(bar_x+100, bar_y)
                 pyautogui.hotkey('ctrl', 'a')
 
                 paste_text('fb.com')
                 pyautogui.hotkey('enter')
                 waiting_for("dark_logo.PNG", waiting_time=10)
 
-                pyautogui.click(bar_x+100, bar_y-10)
+                pyautogui.click(bar_x+100, bar_y)
                 pyautogui.hotkey('ctrl', 'a')
                 paste_text(f"fb.com/{video_id}")
                 pyautogui.hotkey('enter')
@@ -164,8 +165,8 @@ def auto_share():
 def watch_videos():
     logger.info("Start watch video")
     current_hour = datetime.now().hour
-    if current_hour % 2 == 0:
-        return
+    # if current_hour % 2 == 0:
+    #     return
 
     time.sleep(2)
     logger.debug("start share")
@@ -197,7 +198,6 @@ def watch_videos():
             pyautogui.hotkey('enter')
             if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=10):
                 break
-            time.sleep(5)
             logger.error(f"Can not log in {browser}")
 
         start_btn = waiting_for("start_btn.PNG", waiting_time=20)
@@ -243,8 +243,8 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    auto_share()
-    # watch_videos()
+    # auto_share()
+    watch_videos()
     # schedule.every(1).hours.at(":00").do(start_share)
     # schedule.every(1).hours.at(":00").do(start_watch)
     # while True:
