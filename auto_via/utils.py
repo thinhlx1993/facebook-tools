@@ -52,7 +52,7 @@ via_share_table = db['via_share']
 
 
 def random_interval():
-    return random.uniform(0.5, 1.5)
+    return random.uniform(0.1, 0.5)
 
 
 def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None, check_close=True):
@@ -65,7 +65,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=1000, interval=None,
         start_count += 1
         if ret:
             btn_x, btn_y = ret
-            pyautogui.moveTo(btn_x, btn_y, duration=0.7)
+            pyautogui.moveTo(btn_x, btn_y)
             interval = random_interval() if interval is None else interval
             pyautogui.click(btn_x, btn_y, interval=interval)
             break
