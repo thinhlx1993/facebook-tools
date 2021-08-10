@@ -3,6 +3,7 @@ import random
 import time
 from datetime import datetime
 
+import clipboard
 import pymongo
 import schedule
 import pyautogui
@@ -21,7 +22,7 @@ def auto_share():
     current_hour = datetime.now().hour
     # if current_hour % 2 != 0:
     #     return
-
+    shared_via = []
     time.sleep(2)
     logger.debug("start share")
     show_desktop()
@@ -43,13 +44,21 @@ def auto_share():
             logger.debug(f"share video {video_id}")
             pyautogui.click(1024, 1024)
             pyautogui.click(browser)
+
+            pyautogui.press('f2')
+            pyautogui.hotkey('ctrl', 'c')
+            via_name = clipboard.paste()
+            if via_name in shared_via:
+                break
+
+            shared_via.append(via_name)
+            logger.info(f"click to: {browser}, via_name {via_name}")
+            pyautogui.press('enter')
             pyautogui.press('enter')
             click_to("signin.PNG", waiting_time=10)
-            # click_to("fullscreen.PNG", waiting_time=10)
+
             pyautogui.hotkey('alt', 'space')
             pyautogui.press('x')
-            # click_many("close_btn.PNG")
-            # click_to("dark_logo.PNG", confidence=0.9)
 
             reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
             if reload_bar:
@@ -181,7 +190,13 @@ def watch_videos():
         st = time.time()
 
         pyautogui.click(browser)
+        pyautogui.press('f2')
+        pyautogui.hotkey('ctrl', 'c')
+        via_name = clipboard.paste()
+        logger.info(f"click to: {browser}, via_name {via_name}")
         pyautogui.press('enter')
+        pyautogui.press('enter')
+
         click_to("signin.PNG", waiting_time=10)
         # click_to("fullscreen.PNG", waiting_time=10)
         pyautogui.hotkey('alt', 'space')
@@ -189,20 +204,14 @@ def watch_videos():
         # click_many("close_btn.PNG")
         # click_to("dark_logo.PNG", confidence=0.9)
 
-        retry_time = 0
-        while retry_time < 2:
-            retry_time += 1
-            reload_bar = check_exist("reload_bar.PNG")
-            if reload_bar:
-                bar_x, bar_y, _, _ = reload_bar
-                pyautogui.click(bar_x + 100, bar_y)
+        reload_bar = waiting_for("reload_bar.PNG")
+        if reload_bar:
+            bar_x, bar_y, _, _ = reload_bar
+            pyautogui.click(bar_x + 150, bar_y+10)
             pyautogui.hotkey('ctrl', 'a')
 
-            paste_text('fb.com')
-            pyautogui.hotkey('enter')
-            if waiting_for("dark_logo.PNG", confidence=0.95, waiting_time=10):
-                break
-            logger.error(f"Can not log in {browser}")
+        paste_text('fb.com')
+        pyautogui.hotkey('enter')
 
         start_btn = waiting_for("start_btn.PNG", waiting_time=20)
         if start_btn:
@@ -248,9 +257,9 @@ def start_watch():
 if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
-    # watch_videos()
-    schedule.every(6).hours.at(":00").do(start_share)
+    watch_videos()
+    # schedule.every(6).hours.at(":00").do(start_share)
     # schedule.every(1).hours.at(":00").do(start_watch)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
