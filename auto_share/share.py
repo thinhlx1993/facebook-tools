@@ -12,16 +12,20 @@ from auto_share.utils import click_to, click_many, check_exist, paste_text, type
 pyautogui.PAUSE = 0.2
 
 
+def show_desktop():
+    pyautogui.click(1024, 1024)
+    pyautogui.hotkey('windows', 'd')
+
+
 def auto_share():
     current_hour = datetime.now().hour
-    if current_hour % 2 != 0:
-        return
+    # if current_hour % 2 != 0:
+    #     return
 
     time.sleep(2)
     logger.debug("start share")
-    pyautogui.click(1024, 1024)
-    pyautogui.hotkey('windows', 'd')
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
+    show_desktop()
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9)
     for browser in browsers:
         st = time.time()
         scheduler = scheduler_table.find({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
@@ -37,7 +41,7 @@ def auto_share():
             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
-
+            pyautogui.click(1024, 1024)
             pyautogui.click(browser)
             pyautogui.press('enter')
             click_to("signin.PNG", waiting_time=10)
@@ -47,7 +51,7 @@ def auto_share():
             # click_many("close_btn.PNG")
             # click_to("dark_logo.PNG", confidence=0.9)
 
-            reload_bar = waiting_for("reload_bar.PNG")
+            reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
             if reload_bar:
                 bar_x, bar_y = reload_bar
                 bar_y += 10
@@ -244,9 +248,9 @@ def start_watch():
 if __name__ == '__main__':
     logger.info("start share video")
     # auto_share()
-    watch_videos()
-    # schedule.every(1).hours.at(":00").do(start_share)
+    # watch_videos()
+    schedule.every(6).hours.at(":00").do(start_share)
     # schedule.every(1).hours.at(":00").do(start_watch)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
