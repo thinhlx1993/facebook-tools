@@ -49,6 +49,13 @@ class AutoVia:
         pyautogui.press('tab')
         paste_text(self.old_password)
         click_to("sign_in_btn.PNG", confidence=0.9)
+        time.sleep(3)
+        if check_exist("wrong_credentials.PNG"):
+            return False
+
+        if check_exist("cookies_alive_1.PNG"):
+            return True
+
         click_to("EnglishUS_1.PNG")
         if not check_exist("continue.PNG"):
             click_to("EnglishUS_1.PNG", confidence=0.8)
@@ -62,11 +69,13 @@ class AutoVia:
         click_to("continue.PNG", waiting_time=10)
         click_to("itme.PNG", waiting_time=10)
         click_to("continue.PNG", waiting_time=10)
-        if waiting_for("dark_drop_down.PNG", waiting_time=20, confidence=0.9):
+        if waiting_for("dark_logo.PNG", waiting_time=20, confidence=0.9):
             click_to("dark_drop_down.PNG", confidence=0.9)
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
-        waiting_for("cookies_alive_1.PNG")
+        if waiting_for("cookies_alive_1.PNG", waiting_time=10):
+            return True
+        return False
 
     @staticmethod
     def check_dark_light_theme():
@@ -77,140 +86,48 @@ class AutoVia:
 
     @staticmethod
     def change_language():
-        # click_to("cookies_alive_1.PNG", confidence=0.95)
-        # if check_exist("not_in_fun_screen_light.PNG", confidence=0.85):
-        #     click_to("not_in_fun_screen_light.PNG")
         click_to("change_language_1.PNG", confidence=0.8)
-        time.sleep(5)
+        waiting_for("cookies_alive_1.PNG")
         if not check_exist("is_english.PNG"):
             click_to("EnglishUS_1.PNG")
             pyautogui.press("f5")
         waiting_for("cookies_alive_1.PNG")
 
-    def change_phone(self):
-        # click_to("cookies_alive_1.PNG")
-        # click_to("setting_dropdown.PNG", interval=2, confidence=0.85)
-        # click_to("setting_icon.PNG", confidence=0.85)
-        click_to("settings_page.PNG", confidence=0.8)
-        x, y, btn_idx = deciscion(["cai_dat_tai_khoan.PNG", 'cai_dat_chung.PNG', "cai_dat_chung_1.PNG"], confidence=0.7)
-        pyautogui.click(x, y)
-        contact = waiting_for("contact.PNG")
-        if contact is None:
-            return False
-
-        (contact_x, contact_y) = contact
-        time.sleep(2)
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.8, check_close=False)
-        click_to("add_phone_btn.PNG", confidence=0.7)
-        click_to("add_your_phone.PNG", confidence=0.7)
-        self.phone_number, self.session = get_new_phone()
-        #     time.sleep(10)
-        click_to("input_phone_inp.PNG", confidence=0.7)
-        paste_text(self.phone_number)
-        click_to("tiep_tuc.PNG")
-
-        otp_code = get_code(self.session)
-        if otp_code is not None:
-            if check_exist("input_otp_box.PNG"):
-                click_to("input_otp_box.PNG")
-            pyautogui.typewrite(otp_code, interval=0.2)
-            click_to("confirm_otp.PNG")
-            waiting_for("input_otp_success.PNG")
-            click_to("ok_btn.PNG")
-
-            # forgot password
-            session = get_exist_phone(self.phone_number)
-            pyautogui.click(x=1767, y=520)  # click to space
-            pyautogui.hotkey('ctrl', 'shift', 'n')
-            if check_exist("fun_screen_not_able.PNG"):
-                click_to("fun_screen_not_able.PNG")
-
-            click_to("forgot_password.PNG", interval=5)
-            btns = ["find_your_account.PNG", "input_phone_fogot_password.PNG"]
-            x, y, btn_index = deciscion(btns)
-            if btn_index == 0:
-                click_to("input_phone_box.PNG")
-                paste_text(self.phone_number)
-                click_to("tim_kiem_phone.PNG")
-                click_to("tim_kiem_phone_2.PNG")
-                if waiting_for("no_result.PNG", waiting_time=10):
-                    cancel_session(session)
-                    return False
-
-                otp_code = get_code(session)
-                if otp_code is not None:
-                    pyautogui.click(x=1767, y=520, interval=1)  # click to space
-                    click_to("nhap_ma_otp.PNG")
-                    paste_text(otp_code)
-                    click_to("tiep_tuc.PNG")
-                    click_to("new_password_box.PNG")
-                    paste_text("Minh1234@")
-                    click_to("tiep_tuc.PNG", interval=5)
-                    pyautogui.click(x=1454, y=610, interval=0.5)
-                    time.sleep(15)
-                    pyautogui.hotkey("alt", "f4")
-                    return True
-                else:
-                    pyautogui.hotkey('ctrl', 'f4')
-
-            if btn_index == 1:
-                click_to("input_phone_fogot_password.PNG")
-                paste_text(self.phone_number)
-                click_to("forgot_password_search.PNG")
-                if waiting_for("no_result.PNG", waiting_time=10):
-                    cancel_session(session)
-                    return False
-                click_to("forgot_password_next.PNG")
-
-                otp_code = get_code(session)
-                if otp_code is not None:
-                    pyautogui.click(x=1767, y=520, interval=1)  # click to space
-                    click_to("forgot_password_input_otp.PNG")
-                    paste_text(otp_code)
-                    click_to("forgot_password_next.PNG")
-                    click_to("new_password_inp.PNG")
-                    paste_text("Minh1234@")
-                    click_to("forgot_password_next.PNG", interval=5)
-                    pyautogui.click(x=1454, y=610, interval=0.5)
-                    time.sleep(15)
-                    pyautogui.hotkey("alt", "f4")
-                    return True
-                else:
-                    pyautogui.hotkey('ctrl', 'f4')
-        return False
-
     def change_email(self):
-        click_to("settings_page.PNG", confidence=0.8)
+        while True:
+            click_to("settings_page.PNG", confidence=0.85)
+            if waiting_for("settings_title.PNG", waiting_time=10):
+                break
         self.new_email_outlook, self.new_email_password = get_email()
         print(self.new_email_outlook, self.new_email_password)
-        contact_x, contact_y = waiting_for("contact.PNG")
-        click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
-        click_to("add_phone_btn.PNG", confidence=0.7)
-        click_to("new_email_inp.PNG")
-        paste_text(self.new_email_outlook)
-        click_to("add_new_email.PNG")
-        waiting_for("add_other_email.PNG", waiting_time=100)
-        # waiting_for("nhap lai mat khau.PNG", waiting_time=30)
-        # if check_exist("nhap lai mat khau.PNG"):
-        #     paste_text("Minh1234@")
-        #     click_to("send_password.PNG")
-
-        # if not check_exist("email_already_used.PNG"):
-        waiting_for("add_other_email.PNG")
-        href, otp = get_out_look(self.new_email_outlook, self.new_email_password)
-        pyautogui.click(x=1738, y=517)
-        pyautogui.hotkey('ctrl', 't', interval=1)
-        paste_text(href)
-        pyautogui.press('enter')
-        time.sleep(10)
-        pyautogui.hotkey('ctrl', 'w')
-        pyautogui.press('f5')
-        waiting_for("cookies_alive_1.PNG")
-        return True
+        contact = waiting_for("contact.PNG")
+        if contact:
+            contact_x, contact_y = waiting_for("contact.PNG")
+            click_to("modify_phone.PNG", region=(contact_x + 780, contact_y - 20, 200, 40), confidence=0.7, check_close=False)
+            click_to("add_phone_btn.PNG", confidence=0.7)
+            click_to("new_email_inp.PNG")
+            paste_text(self.new_email_outlook)
+            click_to("add_new_email.PNG")
+            waiting_for("add_other_email.PNG", waiting_time=100)
+            waiting_for("add_other_email.PNG")
+            href, otp = get_out_look(self.new_email_outlook, self.new_email_password)
+            pyautogui.click(x=1738, y=517)
+            pyautogui.hotkey('ctrl', 't', interval=1)
+            paste_text(href)
+            pyautogui.press('enter')
+            time.sleep(10)
+            pyautogui.hotkey('ctrl', 'w')
+            pyautogui.press('f5')
+            waiting_for("cookies_alive_1.PNG")
+            return True
+        return False
 
     @staticmethod
     def remove_old_contact():
-        click_to("settings_page.PNG", confidence=0.8)
+        while True:
+            click_to("settings_page.PNG", confidence=0.85)
+            if waiting_for("settings_title.PNG", waiting_time=10):
+                break
         contact = waiting_for("contact.PNG")
         if contact:
             contact_x, contact_y = contact
@@ -261,8 +178,8 @@ class AutoVia:
         pyautogui.press("tab")
         paste_text(self.new_password)
         click_to("save_password.PNG")
-        waiting_for("tiep_tuc.PNG")
-        pyautogui.hotkey('ctrl', 'w')
+        waiting_for("tiep_tuc.PNG", waiting_time=15)
+        # pyautogui.hotkey('ctrl', 'w')
 
     @staticmethod
     def clear_browser():
@@ -292,36 +209,36 @@ class AutoVia:
         via_share_table.insert_one(insert_dict)
 
     def start_job(self):
-        try:
-            worker.change_ip()
-            worker.show_meta_data()
-            time.sleep(10)
-            # get cookies
-            worker.log_in()
-            worker.show_meta_data()
-            worker.change_language()
-            worker.show_meta_data()
+        worker.change_ip()
+        worker.show_meta_data()
+        time.sleep(10)
+        # get cookies
+        logged = worker.log_in()
+        if not logged:
+            return False
+        worker.show_meta_data()
+        worker.change_language()
+        worker.show_meta_data()
 
-            # update current email
-            status = worker.change_email()
-            worker.show_meta_data()
-            worker.remove_old_contact()
-            worker.show_meta_data()
-            worker.change_2fa_code()
-            worker.show_meta_data()
-            worker.change_password()
-            worker.show_meta_data()
-            worker.show_meta_data()
-            worker.save_results()
-            worker.clear_browser()
-            return True
-        except Exception as ex:
-            print(ex)
+        # update current email
+        status = worker.change_email()
+        if not status:
+            return False
+        worker.show_meta_data()
+        worker.remove_old_contact()
+        worker.show_meta_data()
+        worker.change_2fa_code()
+        worker.show_meta_data()
+        worker.change_password()
+        worker.show_meta_data()
+        worker.save_results()
+        # worker.clear_browser()
+        return True
 
 
 if __name__ == '__main__':
     # while True:
-    with open("2.csv", encoding='utf-8') as vias:
+    with open("3.csv", encoding='utf-8') as vias:
         for via in vias.readlines():
             via = via.strip().split(',')
             # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
@@ -331,6 +248,7 @@ if __name__ == '__main__':
 
             exist = via_share_table.find_one({"fb_id": fb_id.strip()})
             if not exist:
+                pyautogui.hotkey('ctrl', 'shift', 'n')
                 worker = AutoVia(
                     fb_id=fb_id.strip(),
                     old_password=old_password.strip(),
@@ -339,5 +257,6 @@ if __name__ == '__main__':
                     old_email_password=old_email_password.strip()
                 )
                 worker.start_job()
+                pyautogui.hotkey('ctrl', 'f4')
             et = time.time()
             print(f"Time consuming {(et - st) / 60} min")

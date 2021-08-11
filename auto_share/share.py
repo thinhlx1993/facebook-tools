@@ -23,10 +23,10 @@ def auto_share():
     # if current_hour % 2 != 0:
     #     return
     shared_via = []
-    time.sleep(2)
+    time.sleep(5)
     logger.debug("start share")
     show_desktop()
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.9)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
         scheduler = scheduler_table.find({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
@@ -49,7 +49,7 @@ def auto_share():
             pyautogui.hotkey('ctrl', 'c')
             via_name = clipboard.paste()
             if via_name in shared_via:
-                break
+                continue
 
             shared_via.append(via_name)
             logger.info(f"click to: {browser}, via_name {via_name}")
@@ -256,8 +256,8 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
-    # auto_share()
-    watch_videos()
+    auto_share()
+    # watch_videos()
     # schedule.every(6).hours.at(":00").do(start_share)
     # schedule.every(1).hours.at(":00").do(start_watch)
     # while True:
