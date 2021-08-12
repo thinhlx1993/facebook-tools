@@ -207,29 +207,29 @@ def cancel_session(session):
     return True if res.status_code == 200 else False
 
 
-def get_out_look(email_outlook, email_password):
-    credentials = Credentials(email_outlook, email_password)
-    account = Account(email_outlook, credentials=credentials, autodiscover=True)
+def get_out_look(email_outlook, email_password, account_outlook):
     while True:
-        time.sleep(5)
-        for item in account.inbox.all().order_by('-datetime_received')[:5]:
-            if item.sender.email_address == 'security@facebookmail.com':
-                print(item.datetime_received)
-                soup = BeautifulSoup(item.body, 'html.parser')
-                all_tags = soup.find_all('a')
-                href = ""
-                for tag in all_tags:
-                    # href="https://www.facebook.com/confirmcontact.php?c=60029&z=0&gfid=AQDLZ-4fI-MohTeh-Ls"
-                    href = tag.get('href')
-                    if 'confirmcontact' in href and email_outlook in str(item.body):
-                        print(href)
-                        break
+        try:
+            for item in account_outlook.inbox.all().order_by('-datetime_received')[:50]:
+                if item.sender.email_address == 'security@facebookmail.com':
+                    print(item.datetime_received)
+                    soup = BeautifulSoup(item.body, 'html.parser')
+                    all_tags = soup.find_all('a')
+                    href = ""
+                    for tag in all_tags:
+                        # href="https://www.facebook.com/confirmcontact.php?c=60029&z=0&gfid=AQDLZ-4fI-MohTeh-Ls"
+                        href = tag.get('href')
+                        if 'confirmcontact' in href and email_outlook in str(item.body):
+                            print(href)
+                            break
 
-                otp_code = re.search("\d{5}", item.body)
-                if otp_code:
-                    start, end = otp_code.span()
-                    otp_code = item.body[start: end]
-                return href, otp_code
+                    otp_code = re.search("\d{5}", item.body)
+                    if otp_code:
+                        start, end = otp_code.span()
+                        otp_code = item.body[start: end]
+                    return href, otp_code
+        except Exception as ex:
+            print(ex)
 
 
 def get_emails(target):
@@ -331,7 +331,7 @@ def get_email():
                     for item in account.inbox.all().order_by('-datetime_received')[:50]:
                         if item.sender.email_address == 'security@facebookmail.com':
                             myquery = {"_id": email['_id']}
-                            newvalues = {"$set": {"failed": True, "used": True}}
+                            newvalues = {"$set": {"failed": False, "used": True}}
                             email_table.update_one(myquery, newvalues)
                             logger.error(f"email is not accessible: {email_outlook}")
                             email_ok = False
@@ -342,11 +342,16 @@ def get_email():
                         newvalues = {"$set": {"used": True}}
                         email_table.update_one(myquery, newvalues)
                         logger.debug(f"email is ready: {email_outlook}")
-                        return email_outlook, email_password
+                        return email_outlook, email_password, account
                 except Exception as ex:
                     myquery = {"_id": email['_id']}
-                    newvalues = {"$set": {"failed": True, "used": True}}
+                    newvalues = {"$set": {"failed": True, "used": False}}
                     email_table.update_one(myquery, newvalues)
+                    # hma_x, hma_y = waiting_for("hma_app.PNG")
+                    # pyautogui.moveTo(hma_x, hma_y)
+                    # pyautogui.click(hma_x, hma_y, button='right', interval=3)
+                    # click_to("change_ip_address.png", interval=3)
+                    # waiting_for("change_ip_success.PNG")
                     logger.error(f"email is not accessible: {email_outlook}")
 
 

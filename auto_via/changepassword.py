@@ -22,8 +22,8 @@ class AutoVia:
         self.old_email_password = old_email_password
         self.old_secret_key = old_secret_key
         self.old_password = old_password
-        self.new_email_outlook = ''
-        self.new_email_password = ''
+        self.new_email_outlook = old_email_outlook
+        self.new_email_password = old_email_password
         self.new_secret_key = ''
         self.new_password = ''
 
@@ -36,8 +36,8 @@ class AutoVia:
         pyautogui.moveTo(hma_x, hma_y)
         pyautogui.click(hma_x, hma_y, button='right', interval=3)
         click_to("change_ip_address.png", interval=3)
-        # waiting_for("change_ip_success.PNG")
-        time.sleep(20)
+        waiting_for("change_ip_success.PNG")
+        # time.sleep(20)
         click_to("google.PNG")
 
     def log_in(self):
@@ -73,9 +73,27 @@ class AutoVia:
             click_to("dark_drop_down.PNG", confidence=0.9)
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
-        if waiting_for("cookies_alive_1.PNG", waiting_time=10):
-            return True
-        return False
+        if waiting_for("locked.PNG", waiting_time=10):
+            self.new_password = self.old_password
+            self.new_secret_key = self.old_secret_key
+            self.new_email_outlook = self.old_email_outlook
+            self.new_email_password = self.old_email_password
+            self.save_results()
+            return False
+
+        if waiting_for("accept_cookies_title.PNG", waiting_time=10):
+            click_to("accept_cookies.PNG")
+
+        click_to("settings_page.PNG")
+        if waiting_for("locked.PNG", waiting_time=10):
+            self.new_password = self.old_password
+            self.new_secret_key = self.old_secret_key
+            self.new_email_outlook = self.old_email_outlook
+            self.new_email_password = self.old_email_password
+            self.save_results()
+            return False
+
+        return True
 
     @staticmethod
     def check_dark_light_theme():
@@ -87,6 +105,8 @@ class AutoVia:
     @staticmethod
     def change_language():
         click_to("change_language_1.PNG", confidence=0.8)
+        click_to("accept_cookies.PNG", confidence=0.5)
+        pyautogui.click(x=951, y=725)
         waiting_for("cookies_alive_1.PNG")
         if not check_exist("is_english.PNG"):
             click_to("EnglishUS_1.PNG")
@@ -98,7 +118,7 @@ class AutoVia:
             click_to("settings_page.PNG", confidence=0.85)
             if waiting_for("settings_title.PNG", waiting_time=10):
                 break
-        self.new_email_outlook, self.new_email_password = get_email()
+        self.new_email_outlook, self.new_email_password, account_outlook = get_email()
         print(self.new_email_outlook, self.new_email_password)
         contact = waiting_for("contact.PNG")
         if contact:
@@ -110,7 +130,7 @@ class AutoVia:
             click_to("add_new_email.PNG")
             waiting_for("add_other_email.PNG", waiting_time=100)
             waiting_for("add_other_email.PNG")
-            href, otp = get_out_look(self.new_email_outlook, self.new_email_password)
+            href, otp = get_out_look(self.new_email_outlook, self.new_email_password, account_outlook)
             pyautogui.click(x=1738, y=517)
             pyautogui.hotkey('ctrl', 't', interval=1)
             paste_text(href)
@@ -210,7 +230,7 @@ class AutoVia:
 
     def start_job(self):
         worker.change_ip()
-        worker.show_meta_data()
+        # worker.show_meta_data()
         time.sleep(10)
         # get cookies
         logged = worker.log_in()
@@ -221,11 +241,11 @@ class AutoVia:
         worker.show_meta_data()
 
         # update current email
-        status = worker.change_email()
-        if not status:
-            return False
+        # status = worker.change_email()
+        # if not status:
+        #     return False
         worker.show_meta_data()
-        worker.remove_old_contact()
+        # worker.remove_old_contact()
         worker.show_meta_data()
         worker.change_2fa_code()
         worker.show_meta_data()
