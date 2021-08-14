@@ -187,7 +187,8 @@ def get_scheduler():
     shared = request.args.get('shared', '')
     finder = {
         "video_id": {"$regex": video_id},
-        "shared": True if shared == "1" else False
+        "shared": True if shared == "1" else False,
+        "share_number": {"$ne": 0}
     }
 
     data = mongo.db.scheduler.find(finder).sort("create_date", pymongo.ASCENDING).skip(page).limit(page_size)

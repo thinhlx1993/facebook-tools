@@ -10,9 +10,9 @@ from utils import logger, click_to, click_many, check_exist, waiting_for, typein
 if __name__ == '__main__':
     time.sleep(2)
     for _ in range(100):
-        click_to("etc.PNG")
+        click_to("joined.PNG")
         click_to("out_groups.PNG")
-        click_to("confirm_out_groups.PNG")
+        click_to("leave_group.PNG")
         pyautogui.click(989, 540)
         pyautogui.hotkey('ctrl', 'w')
         time.sleep(1)

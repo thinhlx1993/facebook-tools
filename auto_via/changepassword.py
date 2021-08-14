@@ -49,12 +49,9 @@ class AutoVia:
         pyautogui.press('tab')
         paste_text(self.old_password)
         click_to("sign_in_btn.PNG", confidence=0.9)
-        time.sleep(3)
-        if check_exist("wrong_credentials.PNG"):
-            return False
 
-        if check_exist("cookies_alive_1.PNG"):
-            return True
+        if waiting_for("wrong_credentials.PNG", waiting_time=20):
+            return False
 
         click_to("EnglishUS_1.PNG")
         if not check_exist("continue.PNG"):
@@ -73,6 +70,7 @@ class AutoVia:
             click_to("dark_drop_down.PNG", confidence=0.9)
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
+
         if waiting_for("locked.PNG", waiting_time=10):
             self.new_password = self.old_password
             self.new_secret_key = self.old_secret_key
@@ -93,7 +91,14 @@ class AutoVia:
             self.save_results()
             return False
 
-        return True
+        click_to("change_language_1.PNG", confidence=0.8)
+        if waiting_for("login_approved.PNG", waiting_time=10):
+            return False
+        if waiting_for("facebook_logo.PNG", waiting_time=10):
+            return False
+        if waiting_for("cookies_alive_1.PNG", waiting_time=10) or waiting_for("dark_logo.PNG", waiting_time=10):
+            return True
+        return False
 
     @staticmethod
     def check_dark_light_theme():
@@ -105,7 +110,6 @@ class AutoVia:
     @staticmethod
     def change_language():
         click_to("change_language_1.PNG", confidence=0.8)
-        click_to("accept_cookies.PNG", confidence=0.5)
         pyautogui.click(x=951, y=725)
         waiting_for("cookies_alive_1.PNG")
         if not check_exist("is_english.PNG"):
@@ -159,6 +163,7 @@ class AutoVia:
 
     def change_2fa_code(self):
         click_to('2fa_page.PNG', confidence=0.9)
+
         click_to("manage_2fa.PNG")
         waiting_for("2fa_title.PNG")
         # Xác thực 2 yếu tố đang bật
@@ -169,23 +174,38 @@ class AutoVia:
             if check_exist("enter_password.PNG"):
                 paste_text(self.old_password)
                 pyautogui.press('enter')
+        if waiting_for("login_approved.PNG", waiting_time=10):
+            self.new_secret_key = self.old_secret_key
+            self.new_email_outlook = self.old_email_outlook
+            self.new_email_password = self.old_email_password
+            self.save_results()
+            return False
         click_to("use_authenticator_app.PNG")
         waiting_for("next_btn_otp.PNG")
         pyautogui.moveTo(989, 540)
         pyautogui.dragTo(1183, 610, 1, button='left')
         pyautogui.hotkey('ctrl', 'c')
         self.new_secret_key = clipboard.paste().strip().replace(' ', '')
-        totp = pyotp.TOTP(self.new_secret_key)
-        print("Current OTP:", totp.now())
+        try:
+            totp = pyotp.TOTP(self.new_secret_key)
+            print("Current OTP:", totp.now())
+        except Exception as ex:
+            return False
         click_to("next_btn_otp.PNG", check_close=False)
         waiting_for("enter_2fa_code.PNG")
         paste_text(totp.now())
         waiting_for("2fa_enabled.PNG")
+        return True
 
     def change_password(self):
         click_to("security_page.PNG", confidence=0.8)
         waiting_for("account_proteted_title.PNG", confidence=0.7)
-        use_2fa_x, use_2fa_y = waiting_for("use_change_password.PNG")
+
+        change_password = waiting_for("use_change_password.PNG")
+        if not change_password:
+            return False
+
+        use_2fa_x, use_2fa_y = change_password
         click_to("edit_btn.PNG", region=(use_2fa_x + 500, use_2fa_y - 20, 400, 100))
         time.sleep(5)
         click_to("current_password.PNG")
@@ -197,9 +217,11 @@ class AutoVia:
         paste_text(self.new_password)
         pyautogui.press("tab")
         paste_text(self.new_password)
-        click_to("save_password.PNG")
+        pyautogui.press('enter')
+        # click_to("save_password.PNG")
         waiting_for("tiep_tuc.PNG", waiting_time=15)
         # pyautogui.hotkey('ctrl', 'w')
+        return True
 
     @staticmethod
     def clear_browser():
@@ -246,10 +268,13 @@ class AutoVia:
         #     return False
         worker.show_meta_data()
         # worker.remove_old_contact()
+        status = worker.change_password()
+        if not status:
+            return False
         worker.show_meta_data()
-        worker.change_2fa_code()
-        worker.show_meta_data()
-        worker.change_password()
+        status = worker.change_2fa_code()
+        if not status:
+            return False
         worker.show_meta_data()
         worker.save_results()
         # worker.clear_browser()
@@ -258,7 +283,7 @@ class AutoVia:
 
 if __name__ == '__main__':
     # while True:
-    with open("3.csv", encoding='utf-8') as vias:
+    with open("4.csv", encoding='utf-8') as vias:
         for via in vias.readlines():
             via = via.strip().split(',')
             # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
@@ -268,6 +293,7 @@ if __name__ == '__main__':
 
             exist = via_share_table.find_one({"fb_id": fb_id.strip()})
             if not exist:
+                pyautogui.click(989, 540)
                 pyautogui.hotkey('ctrl', 'shift', 'n')
                 worker = AutoVia(
                     fb_id=fb_id.strip(),
