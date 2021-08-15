@@ -40,12 +40,13 @@ def auto_share():
             if share_number == 0:
                 update_data['shared'] = True
 
-            scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
             pyautogui.click(997, 452)
-            pyautogui.click(browser)
+            if not check_exist("coccoc.PNG"):
+                show_desktop()
 
+            pyautogui.click(browser)
             pyautogui.press('f2')
             pyautogui.hotkey('ctrl', 'c')
             via_name = clipboard.paste()
@@ -57,11 +58,12 @@ def auto_share():
             pyautogui.press('enter')
             pyautogui.press('enter')
             # click_to("signin.PNG", waiting_time=10)
-            pyautogui.moveTo(997, 452)
+            click_to("reload_bar.PNG")
             pyautogui.hotkey('alt', 'space')
-            maximize = waiting_for("maximize.PNG", waiting_time=10)
-            if maximize:
-                pyautogui.press('x')
+            # maximize = waiting_for("maximize.PNG", waiting_time=10)
+            # if maximize:
+            time.sleep(1)
+            pyautogui.press('x')
 
             time.sleep(1)
             pyautogui.click(997, 452)
@@ -117,42 +119,43 @@ def auto_share():
                 retry_time = 0
                 shared = False
                 while retry_time < 3 and not shared:
-                    waiting_for("public_group.PNG", confidence=0.85)
-                    pyautogui.moveTo(relative_position(1027, 549))
-                    time.sleep(2)
-                    scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
-                    pyautogui.scroll(100 * scroll_time)
-                    time.sleep(2)
-                    groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.8)
-                    groups = list(groups)
-                    # if len(groups) > 0:
-                    for group in groups:
-                        # group = random.choice(groups)
-                        left, top, _, height = group
-                        exist = check_exist("nhom_cong_khai.PNG")
-                        if exist:
-                            public_x, public_y, _, _ = exist
-                            width = left - public_x
-                            # width, height = relative_position(width, height)
-                            # left, top = relative_position(left, top)
-                            img = pyautogui.screenshot(region=(public_x, top, width, height))
-                            group_name = pytesseract.image_to_string(img).strip()
+                    public_group = waiting_for("public_group.PNG", confidence=0.85, waiting_time=15)
+                    if public_group:
+                        pyautogui.moveTo(relative_position(1027, 549))
+                        time.sleep(2)
+                        scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
+                        pyautogui.scroll(100 * scroll_time)
+                        time.sleep(2)
+                        groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.8)
+                        groups = list(groups)
+                        # if len(groups) > 0:
+                        for group in groups:
+                            # group = random.choice(groups)
+                            left, top, _, height = group
+                            exist = check_exist("nhom_cong_khai.PNG")
+                            if exist:
+                                public_x, public_y, _, _ = exist
+                                width = left - public_x
+                                # width, height = relative_position(width, height)
+                                # left, top = relative_position(left, top)
+                                img = pyautogui.screenshot(region=(public_x, top, width, height))
+                                group_name = pytesseract.image_to_string(img).strip()
 
-                            try:
-                                os.makedirs("debug", exist_ok=True)
-                                img.save(f"debug/{int(time.time())}.PNG")
-                            except Exception as ex:
-                                pass
+                                try:
+                                    os.makedirs("debug", exist_ok=True)
+                                    img.save(f"debug/{int(time.time())}.PNG")
+                                except Exception as ex:
+                                    pass
 
-                            logger.info(f"found group name: {group_name}")
+                                logger.info(f"found group name: {group_name}")
 
-                            groups_shared = scheduler.get('groups_shared', [])
-                            if group_name not in groups_shared:
-                                groups_shared.append(group_name)
-                                scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
-                                pyautogui.click(group, duration=0.5)
-                                shared = True
-                                break
+                                groups_shared = scheduler.get('groups_shared', [])
+                                if group_name not in groups_shared:
+                                    groups_shared.append(group_name)
+                                    scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
+                                    pyautogui.click(group, duration=0.5)
+                                    shared = True
+                                    break
 
                     retry_time += 1
 
@@ -175,6 +178,7 @@ def auto_share():
                     else:
                         # click_many("close_btn.PNG")
                         click_to("dark_logo.PNG", confidence=0.9)
+                        scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                 pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
@@ -207,13 +211,14 @@ def watch_videos():
         click_to("signin.PNG", waiting_time=10)
         # click_to("fullscreen.PNG", waiting_time=10)
         pyautogui.hotkey('alt', 'space')
+        time.sleep(1)
         pyautogui.press('x')
         # click_many("close_btn.PNG")
         # click_to("dark_logo.PNG", confidence=0.9)
-
+        pyautogui.click(997, 452)
         reload_bar = waiting_for("reload_bar.PNG")
         if reload_bar:
-            bar_x, bar_y, _, _ = reload_bar
+            bar_x, bar_y = reload_bar
             pyautogui.click(bar_x + 150, bar_y+10)
             pyautogui.hotkey('ctrl', 'a')
 
