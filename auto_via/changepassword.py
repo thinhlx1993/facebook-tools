@@ -50,11 +50,11 @@ class AutoVia:
         paste_text(self.old_password)
         click_to("sign_in_btn.PNG", confidence=0.9)
 
-        if waiting_for("wrong_credentials.PNG", waiting_time=20):
+        if waiting_for("wrong_credentials.PNG", waiting_time=10):
             return False
 
         click_to("EnglishUS_1.PNG")
-        if not check_exist("continue.PNG"):
+        if not waiting_for("continue.PNG", waiting_time=10):
             click_to("EnglishUS_1.PNG", confidence=0.8)
 
         secret_key = self.old_secret_key.strip().replace(' ', '')
@@ -71,13 +71,13 @@ class AutoVia:
             click_to("dark_theme.PNG")
             click_to("off_dark_theme.PNG")
 
-        if waiting_for("locked.PNG", waiting_time=10):
-            self.new_password = self.old_password
-            self.new_secret_key = self.old_secret_key
-            self.new_email_outlook = self.old_email_outlook
-            self.new_email_password = self.old_email_password
-            self.save_results()
-            return False
+        # if waiting_for("locked.PNG", waiting_time=10):
+        #     self.new_password = self.old_password
+        #     self.new_secret_key = self.old_secret_key
+        #     self.new_email_outlook = self.old_email_outlook
+        #     self.new_email_password = self.old_email_password
+        #     self.save_results()
+        #     return False
 
         if waiting_for("accept_cookies_title.PNG", waiting_time=10):
             click_to("accept_cookies.PNG")
@@ -235,16 +235,16 @@ class AutoVia:
 
     def save_results(self):
         with open("via-share-output.txt", 'a', encoding='utf-8') as output_file:
-            output_file.write(f"{self.fb_id}|{self.new_password}|{self.new_secret_key}|{self.new_email_outlook}|{self.new_email_password}\n")
+            output_file.write(f"{self.fb_id}|{self.old_password}|{self.old_secret_key}|{self.old_email_outlook}|{self.old_email_password}\n")
             output_file.close()
 
         insert_dict = {
             "_id": str(uuid.uuid4()),
             "fb_id": self.fb_id,
-            "password": self.new_password,
-            "secret_key": self.new_secret_key,
-            "email": self.new_email_outlook,
-            "email_password": self.new_email_password,
+            "password": self.old_password,
+            "secret_key": self.old_secret_key,
+            "email": self.old_email_outlook,
+            "email_password": self.old_email_password,
             "phone_number": '',
             "created_date": datetime.now()
         }
@@ -253,28 +253,27 @@ class AutoVia:
     def start_job(self):
         worker.change_ip()
         # worker.show_meta_data()
-        time.sleep(10)
         # get cookies
         logged = worker.log_in()
         if not logged:
             return False
-        worker.show_meta_data()
-        worker.change_language()
-        worker.show_meta_data()
+        # worker.show_meta_data()
+        # worker.change_language()
+        # worker.show_meta_data()
 
         # update current email
         # status = worker.change_email()
         # if not status:
         #     return False
-        worker.show_meta_data()
+        # worker.show_meta_data()
         # worker.remove_old_contact()
-        status = worker.change_password()
-        if not status:
-            return False
-        worker.show_meta_data()
-        status = worker.change_2fa_code()
-        if not status:
-            return False
+        # status = worker.change_password()
+        # if not status:
+        #     return False
+        # worker.show_meta_data()
+        # status = worker.change_2fa_code()
+        # if not status:
+        #     return False
         worker.show_meta_data()
         worker.save_results()
         # worker.clear_browser()
@@ -283,7 +282,7 @@ class AutoVia:
 
 if __name__ == '__main__':
     # while True:
-    with open("4.csv", encoding='utf-8') as vias:
+    with open("3.csv", encoding='utf-8') as vias:
         for via in vias.readlines():
             via = via.strip().split(',')
             # 1164660951|satthu111|ON64EQWAJJBCSO7CPIBXV56NRWEDCIHI|rttvakelsey@hotmail.com|flEanxd6jrw
@@ -291,7 +290,7 @@ if __name__ == '__main__':
             print(fb_id, old_password, old_secret_key, old_email_outlook, old_email_password)
             st = time.time()
 
-            exist = via_share_table.find_one({"fb_id": fb_id.strip()})
+            exist = via_share_table.find_one({"fb_id": fb_id.strip(), "password": {"$ne": old_password}})
             if not exist:
                 pyautogui.click(989, 540)
                 pyautogui.hotkey('ctrl', 'shift', 'n')

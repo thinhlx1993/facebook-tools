@@ -5,6 +5,7 @@ from datetime import datetime
 
 import clipboard
 import pymongo
+import uuid
 import schedule
 import pyautogui
 import pytesseract
@@ -14,8 +15,8 @@ pyautogui.PAUSE = 0.2
 
 
 def show_desktop():
-    pyautogui.click(1024, 1024)
-    pyautogui.hotkey('windows', 'd')
+    pyautogui.click(1635, 1065, button="RIGHT")
+    click_to("show_desktop.PNG")
 
 
 def auto_share():
@@ -42,7 +43,7 @@ def auto_share():
             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
-            pyautogui.click(1024, 1024)
+            pyautogui.click(997, 452)
             pyautogui.click(browser)
 
             pyautogui.press('f2')
@@ -55,21 +56,26 @@ def auto_share():
             logger.info(f"click to: {browser}, via_name {via_name}")
             pyautogui.press('enter')
             pyautogui.press('enter')
-            click_to("signin.PNG", waiting_time=10)
-
+            # click_to("signin.PNG", waiting_time=10)
+            pyautogui.moveTo(997, 452)
             pyautogui.hotkey('alt', 'space')
-            pyautogui.press('x')
+            maximize = waiting_for("maximize.PNG", waiting_time=10)
+            if maximize:
+                pyautogui.press('x')
+
+            time.sleep(1)
+            pyautogui.click(997, 452)
 
             reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
             if reload_bar:
                 bar_x, bar_y = reload_bar
-                bar_y += 10
+                bar_y += 0
                 pyautogui.click(bar_x+100, bar_y)
-                pyautogui.hotkey('ctrl', 'a')
-
-                paste_text('fb.com')
-                pyautogui.hotkey('enter')
-                waiting_for("dark_logo.PNG", waiting_time=10)
+                # pyautogui.hotkey('ctrl', 'a')
+                #
+                # paste_text('fb.com')
+                # pyautogui.hotkey('enter')
+                # waiting_for("dark_logo.PNG", waiting_time=10)
 
                 pyautogui.click(bar_x+100, bar_y)
                 pyautogui.hotkey('ctrl', 'a')
@@ -134,7 +140,7 @@ def auto_share():
 
                             try:
                                 os.makedirs("debug", exist_ok=True)
-                                img.save(f"debug/{group_name}.PNG")
+                                img.save(f"debug/{int(time.time())}.PNG")
                             except Exception as ex:
                                 pass
 
@@ -169,9 +175,10 @@ def auto_share():
                     else:
                         # click_many("close_btn.PNG")
                         click_to("dark_logo.PNG", confidence=0.9)
+                pyautogui.hotkey('ctrl', 'f4')
+
         et = time.time()
         logger.debug(f"share done time consuming: {round((et - st)/60, 1)}")
-        pyautogui.hotkey('ctrl', 'f4')
         pyautogui.hotkey('windows', 'd')
 
 
@@ -256,6 +263,8 @@ def start_watch():
 
 if __name__ == '__main__':
     logger.info("start share video")
+    # time.sleep(2)
+    # print(pyautogui.position())
     auto_share()
     # watch_videos()
     # schedule.every(6).hours.at(":00").do(start_share)
