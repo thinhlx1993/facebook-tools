@@ -140,7 +140,7 @@ def auto_share():
                                 # width, height = relative_position(width, height)
                                 # left, top = relative_position(left, top)
                                 img = pyautogui.screenshot(region=(public_x, top, width, height))
-                                group_name = pytesseract.image_to_string(img).strip().split('\\n')[0]
+                                group_name = pytesseract.image_to_string(img).strip().split('\\n')[0].strip()
 
                                 try:
                                     os.makedirs("debug", exist_ok=True)
