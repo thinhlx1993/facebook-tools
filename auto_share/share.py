@@ -57,18 +57,19 @@ def auto_share():
             logger.info(f"click to: {browser}, via_name {via_name}")
             pyautogui.press('enter')
             pyautogui.press('enter')
-            # click_to("signin.PNG", waiting_time=10)
-            click_to("reload_bar.PNG")
-            pyautogui.hotkey('alt', 'space')
+            click_to("signin.PNG", waiting_time=10)
+            # click_to("reload_bar.PNG")
+            # pyautogui.hotkey('alt', 'space')
             # maximize = waiting_for("maximize.PNG", waiting_time=10)
             # if maximize:
-            time.sleep(1)
-            pyautogui.press('x')
+            # time.sleep(1)
+            # pyautogui.press('x')
+            # time.sleep(1)
+            if waiting_for("reload_bar.PNG"):
+                click_to("fullscreen_btn.PNG", waiting_time=5)
+            time.sleep(5)
 
-            time.sleep(1)
-            pyautogui.click(997, 452)
-
-            reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
+            reload_bar = waiting_for("reload_bar.PNG", waiting_time=10)
             if reload_bar:
                 bar_x, bar_y = reload_bar
                 bar_y += 0
@@ -84,7 +85,7 @@ def auto_share():
                 paste_text(f"fb.com/{video_id}")
                 pyautogui.hotkey('enter')
 
-            if waiting_for("dark_logo.PNG", waiting_time=25):
+            if waiting_for("dark_logo.PNG", waiting_time=50):
                 for i in range(60):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
@@ -139,7 +140,7 @@ def auto_share():
                                 # width, height = relative_position(width, height)
                                 # left, top = relative_position(left, top)
                                 img = pyautogui.screenshot(region=(public_x, top, width, height))
-                                group_name = pytesseract.image_to_string(img).strip()
+                                group_name = pytesseract.image_to_string(img).strip().split('\\n')[0]
 
                                 try:
                                     os.makedirs("debug", exist_ok=True)
@@ -210,12 +211,12 @@ def watch_videos():
 
         click_to("signin.PNG", waiting_time=10)
         # click_to("fullscreen.PNG", waiting_time=10)
-        pyautogui.hotkey('alt', 'space')
-        time.sleep(1)
-        pyautogui.press('x')
+        if waiting_for("reload_bar.PNG"):
+            click_to("fullscreen_btn.PNG", waiting_time=5)
+        time.sleep(5)
         # click_many("close_btn.PNG")
         # click_to("dark_logo.PNG", confidence=0.9)
-        pyautogui.click(997, 452)
+        # pyautogui.click(997, 452)
         reload_bar = waiting_for("reload_bar.PNG")
         if reload_bar:
             bar_x, bar_y = reload_bar
