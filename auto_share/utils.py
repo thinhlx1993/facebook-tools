@@ -93,7 +93,7 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=50):
     return None
 
 
-def deciscion(btns, region=None, confidence=0.8, waiting_time=200):
+def deciscion(btns, region=None, confidence=0.8, waiting_time=50):
     start_count = 0
     while start_count < waiting_time:
         start_count += 1

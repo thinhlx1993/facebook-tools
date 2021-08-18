@@ -19,6 +19,24 @@ def show_desktop():
     click_to("show_desktop.PNG")
 
 
+def access_video(video_id):
+    reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
+    if reload_bar:
+        bar_x, bar_y = reload_bar
+        bar_y += 0
+        pyautogui.click(bar_x + 100, bar_y)
+        # pyautogui.hotkey('ctrl', 'a')
+        #
+        # paste_text('fb.com')
+        # pyautogui.hotkey('enter')
+        # waiting_for("dark_logo.PNG", waiting_time=10)
+
+        pyautogui.click(bar_x + 100, bar_y)
+        pyautogui.hotkey('ctrl', 'a')
+        paste_text(f"fb.com/{video_id}")
+        pyautogui.hotkey('enter')
+
+
 def auto_share():
     current_hour = datetime.now().hour
     # if current_hour % 2 != 0:
@@ -58,32 +76,37 @@ def auto_share():
             pyautogui.press('enter')
             pyautogui.press('enter')
             click_to("signin.PNG", waiting_time=10)
-            # click_to("reload_bar.PNG")
-            # pyautogui.hotkey('alt', 'space')
-            # maximize = waiting_for("maximize.PNG", waiting_time=10)
-            # if maximize:
-            # time.sleep(1)
-            # pyautogui.press('x')
-            # time.sleep(1)
             if waiting_for("reload_bar.PNG"):
                 click_to("fullscreen_btn.PNG", waiting_time=5)
-            time.sleep(5)
 
-            reload_bar = waiting_for("reload_bar.PNG", waiting_time=10)
-            if reload_bar:
-                bar_x, bar_y = reload_bar
-                bar_y += 0
-                pyautogui.click(bar_x+100, bar_y)
-                # pyautogui.hotkey('ctrl', 'a')
-                #
-                # paste_text('fb.com')
-                # pyautogui.hotkey('enter')
-                # waiting_for("dark_logo.PNG", waiting_time=10)
+            access_video(video_id)
 
-                pyautogui.click(bar_x+100, bar_y)
-                pyautogui.hotkey('ctrl', 'a')
-                paste_text(f"fb.com/{video_id}")
-                pyautogui.hotkey('enter')
+            # check dark theme
+            buttons = ['light_logo.PNG', 'dark_logo.PNG']
+            btn_x, btn_y, btn_index = deciscion(buttons)
+            if btn_index == 1:
+                # change theme
+                click_to("light_dropdown.PNG")
+                click_to("theme_btn.PNG")
+                click_to("confirm_change.PNG")
+                access_video(video_id)
+
+            waiting_for("dark_logo.PNG")
+            if check_exist("search_title.PNG"):
+                # change language
+                reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
+                if reload_bar:
+                    bar_x, bar_y = reload_bar
+                    bar_y += 0
+                    pyautogui.click(bar_x + 100, bar_y)
+                    pyautogui.hotkey('ctrl', 'a')
+                    paste_text("https://www.facebook.com/settings?tab=language")
+                    pyautogui.hotkey('enter')
+                    click_to("English.PNG")
+                    pyautogui.press('f5')
+                    time.sleep(5)
+                    waiting_for("dark_logo.PNG")
+                    access_video(video_id)
 
             if waiting_for("dark_logo.PNG", waiting_time=50):
                 for i in range(60):
