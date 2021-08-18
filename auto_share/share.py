@@ -79,23 +79,24 @@ def auto_share():
             pyautogui.press('enter')
             pyautogui.press('enter')
             click_to("signin.PNG", waiting_time=10)
+
+            pyautogui.moveTo(1027, 549)
             if waiting_for("reload_bar.PNG"):
                 click_to("fullscreen_btn.PNG", waiting_time=5)
 
-            access_video(video_id)
-
+            access_video(None)
             # check dark theme
             buttons = ['light_logo.PNG', 'dark_logo.PNG']
             btn_x, btn_y, btn_index = deciscion(buttons)
-            if btn_index == 1:
+            if btn_index == 0:
                 # change theme
                 click_to("light_dropdown.PNG")
                 click_to("theme_btn.PNG")
                 click_to("confirm_change.PNG")
-                access_video(video_id)
+                click_to('dark_logo.PNG')
 
             waiting_for("dark_logo.PNG")
-            if check_exist("search_title.PNG"):
+            if not waiting_for("search_title.PNG", waiting_time=15):
                 # change language
                 reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
                 if reload_bar:
@@ -110,7 +111,8 @@ def auto_share():
                     time.sleep(5)
                     waiting_for("dark_logo.PNG")
                     access_video(video_id)
-
+            else:
+                access_video(video_id)
             if waiting_for("dark_logo.PNG", waiting_time=50):
                 for i in range(60):
                     time.sleep(1)
@@ -235,12 +237,17 @@ def watch_videos():
         pyautogui.press('enter')
         pyautogui.press('enter')
 
+        if waiting_for("reload_bar.PNG", waiting_time=15):
+            click_to("fullscreen_btn.PNG", waiting_time=5)
+
         click_to("signin.PNG", waiting_time=10)
 
+        pyautogui.moveTo(1027, 549)
+        access_video(None)
         # check dark theme
         buttons = ['light_logo.PNG', 'dark_logo.PNG']
         btn_x, btn_y, btn_index = deciscion(buttons)
-        if btn_index == 1:
+        if btn_index == 0:
             # change theme
             click_to("light_dropdown.PNG")
             click_to("theme_btn.PNG")
@@ -248,7 +255,7 @@ def watch_videos():
             access_video(None)
 
         waiting_for("dark_logo.PNG")
-        if check_exist("search_title.PNG"):
+        if not waiting_for("search_title.PNG", waiting_time=15):
             # change language
             reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
             if reload_bar:
