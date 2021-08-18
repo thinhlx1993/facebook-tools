@@ -300,10 +300,10 @@ if __name__ == '__main__':
     logger.info("start share video")
     # time.sleep(2)
     # print(pyautogui.position())
-    auto_share()
+    # auto_share()
     # watch_videos()
-    # schedule.every(6).hours.at(":00").do(start_share)
+    schedule.every(5).hours.at(":00").do(start_share)
     # schedule.every(1).hours.at(":00").do(start_watch)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
