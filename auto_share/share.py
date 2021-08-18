@@ -10,7 +10,7 @@ import schedule
 import pyautogui
 import pytesseract
 from auto_share.utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
-    relative_position, get_title, scheduler_table, logger
+    relative_position, get_title, scheduler_table, logger, group_table
 pyautogui.PAUSE = 0.2
 
 
@@ -56,6 +56,8 @@ def auto_share():
         if len(scheduler) > 0:
             scheduler = scheduler[0]
             share_number = scheduler.get("share_number", 1)
+            groups_shared = scheduler.get('groups_shared', [])
+            # group_type = scheduler.get("group_type", ["go", "co_khi", "xay_dung"])
             share_number -= 1
             update_data = {"share_number": share_number}
             if share_number == 0:
@@ -145,51 +147,30 @@ def auto_share():
                 else:
                     continue
 
-                retry_time = 0
-                shared = False
-                while retry_time < 3 and not shared:
-                    public_group = waiting_for("public_group.PNG", confidence=0.85, waiting_time=15)
-                    if public_group:
-                        pyautogui.moveTo(relative_position(1027, 549))
-                        time.sleep(2)
-                        scroll_time = random.choice([-1, -2, -3, -4, 0, 1, 2, 3, 4])
-                        pyautogui.scroll(100 * scroll_time)
-                        time.sleep(2)
-                        groups = pyautogui.locateAllOnScreen(f"btn/public_group.PNG", confidence=0.8)
-                        groups = list(groups)
-                        # if len(groups) > 0:
-                        for group in groups:
-                            # group = random.choice(groups)
-                            left, top, _, height = group
-                            exist = check_exist("nhom_cong_khai.PNG")
-                            if exist:
-                                public_x, public_y, _, _ = exist
-                                width = left - public_x
-                                # width, height = relative_position(width, height)
-                                # left, top = relative_position(left, top)
-                                img = pyautogui.screenshot(region=(public_x, top, width, height))
-                                group_name = pytesseract.image_to_string(img).strip().split('\\n')[0].strip()
-
-                                try:
-                                    os.makedirs("debug", exist_ok=True)
-                                    img.save(f"debug/{int(time.time())}.PNG")
-                                except Exception as ex:
-                                    pass
-
+                with open("groups.txt", encoding='utf-8') as group_file:
+                    for line in group_file.readlines():
+                        group_name = line.strip()
+                        # try:
+                        #     os.makedirs("debug", exist_ok=True)
+                        #     img.save(f"debug/{group_name}.PNG")
+                        # except Exception as ex:
+                        #     pass
+                        search_for_group = waiting_for("search_for_group.PNG")
+                        if search_for_group:
+                            search_x, search_y = search_for_group
+                            pyautogui.click(search_x+100, search_y)
+                            pyautogui.hotkey('ctrl', 'a')
+                            paste_text(group_name)
+                            if waiting_for("public_group.PNG", waiting_time=10) and group_name not in groups_shared:
                                 logger.info(f"found group name: {group_name}")
-
-                                groups_shared = scheduler.get('groups_shared', [])
-                                if group_name not in groups_shared:
-                                    groups_shared.append(group_name)
-                                    scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": {"groups_shared": groups_shared}})
-                                    pyautogui.click(group, duration=0.5)
-                                    shared = True
-                                    break
-
-                    retry_time += 1
+                                groups_shared.append(group_name)
+                                scheduler_table.update_one({"_id": scheduler['_id']},
+                                                           {"$set": {"groups_shared": groups_shared}})
+                                click_to("public_group.PNG")
+                                break
 
                 post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
-                if post_btn and retry_time < 5:
+                if post_btn:
                     title = scheduler['title'] if 'title' in scheduler else get_title()
                     typeing_text(title)
                     time.sleep(5)
@@ -281,8 +262,6 @@ def watch_videos():
                 if playbtn:
                     pyautogui.moveTo(playbtn)
                     pyautogui.click(playbtn)
-                # pyautogui.moveTo(relative_position(1027, 549), duration=1)
-                # pyautogui.moveTo(relative_position(800, 649), duration=1)
                 playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
                 if playbtn:
                     pyautogui.moveTo(playbtn)

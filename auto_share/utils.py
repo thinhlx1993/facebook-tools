@@ -37,6 +37,7 @@ email_table = db['emails']
 cookies_table = db['cookies']
 via_share_table = db['via_share']
 scheduler_table = db['scheduler']
+group_table = db['groups']
 
 
 def random_interval():
