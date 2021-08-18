@@ -33,7 +33,10 @@ def access_video(video_id):
 
         pyautogui.click(bar_x + 100, bar_y)
         pyautogui.hotkey('ctrl', 'a')
-        paste_text(f"fb.com/{video_id}")
+        if video_id:
+            paste_text(f"fb.com/{video_id}")
+        else:
+            paste_text(f"fb.com")
         pyautogui.hotkey('enter')
 
 
@@ -233,21 +236,33 @@ def watch_videos():
         pyautogui.press('enter')
 
         click_to("signin.PNG", waiting_time=10)
-        # click_to("fullscreen.PNG", waiting_time=10)
-        if waiting_for("reload_bar.PNG"):
-            click_to("fullscreen_btn.PNG", waiting_time=5)
-        time.sleep(5)
-        # click_many("close_btn.PNG")
-        # click_to("dark_logo.PNG", confidence=0.9)
-        # pyautogui.click(997, 452)
-        reload_bar = waiting_for("reload_bar.PNG")
-        if reload_bar:
-            bar_x, bar_y = reload_bar
-            pyautogui.click(bar_x + 150, bar_y+10)
-            pyautogui.hotkey('ctrl', 'a')
 
-        paste_text('fb.com')
-        pyautogui.hotkey('enter')
+        # check dark theme
+        buttons = ['light_logo.PNG', 'dark_logo.PNG']
+        btn_x, btn_y, btn_index = deciscion(buttons)
+        if btn_index == 1:
+            # change theme
+            click_to("light_dropdown.PNG")
+            click_to("theme_btn.PNG")
+            click_to("confirm_change.PNG")
+            access_video(None)
+
+        waiting_for("dark_logo.PNG")
+        if check_exist("search_title.PNG"):
+            # change language
+            reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
+            if reload_bar:
+                bar_x, bar_y = reload_bar
+                bar_y += 0
+                pyautogui.click(bar_x + 100, bar_y)
+                pyautogui.hotkey('ctrl', 'a')
+                paste_text("https://www.facebook.com/settings?tab=language")
+                pyautogui.hotkey('enter')
+                click_to("English.PNG")
+                pyautogui.press('f5')
+                time.sleep(5)
+                waiting_for("dark_logo.PNG")
+                access_video(None)
 
         start_btn = waiting_for("start_btn.PNG", waiting_time=20)
         if start_btn:
