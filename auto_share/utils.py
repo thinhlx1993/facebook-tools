@@ -60,6 +60,7 @@ def click_to(btn, confidence=0.8, region=None, waiting_time=50, interval=None, c
             return True
 
         time.sleep(0.2)
+    logger.error(f"Not found {btn}")
     return None
 
 
@@ -91,6 +92,7 @@ def waiting_for(btn, region=None, confidence=0.8, waiting_time=50):
             return x, y
 
         time.sleep(0.2)
+    logger.error(f"Not found {btn}")
     return None
 
 
@@ -98,6 +100,7 @@ def deciscion(btns, region=None, confidence=0.8, waiting_time=50):
     start_count = 0
     while start_count < waiting_time:
         start_count += 1
+        time.sleep(0.2)
         logger.debug(f"Waiting for {btns}")
         for btn_index, btn in enumerate(btns):
             ret = pyautogui.locateCenterOnScreen(f"btn/{btn}", confidence=confidence, region=region)

@@ -89,13 +89,15 @@ def auto_share():
             access_video(None)
             # check dark theme
             buttons = ['light_logo.PNG', 'dark_logo.PNG']
-            btn_x, btn_y, btn_index = deciscion(buttons)
-            if btn_index == 0:
-                # change theme
-                click_to("light_dropdown.PNG")
-                click_to("theme_btn.PNG")
-                click_to("confirm_change.PNG")
-                click_to('dark_logo.PNG')
+            deciscion_results = deciscion(buttons)
+            if deciscion_results:
+                btn_x, btn_y, btn_index = deciscion_results
+                if btn_index == 0:
+                    # change theme
+                    click_to("light_dropdown.PNG")
+                    click_to("theme_btn.PNG")
+                    click_to("confirm_change.PNG")
+                    click_to('dark_logo.PNG')
 
             waiting_for("dark_logo.PNG")
             if not waiting_for("search_title.PNG", waiting_time=15):
@@ -115,7 +117,7 @@ def auto_share():
                     access_video(video_id)
             else:
                 access_video(video_id)
-            if waiting_for("dark_logo.PNG", waiting_time=50):
+            if waiting_for("dark_logo.PNG", waiting_time=20):
                 for i in range(60):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
@@ -155,7 +157,7 @@ def auto_share():
                         #     img.save(f"debug/{group_name}.PNG")
                         # except Exception as ex:
                         #     pass
-                        search_for_group = waiting_for("search_for_group.PNG")
+                        search_for_group = waiting_for("search_for_group.PNG", waiting_time=10)
                         if search_for_group:
                             search_x, search_y = search_for_group
                             pyautogui.click(search_x+100, search_y)
@@ -168,6 +170,9 @@ def auto_share():
                                                            {"$set": {"groups_shared": groups_shared}})
                                 click_to("public_group.PNG")
                                 break
+                            else:
+                                pyautogui.hotkey('ctrl', 'a')
+                                pyautogui.press('backspace')
 
                 post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
                 if post_btn:
