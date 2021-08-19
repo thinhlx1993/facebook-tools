@@ -116,7 +116,7 @@ def auto_share(table_data, current_index, window, stop):
             if status:
                 waiting_for("dark_logo.PNG")
                 waiting_for("reload_bar.PNG")
-                for i in range(60):
+                for i in range(20):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
                     if playbtn:
