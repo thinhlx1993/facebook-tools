@@ -1,14 +1,12 @@
 import os
 import random
+import threading
 import time
 from datetime import datetime
-
+import PySimpleGUI as sg
 import clipboard
 import pymongo
-import uuid
-import schedule
 import pyautogui
-import pytesseract
 from auto_share.utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger, group_table
 pyautogui.PAUSE = 0.2
@@ -40,14 +38,12 @@ def access_video(video_id):
         pyautogui.hotkey('enter')
 
 
-def auto_share():
-    current_hour = datetime.now().hour
-    # if current_hour % 2 != 0:
-    #     return
+def auto_share(table_data, current_index, window, stop):
     shared_via = []
     time.sleep(5)
     logger.debug("start share")
     show_desktop()
+    video_id = table_data[0][0]
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
@@ -273,10 +269,10 @@ def watch_videos():
         pyautogui.hotkey('windows', 'd')
 
 
-def start_share():
+def start_share(table_data, current_index, window, stop):
     logger.debug("Start share")
     try:
-        auto_share()
+        auto_share(table_data, current_index, window, stop)
         logger.debug("Done share")
     except Exception as ex:
         logger.error(ex)
@@ -291,14 +287,59 @@ def start_watch():
         logger.error(ex)
 
 
+def mapping_table(item):
+    return [item.get('video_id', ''), len(item.get('groups_shared', [])), item.get('shared', False)]
+
+
 if __name__ == '__main__':
-    logger.info("start share video")
-    # time.sleep(2)
-    # print(pyautogui.position())
-    auto_share()
-    # watch_videos()
-    # schedule.every(6).hours.at(":00").do(start_share)
-    # schedule.every(1).hours.at(":00").do(start_watch)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    sg.theme('DarkAmber')  # Add a touch of color
+    # All the stuff inside your window.
+    headings = ['video_id', 'share group', 'share done']  # the text of the headings
+    table_default = scheduler_table.find({"shared": False}, {"video_id": 1, "groups_shared": 1, "shared": 1})
+    table_default = list(map(mapping_table, list(table_default)))
+    layout = [[sg.Table(values=table_default,
+                        headings=headings,
+                        display_row_numbers=True,
+                        justification='right',
+                        auto_size_columns=False,
+                        col_widths=[20, 20, 15],
+                        vertical_scroll_only=False,
+                        num_rows=24, key='table')],
+              [sg.Button('Start'),
+               sg.Button('Remove'),
+               sg.Button('Cancel')]]
+
+    # Create the Window
+    window = sg.Window('Auto Share', layout)
+
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read()
+        print(f'{event} You entered {values}')
+        print('event', event)
+        if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
+            browserExe = "chrome.exe"
+            os.system("taskkill /f /im " + browserExe)
+            break
+        elif event == 'Start':
+            window.Element('Start').Update(text="Sharing")
+            stop_threads = False
+            current_index = 0
+            if len(values['table']) > 0:
+                current_index = values['table'][0]
+            table_data = window.Element('table').Get()
+            thread = threading.Thread(target=start_share,
+                                      args=(table_data, current_index, window, lambda: stop_threads,),
+                                      daemon=True)
+            thread.start()
+        elif event == 'Remove':
+            removed = values['table']
+            table_data = window.Element('table').Get()
+            for item in reversed(removed):
+                print()
+                video_id = table_data[item][0]
+                scheduler_table.update_one({"video_id": video_id}, {"$set": {'shared': True}})
+                table_data.pop(item)
+            window.Element('table').Update(values=table_data)
+
+    window.close()
