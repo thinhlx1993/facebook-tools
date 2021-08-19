@@ -19,6 +19,7 @@ def show_desktop():
 
 
 def access_video(video_id):
+    waiting_for("dark_logo.PNG", waiting_time=20)
     reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
     if reload_bar:
         bar_x, bar_y = reload_bar
@@ -85,8 +86,11 @@ def auto_share(table_data, current_index, window, stop):
                 click_to("theme_btn.PNG")
                 click_to("confirm_change.PNG")
                 click_to('dark_logo.PNG')
+                pyautogui.press('f5')
+                time.sleep(2)
 
             waiting_for("reload_bar.PNG")
+            waiting_for("dark_logo.PNG")
             if not waiting_for("search_title.PNG", waiting_time=10):
                 # change language
                 reload_bar = waiting_for("reload_bar.PNG")
@@ -100,8 +104,9 @@ def auto_share(table_data, current_index, window, stop):
                     waiting_for("reload_bar.PNG")
                     click_to("English.PNG")
                     click_to("English.PNG")
-                    time.sleep(5)
+                    time.sleep(2)
                     pyautogui.press('f5')
+                    time.sleep(2)
                     waiting_for("dark_logo.PNG")
 
             access_video(video_id)
