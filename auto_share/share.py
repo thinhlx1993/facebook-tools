@@ -19,17 +19,10 @@ def show_desktop():
 
 
 def access_video(video_id):
-    reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
+    reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
     if reload_bar:
         bar_x, bar_y = reload_bar
         bar_y += 0
-        pyautogui.click(bar_x + 100, bar_y)
-        # pyautogui.hotkey('ctrl', 'a')
-        #
-        # paste_text('fb.com')
-        # pyautogui.hotkey('enter')
-        # waiting_for("dark_logo.PNG", waiting_time=10)
-
         pyautogui.click(bar_x + 100, bar_y)
         pyautogui.hotkey('ctrl', 'a')
         if video_id:
@@ -111,7 +104,8 @@ def auto_share(table_data, current_index, window, stop):
                     waiting_for("dark_logo.PNG")
 
             access_video(video_id)
-            if waiting_for("dark_logo.PNG") and waiting_for("reload_bar.PNG"):
+            if waiting_for("reload_bar.PNG"):
+                waiting_for("dark_logo.PNG")
                 for i in range(60):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
