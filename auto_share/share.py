@@ -2,6 +2,7 @@ import os
 import random
 import threading
 import time
+import uuid
 from datetime import datetime
 import PySimpleGUI as sg
 import clipboard
@@ -299,7 +300,9 @@ if __name__ == '__main__':
     headings = ['video_id', 'share group', 'share done']  # the text of the headings
     table_default = scheduler_table.find({"shared": False}, {"video_id": 1, "groups_shared": 1, "shared": 1})
     table_default = list(map(mapping_table, list(table_default)))
-    layout = [[sg.Table(values=table_default,
+    layout = [[sg.Text('Video ID'), sg.InputText("", key="video_id"), sg.Button('Add')],
+              [sg.Text('SEO Text'), sg.InputText("", key="text_seo")],
+               [sg.Table(values=table_default,
                         headings=headings,
                         display_row_numbers=True,
                         justification='right',
@@ -343,5 +346,27 @@ if __name__ == '__main__':
                 scheduler_table.update_one({"video_id": video_id}, {"$set": {'shared': True}})
                 table_data.pop(item)
             window.Element('table').Update(values=table_data)
+        elif event == 'Add':
+            video_id = values['video_id']
+            text_seo = values['text_seo']
+            if video_id != "" and text_seo != "":
+                exist_scheduler = scheduler_table.find_one({"video_id": video_id})
+                if exist_scheduler:
+                    scheduler_table.update_one({"_id": exist_scheduler['_id']},
+                                               {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
 
+                new_scheduler = {
+                    "_id": str(uuid.uuid4()),
+                    "video_id": video_id,
+                    "title": text_seo,
+                    "scheduler_time": datetime.now().timestamp(),
+                    "create_date": datetime.now().timestamp(),
+                    "shared": False,
+                    "share_number": 30
+                }
+
+                result = scheduler_table.insert_one(new_scheduler)
+                sg.Popup('Them thanh cong', keep_on_top=True)
+            else:
+                sg.Popup('Them that bai', keep_on_top=True)
     window.close()
