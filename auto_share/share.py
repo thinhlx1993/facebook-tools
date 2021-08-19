@@ -99,8 +99,9 @@ def auto_share(table_data, current_index, window, stop):
                     pyautogui.hotkey('enter')
                     waiting_for("reload_bar.PNG")
                     click_to("English.PNG")
-                    pyautogui.press('f5')
+                    click_to("English.PNG")
                     time.sleep(5)
+                    pyautogui.press('f5')
                     waiting_for("dark_logo.PNG")
 
             access_video(video_id)
