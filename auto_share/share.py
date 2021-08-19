@@ -80,7 +80,7 @@ def auto_share(table_data, current_index, window, stop):
 
             pyautogui.moveTo(1027, 549)
             if waiting_for("reload_bar.PNG"):
-                click_to("fullscreen_btn.PNG", waiting_time=5)
+                click_to("fullscreen_btn.PNG", waiting_time=10)
 
             access_video(None)
             # check dark theme
@@ -94,7 +94,7 @@ def auto_share(table_data, current_index, window, stop):
                 click_to('dark_logo.PNG')
 
             waiting_for("reload_bar.PNG")
-            if not waiting_for("search_title.PNG"):
+            if not waiting_for("search_title.PNG", waiting_time=10):
                 # change language
                 reload_bar = waiting_for("reload_bar.PNG")
                 if reload_bar:
@@ -104,6 +104,7 @@ def auto_share(table_data, current_index, window, stop):
                     pyautogui.hotkey('ctrl', 'a')
                     paste_text("https://www.facebook.com/settings?tab=language")
                     pyautogui.hotkey('enter')
+                    waiting_for("reload_bar.PNG")
                     click_to("English.PNG")
                     pyautogui.press('f5')
                     time.sleep(5)
