@@ -80,6 +80,13 @@ def auto_share(table_data, current_index, window, stop):
                 click_to("fullscreen_btn.PNG", waiting_time=10)
 
             access_video(None)
+            if waiting_for("reload_bar.PNG"):
+                if check_exist("chan_socket.PNG"):
+                    click_to("chan_socket.PNG")
+
+            # if waiting_for("chan_socket.PNG", waiting_time=10):
+            #     click_to("chan_socket.PNG")
+
             # check dark theme
             buttons = ['light_logo.PNG', 'dark_logo.PNG']
             btn_x, btn_y, btn_index = deciscion(buttons)
@@ -87,6 +94,7 @@ def auto_share(table_data, current_index, window, stop):
                 # change theme
                 click_to("light_dropdown.PNG")
                 click_to("theme_btn.PNG")
+                click_to("theme_btn.PNG", waiting_time=5)
                 click_to("confirm_change.PNG")
                 click_to('dark_logo.PNG')
                 pyautogui.press('f5')
@@ -94,6 +102,10 @@ def auto_share(table_data, current_index, window, stop):
 
             waiting_for("reload_bar.PNG")
             waiting_for("dark_logo.PNG")
+
+            if check_exist("chan_socket.PNG"):
+                click_to("chan_socket.PNG")
+
             if not waiting_for("search_title.PNG", waiting_time=10):
                 # change language
                 reload_bar = waiting_for("reload_bar.PNG")
