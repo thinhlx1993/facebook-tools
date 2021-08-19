@@ -366,6 +366,10 @@ if __name__ == '__main__':
                 }
 
                 result = scheduler_table.insert_one(new_scheduler)
+                table_default = scheduler_table.find({"shared": False},
+                                                     {"video_id": 1, "groups_shared": 1, "shared": 1})
+                table_default = list(map(mapping_table, list(table_default)))
+                window.Element('table').Update(values=table_default)
                 sg.Popup('Them thanh cong', keep_on_top=True)
             else:
                 sg.Popup('Them that bai', keep_on_top=True)
