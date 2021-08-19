@@ -43,7 +43,6 @@ def auto_share(table_data, current_index, window, stop):
     time.sleep(5)
     logger.debug("start share")
     show_desktop()
-    video_id = table_data[0][0]
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
@@ -93,10 +92,10 @@ def auto_share(table_data, current_index, window, stop):
                 click_to("confirm_change.PNG")
                 click_to('dark_logo.PNG')
 
-            waiting_for("dark_logo.PNG")
-            if not waiting_for("search_title.PNG", waiting_time=15):
+            waiting_for("reload_bar.PNG")
+            if not waiting_for("search_title.PNG"):
                 # change language
-                reload_bar = waiting_for("reload_bar.PNG", waiting_time=15)
+                reload_bar = waiting_for("reload_bar.PNG")
                 if reload_bar:
                     bar_x, bar_y = reload_bar
                     bar_y += 0
@@ -108,10 +107,9 @@ def auto_share(table_data, current_index, window, stop):
                     pyautogui.press('f5')
                     time.sleep(5)
                     waiting_for("dark_logo.PNG")
-                    access_video(video_id)
-            else:
-                access_video(video_id)
-            if waiting_for("dark_logo.PNG", waiting_time=50):
+
+            access_video(video_id)
+            if waiting_for("dark_logo.PNG") and waiting_for("reload_bar.PNG"):
                 for i in range(60):
                     time.sleep(1)
                     playbtn = check_exist("playbtn.PNG", confidence=0.85)
