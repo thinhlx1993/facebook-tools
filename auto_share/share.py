@@ -8,7 +8,7 @@ import PySimpleGUI as sg
 import clipboard
 import pymongo
 import pyautogui
-from auto_share.utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
+from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger, group_table
 pyautogui.PAUSE = 0.2
 
