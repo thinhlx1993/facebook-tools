@@ -110,7 +110,7 @@ def auto_share(table_data, current_index, window, stop):
                     time.sleep(2)
                     pyautogui.press('f5')
                     time.sleep(2)
-                    waiting_for("dark_logo.PNG")
+                    waiting_for("reload_bar.PNG")
 
             status = access_video(video_id)
             if status:
