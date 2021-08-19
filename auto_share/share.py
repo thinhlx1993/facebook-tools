@@ -184,7 +184,7 @@ def auto_share(table_data, current_index, window, stop):
                                 else:
                                     pyautogui.hotkey('ctrl', 'a')
                                     pyautogui.press('backspace')
-
+                scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                 post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
                 if post_btn:
                     title = scheduler['title'] if 'title' in scheduler else get_title()
@@ -192,19 +192,19 @@ def auto_share(table_data, current_index, window, stop):
                     time.sleep(5)
                     click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
                     click_to("post_success.PNG", confidence=0.8, waiting_time=20)
-                    spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
-                    if spam:
-                        pyautogui.hotkey('ctrl', 'f4')
-                        time.sleep(1)
-                        pyautogui.press('enter')
-                        time.sleep(1)
-                        pyautogui.hotkey('ctrl', 'f4')
-                        logger.info("limited")
-                    # click_to("dark_logo.PNG", confidence=0.9)
-                    else:
-                        # click_many("close_btn.PNG")
-                        click_to("dark_logo.PNG", confidence=0.9)
-                        scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
+                    # spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
+                    # if spam:
+                    #     pyautogui.hotkey('ctrl', 'f4')
+                    #     time.sleep(1)
+                    #     pyautogui.press('enter')
+                    #     time.sleep(1)
+                    #     pyautogui.hotkey('ctrl', 'f4')
+                    #     logger.info("limited")
+                    # # click_to("dark_logo.PNG", confidence=0.9)
+                    # else:
+                    #     # click_many("close_btn.PNG")
+                    #     click_to("dark_logo.PNG", confidence=0.9)
+
             pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
