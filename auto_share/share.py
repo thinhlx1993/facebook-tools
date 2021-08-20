@@ -39,7 +39,7 @@ def auto_share(table_data, current_index, window, stop):
     shared_via = []
     time.sleep(5)
     logger.debug("start share")
-    show_desktop()
+    # show_desktop()
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.98)
     for browser in browsers:
         st = time.time()
