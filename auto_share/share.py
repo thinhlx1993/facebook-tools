@@ -40,7 +40,7 @@ def auto_share(table_data, current_index, window, stop):
     time.sleep(5)
     logger.debug("start share")
     show_desktop()
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.98)
     for browser in browsers:
         st = time.time()
         scheduler = scheduler_table.find({"shared": False}).sort("create_date", pymongo.ASCENDING)
@@ -57,9 +57,9 @@ def auto_share(table_data, current_index, window, stop):
 
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
-            pyautogui.click(997, 452)
-            if not check_exist("coccoc.PNG"):
-                show_desktop()
+            # pyautogui.click(997, 452)
+            # if not check_exist("coccoc.PNG"):
+            show_desktop()
 
             pyautogui.click(browser)
             pyautogui.press('f2')
@@ -71,9 +71,9 @@ def auto_share(table_data, current_index, window, stop):
             shared_via.append(via_name)
             logger.info(f"click to: {browser}, via_name {via_name}")
             pyautogui.press('enter')
-            pyautogui.press('enter')
+            # pyautogui.press('enter')
             time.sleep(2)
-            click_to("signin.PNG", waiting_time=10)
+            click_to("signin.PNG", waiting_time=5)
 
             pyautogui.moveTo(1027, 549)
             if waiting_for("reload_bar.PNG"):
