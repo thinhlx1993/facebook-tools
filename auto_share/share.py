@@ -48,12 +48,12 @@ def auto_share(table_data, current_index, window, stop):
         scheduler = list(scheduler)
         if len(scheduler) > 0:
             scheduler = scheduler[0]
-            share_number = scheduler.get("share_number", 1)
+            share_number = scheduler.get("share_number", 0)
             groups_shared = scheduler.get('groups_shared', [])
             # group_type = scheduler.get("group_type", ["go", "co_khi", "xay_dung"])
-            share_number -= 1
+            share_number += 1
             update_data = {"share_number": share_number}
-            if len(groups_shared) >= 20:
+            if share_number >= 20:
                 update_data['shared'] = True
 
             video_id = scheduler['video_id']
@@ -384,7 +384,7 @@ if __name__ == '__main__':
                     "scheduler_time": datetime.now().timestamp(),
                     "create_date": datetime.now().timestamp(),
                     "shared": False,
-                    "share_number": 30
+                    "share_number": 0
                 }
 
                 result = scheduler_table.insert_one(new_scheduler)
