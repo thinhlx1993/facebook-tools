@@ -41,7 +41,7 @@ def auto_share(table_data, current_index, window, stop):
     time.sleep(5)
     logger.debug("start share")
     show_desktop()
-    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.98)
+    browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
         scheduler = scheduler_table.find({"shared": False}).sort("create_date", pymongo.ASCENDING)
