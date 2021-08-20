@@ -89,121 +89,123 @@ def auto_share(table_data, current_index, window, stop):
 
             # check dark theme
             buttons = ['light_logo.PNG', 'dark_logo.PNG']
-            btn_x, btn_y, btn_index = deciscion(buttons)
-            if btn_index == 0:
-                # change theme
-                click_to("light_dropdown.PNG")
-                click_to("theme_btn.PNG")
-                click_to("theme_btn.PNG", waiting_time=5)
-                click_to("confirm_change.PNG")
-                click_to('dark_logo.PNG')
-                pyautogui.press('f5')
-                time.sleep(2)
-
-            waiting_for("reload_bar.PNG")
-            waiting_for("dark_logo.PNG")
-
-            if check_exist("chan_socket.PNG"):
-                click_to("chan_socket.PNG")
-
-            if not waiting_for("search_title.PNG", waiting_time=10):
-                # change language
-                reload_bar = waiting_for("reload_bar.PNG")
-                if reload_bar:
-                    bar_x, bar_y = reload_bar
-                    bar_y += 0
-                    pyautogui.click(bar_x + 100, bar_y)
-                    pyautogui.hotkey('ctrl', 'a')
-                    paste_text("https://www.facebook.com/settings?tab=language")
-                    pyautogui.hotkey('enter')
-                    waiting_for("reload_bar.PNG")
-                    click_to("English.PNG")
-                    click_to("English.PNG")
-                    time.sleep(2)
+            results = deciscion(buttons)
+            if results:
+                btn_x, btn_y, btn_index = results
+                if btn_index == 0:
+                    # change theme
+                    click_to("light_dropdown.PNG")
+                    click_to("theme_btn.PNG")
+                    click_to("theme_btn.PNG", waiting_time=5)
+                    click_to("confirm_change.PNG")
+                    click_to('dark_logo.PNG')
                     pyautogui.press('f5')
                     time.sleep(2)
-                    waiting_for("reload_bar.PNG")
 
-            status = access_video(video_id)
-            if status:
-                waiting_for("dark_logo.PNG")
                 waiting_for("reload_bar.PNG")
-                for i in range(20):
-                    time.sleep(1)
-                    playbtn = check_exist("playbtn.PNG", confidence=0.85)
-                    if playbtn:
-                        pyautogui.moveTo(playbtn)
-                        pyautogui.click(playbtn)
-                    playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
-                    if playbtn:
-                        pyautogui.moveTo(playbtn)
-                        pyautogui.click(playbtn)
+                waiting_for("dark_logo.PNG")
 
-                # click share buttons
-                buttons = ['share_btn_1.PNG', 'share_btn.PNG']
-                result = deciscion(buttons, confidence=0.9)
-                if result:
-                    share_x, share_y, idx = result
-                    pyautogui.click(share_x, share_y)
-                else:
-                    continue
+                if check_exist("chan_socket.PNG"):
+                    click_to("chan_socket.PNG")
 
-                # click options or share to a group
-                buttons = ["share_to_group.PNG", "options.PNG"]
-                result = deciscion(buttons, confidence=0.9)
-                if result:
-                    share_x, share_y, idx = result
-                    pyautogui.click(share_x, share_y, interval=1)
-                    if idx == 1:
-                        click_to("share_to_group.PNG", confidence=0.9)
-                else:
-                    continue
+                if not waiting_for("search_title.PNG", waiting_time=10):
+                    # change language
+                    reload_bar = waiting_for("reload_bar.PNG")
+                    if reload_bar:
+                        bar_x, bar_y = reload_bar
+                        bar_y += 0
+                        pyautogui.click(bar_x + 100, bar_y)
+                        pyautogui.hotkey('ctrl', 'a')
+                        paste_text("https://www.facebook.com/settings?tab=language")
+                        pyautogui.hotkey('enter')
+                        waiting_for("reload_bar.PNG")
+                        click_to("English.PNG")
+                        click_to("English.PNG")
+                        time.sleep(2)
+                        pyautogui.press('f5')
+                        time.sleep(2)
+                        waiting_for("reload_bar.PNG")
 
-                with open("groups.txt", encoding='utf-8') as group_file:
-                    for line in group_file.readlines():
-                        group_name = line.strip()
-                        if group_name not in groups_shared:
-                            # try:
-                            #     os.makedirs("debug", exist_ok=True)
-                            #     img.save(f"debug/{group_name}.PNG")
-                            # except Exception as ex:
-                            #     pass
-                            search_for_group = waiting_for("search_for_group.PNG")
-                            if search_for_group:
-                                search_x, search_y = search_for_group
-                                pyautogui.click(search_x+100, search_y)
-                                # pyautogui.hotkey('ctrl', 'a')
-                                paste_text(group_name)
-                                if waiting_for("public_group.PNG", waiting_time=10):
-                                    logger.info(f"found group name: {group_name}")
-                                    groups_shared.append(group_name)
-                                    scheduler_table.update_one({"_id": scheduler['_id']},
-                                                               {"$set": {"groups_shared": groups_shared}})
-                                    click_to("public_group.PNG")
-                                    break
-                                else:
-                                    pyautogui.hotkey('ctrl', 'a')
-                                    pyautogui.press('backspace')
-                scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
-                post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
-                if post_btn:
-                    title = scheduler['title'] if 'title' in scheduler else get_title()
-                    typeing_text(title)
-                    time.sleep(5)
-                    click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
-                    click_to("post_success.PNG", confidence=0.8, waiting_time=20)
-                    # spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
-                    # if spam:
-                    #     pyautogui.hotkey('ctrl', 'f4')
-                    #     time.sleep(1)
-                    #     pyautogui.press('enter')
-                    #     time.sleep(1)
-                    #     pyautogui.hotkey('ctrl', 'f4')
-                    #     logger.info("limited")
-                    # # click_to("dark_logo.PNG", confidence=0.9)
-                    # else:
-                    #     # click_many("close_btn.PNG")
-                    #     click_to("dark_logo.PNG", confidence=0.9)
+                status = access_video(video_id)
+                if status:
+                    waiting_for("dark_logo.PNG")
+                    waiting_for("reload_bar.PNG")
+                    for i in range(20):
+                        time.sleep(1)
+                        playbtn = check_exist("playbtn.PNG", confidence=0.85)
+                        if playbtn:
+                            pyautogui.moveTo(playbtn)
+                            pyautogui.click(playbtn)
+                        playbtn = check_exist("play_btn_2.PNG", confidence=0.85)
+                        if playbtn:
+                            pyautogui.moveTo(playbtn)
+                            pyautogui.click(playbtn)
+
+                    # click share buttons
+                    buttons = ['share_btn_1.PNG', 'share_btn.PNG']
+                    result = deciscion(buttons, confidence=0.9)
+                    if result:
+                        share_x, share_y, idx = result
+                        pyautogui.click(share_x, share_y)
+                    else:
+                        continue
+
+                    # click options or share to a group
+                    buttons = ["share_to_group.PNG", "options.PNG"]
+                    result = deciscion(buttons, confidence=0.9)
+                    if result:
+                        share_x, share_y, idx = result
+                        pyautogui.click(share_x, share_y, interval=1)
+                        if idx == 1:
+                            click_to("share_to_group.PNG", confidence=0.9)
+                    else:
+                        continue
+
+                    with open("groups.txt", encoding='utf-8') as group_file:
+                        for line in group_file.readlines():
+                            group_name = line.strip()
+                            if group_name not in groups_shared:
+                                # try:
+                                #     os.makedirs("debug", exist_ok=True)
+                                #     img.save(f"debug/{group_name}.PNG")
+                                # except Exception as ex:
+                                #     pass
+                                search_for_group = waiting_for("search_for_group.PNG")
+                                if search_for_group:
+                                    search_x, search_y = search_for_group
+                                    pyautogui.click(search_x+100, search_y)
+                                    # pyautogui.hotkey('ctrl', 'a')
+                                    paste_text(group_name)
+                                    if waiting_for("public_group.PNG", waiting_time=10):
+                                        logger.info(f"found group name: {group_name}")
+                                        groups_shared.append(group_name)
+                                        scheduler_table.update_one({"_id": scheduler['_id']},
+                                                                   {"$set": {"groups_shared": groups_shared}})
+                                        click_to("public_group.PNG")
+                                        break
+                                    else:
+                                        pyautogui.hotkey('ctrl', 'a')
+                                        pyautogui.press('backspace')
+                    scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
+                    post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
+                    if post_btn:
+                        title = scheduler['title'] if 'title' in scheduler else get_title()
+                        typeing_text(title)
+                        time.sleep(5)
+                        click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
+                        click_to("post_success.PNG", confidence=0.8, waiting_time=20)
+                        # spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
+                        # if spam:
+                        #     pyautogui.hotkey('ctrl', 'f4')
+                        #     time.sleep(1)
+                        #     pyautogui.press('enter')
+                        #     time.sleep(1)
+                        #     pyautogui.hotkey('ctrl', 'f4')
+                        #     logger.info("limited")
+                        # # click_to("dark_logo.PNG", confidence=0.9)
+                        # else:
+                        #     # click_many("close_btn.PNG")
+                        #     click_to("dark_logo.PNG", confidence=0.9)
 
             pyautogui.hotkey('ctrl', 'f4')
 
