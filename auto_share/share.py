@@ -53,7 +53,7 @@ def auto_share(table_data, current_index, window, stop):
             # group_type = scheduler.get("group_type", ["go", "co_khi", "xay_dung"])
             share_number -= 1
             update_data = {"share_number": share_number}
-            if share_number == 0:
+            if len(groups_shared) >= 20:
                 update_data['shared'] = True
 
             video_id = scheduler['video_id']
