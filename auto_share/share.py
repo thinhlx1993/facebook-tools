@@ -19,8 +19,9 @@ def show_desktop():
 
 
 def access_video(video_id):
-    waiting_for("dark_logo.PNG", waiting_time=20)
-    reload_bar = waiting_for("reload_bar.PNG", waiting_time=20)
+    # if video_id:
+    #     waiting_for("dark_logo.PNG", waiting_time=20)
+    reload_bar = waiting_for("reload_bar.PNG")
     if reload_bar:
         bar_x, bar_y = reload_bar
         bar_y += 0
