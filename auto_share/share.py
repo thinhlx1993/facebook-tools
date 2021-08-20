@@ -120,12 +120,13 @@ def auto_share(table_data, current_index, window, stop):
                         paste_text("https://www.facebook.com/settings?tab=language")
                         pyautogui.hotkey('enter')
                         waiting_for("reload_bar.PNG")
-                        click_to("English.PNG")
-                        click_to("English.PNG")
-                        time.sleep(2)
-                        pyautogui.press('f5')
-                        time.sleep(2)
-                        waiting_for("reload_bar.PNG")
+                        for i in range(3):
+                            click_to("English.PNG")
+                            time.sleep(2)
+                            pyautogui.press('f5')
+                            waiting_for("reload_bar.PNG")
+                            if check_exist("languages_and_regions.PNG"):
+                                break
 
                 status = access_video(video_id)
                 if status:
