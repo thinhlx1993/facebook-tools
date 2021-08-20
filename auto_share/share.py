@@ -43,7 +43,7 @@ def auto_share(table_data, current_index, window, stop):
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
-        scheduler = scheduler_table.find({"shared": False, "share_number": {"$gt": 0}}).sort("create_date", pymongo.ASCENDING)
+        scheduler = scheduler_table.find({"shared": False}).sort("create_date", pymongo.ASCENDING)
         scheduler = list(scheduler)
         if len(scheduler) > 0:
             scheduler = scheduler[0]
@@ -360,14 +360,14 @@ if __name__ == '__main__':
             removed = values['table']
             table_data = window.Element('table').Get()
             for item in reversed(removed):
-                print()
                 video_id = table_data[item][0]
-                scheduler_table.update_one({"video_id": video_id}, {"$set": {'shared': True}})
+                print(video_id)
+                results = scheduler_table.delete_one({"video_id": str(video_id.strip())})
                 table_data.pop(item)
             window.Element('table').Update(values=table_data)
         elif event == 'Add':
-            video_id = values['video_id']
-            text_seo = values['text_seo']
+            video_id = str(values['video_id']).strip()
+            text_seo = str(values['text_seo']).strip()
             if video_id != "" and text_seo != "":
                 exist_scheduler = scheduler_table.find_one({"video_id": video_id})
                 if exist_scheduler:
