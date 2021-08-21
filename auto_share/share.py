@@ -12,10 +12,74 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
     relative_position, get_title, scheduler_table, logger, group_table
 pyautogui.PAUSE = 0.2
 
+groups = [
+    "https://www.facebook.com/groups/284528346141823"
+    "https://www.facebook.com/groups/372180039813663/"
+    "https://www.facebook.com/groups/1wood/"
+    "https://www.facebook.com/groups/2482038492036858/"
+    "https://www.facebook.com/groups/118324232155883/"
+    "https://www.facebook.com/groups/764469894399332/"
+    "https://www.facebook.com/groups/237876086746624/"
+    "https://www.facebook.com/groups/2024863544223154/"
+    "https://www.facebook.com/groups/1806480589657646/"
+    "https://www.facebook.com/groups/665858770866658/"
+    "https://www.facebook.com/groups/191115926250896/"
+    "https://www.facebook.com/groups/840300433502695/"
+    "https://www.facebook.com/groups/710369076275708/"
+    "https://www.facebook.com/groups/apaixonadosporferramentas/"
+    "https://www.facebook.com/groups/3541592475928295"
+    "https://www.facebook.com/groups/1099592037096961/"
+    "https://www.facebook.com/groups/2165172070388247/"
+    "https://www.facebook.com/groups/920508311830400"
+    "https://www.facebook.com/groups/4046851472079245"
+    "https://www.facebook.com/groups/316487553214879"
+    "https://www.facebook.com/groups/312177843254758/"
+    "https://www.facebook.com/groups/274687116922393/"
+]
+
 
 def show_desktop():
     pyautogui.click(1635, 1065, button="RIGHT")
     click_to("show_desktop.PNG", waiting_time=10)
+
+
+def join_group():
+    group = random.choice(groups)
+    access_group(group)
+    buttons = ["join_group.PNG", "join_group_1.PNG"]
+    decision = deciscion(buttons, waiting_time=10)
+    if decision:
+        x, y, btn_idx = decision
+        pyautogui.click(x, y)
+        buttons = ["joined.PNG", "answer_question.PNG"]
+        decision = deciscion(buttons)
+        if decision:
+            x, y, btn_idx = decision
+            if btn_idx == 0:
+                return True
+            else:
+                pyautogui.moveTo(x, y)
+                write_an_answer = check_exist("write_an_answer.PNG")
+                while not write_an_answer:
+                    pyautogui.click(write_an_answer)
+                    paste_text("Yes. I'm agree")
+                    pyautogui.scroll(-200)
+                    write_an_answer = check_exist("write_an_answer.PNG")
+                    time.sleep(1)
+                check_box_group = check_exist("check_box_group.PNG")
+                waiting_time = 0
+                while not check_box_group and waiting_time < 5:
+                    waiting_time += 1
+                    pyautogui.click(check_box_group)
+                    pyautogui.scroll(-200)
+                    check_box_group = check_exist("check_box_group.PNG")
+                    time.sleep(1)
+                    if check_exist("submit_join.PNG"):
+                        break
+
+                click_to("submit_join.PNG", waiting_time=5)
+                return True
+    return False
 
 
 def access_video(video_id):
@@ -32,6 +96,23 @@ def access_video(video_id):
         else:
             paste_text(f"fb.com")
         pyautogui.hotkey('enter')
+        return True
+    return False
+
+
+def access_group(group_id):
+    # if video_id:
+    #     waiting_for("dark_logo.PNG", waiting_time=20)
+    reload_bar = waiting_for("reload_bar.PNG")
+    if reload_bar:
+        bar_x, bar_y = reload_bar
+        bar_y += 0
+        pyautogui.click(bar_x + 100, bar_y)
+        pyautogui.hotkey('ctrl', 'a')
+        paste_text(group_id)
+        pyautogui.hotkey('enter')
+        time.sleep(2)
+        waiting_for("reload_bar.PNG")
         return True
     return False
 
@@ -126,6 +207,8 @@ def auto_share(table_data, current_index, window, stop):
                         pyautogui.press('f5')
                         time.sleep(2)
                         waiting_for("reload_bar.PNG")
+
+                join_group()
 
                 status = access_video(video_id)
                 if status:
