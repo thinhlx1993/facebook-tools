@@ -293,7 +293,7 @@ def auto_share(table_data, current_index, window, stop):
                 #         else:
                 #             # click_many("close_btn.PNG")
                 #             click_to("dark_logo.PNG", confidence=0.9)
-
+            window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
             pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
@@ -454,6 +454,11 @@ if __name__ == '__main__':
                 results = scheduler_table.delete_one({"video_id": str(video_id.strip())})
                 table_data.pop(item)
             window.Element('table').Update(values=table_data)
+        elif event == '-THREAD-':
+            table_default = scheduler_table.find({"shared": False},
+                                                 {"video_id": 1, "groups_shared": 1, "shared": 1})
+            table_default = list(map(mapping_table, list(table_default)))
+            window.Element('table').Update(values=table_default)
         elif event == 'Add':
             video_id = str(values['video_id']).strip()
             text_seo = str(values['text_seo']).strip()
