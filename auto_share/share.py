@@ -46,7 +46,7 @@ def show_desktop():
 def join_group():
     group = random.choice(groups)
     access_group(group)
-    buttons = ["join_group.PNG", "join_group_1.PNG"]
+    buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
     decision = deciscion(buttons, waiting_time=10)
     if decision:
         x, y, btn_idx = decision
