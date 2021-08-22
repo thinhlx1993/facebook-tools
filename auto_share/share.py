@@ -40,7 +40,7 @@ groups = [
 
 def show_desktop():
     pyautogui.click(1635, 1065, button="RIGHT")
-    click_to("show_desktop.PNG", waiting_time=10)
+    click_to("show_desktop.PNG", waiting_time=5)
 
 
 def join_group():
@@ -141,8 +141,8 @@ def auto_share(table_data, current_index, window, stop):
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
             # pyautogui.click(997, 452)
-            if not check_exist("coccoc.PNG"):
-                show_desktop()
+            # if not check_exist("coccoc.PNG"):
+            show_desktop()
 
             time.sleep(2)
             pyautogui.click(browser)
