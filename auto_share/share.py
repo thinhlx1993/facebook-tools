@@ -148,8 +148,8 @@ def auto_share(table_data, current_index, window, stop):
             pyautogui.moveTo(1097, 452)
             if not check_exist("coccoc.PNG"):
                 show_desktop()
-            logger.info(f"click to: {browser}")
             pyautogui.doubleClick(browser)
+            logger.info(f"click to: {browser}")
             # shared_via.append(via_name)
             # pyautogui.press('enter')
             # pyautogui.press('enter')
