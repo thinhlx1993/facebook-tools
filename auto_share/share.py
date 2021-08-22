@@ -145,7 +145,7 @@ def auto_share(table_data, current_index, window, stop):
 
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
-            pyautogui.moveTo(1097, 452)
+            pyautogui.moveTo(browser)
             if not check_exist("coccoc.PNG"):
                 show_desktop()
             pyautogui.doubleClick(browser)
