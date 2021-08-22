@@ -44,7 +44,7 @@ def show_desktop():
         pyautogui.click(show_desktop_btn, button="RIGHT")
         if check_exist("show_desktop.PNG"):
             click_to("show_desktop.PNG", waiting_time=10)
-            time.sleep(2)
+            time.sleep(1)
     pyautogui.click(1027, 549)
 
 
@@ -148,12 +148,10 @@ def auto_share(table_data, current_index, window, stop):
             # pyautogui.click(997, 452)
             # if not check_exist("coccoc.PNG"):
             show_desktop()
-
-            time.sleep(2)
-            pyautogui.click(browser)
-            # shared_via.append(via_name)
             logger.info(f"click to: {browser}")
-            pyautogui.press('enter')
+            pyautogui.doubleClick(browser)
+            # shared_via.append(via_name)
+            # pyautogui.press('enter')
             # pyautogui.press('enter')
             time.sleep(2)
             click_to("signin.PNG", waiting_time=5)
