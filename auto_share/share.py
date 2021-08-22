@@ -46,7 +46,7 @@ def show_desktop():
 def join_group():
     group = random.choice(groups)
     access_group(group)
-    buttons = ["join_group.PNG", "join_group_1.PNG"]
+    buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
     decision = deciscion(buttons, waiting_time=10)
     if decision:
         x, y, btn_idx = decision
@@ -76,8 +76,9 @@ def join_group():
                     time.sleep(1)
                     if check_exist("submit_join.PNG"):
                         break
-                click_to("check.PNG", waiting_time=5)
-                click_to("submit_join.PNG", waiting_time=5)
+
+                click_many("check.PNG")
+                click_to("submit_join.PNG", waiting_time=10)
                 return True
     return False
 
@@ -279,7 +280,7 @@ def auto_share(table_data, current_index, window, stop):
                         typeing_text(title)
                         time.sleep(5)
                         click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
-                        click_to("post_success.PNG", confidence=0.8, waiting_time=20)
+                        click_to("post_success.PNG", confidence=0.8, waiting_time=10)
                         spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
                 #         if spam:
                 #             pyautogui.hotkey('ctrl', 'f4')
