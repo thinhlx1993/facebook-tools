@@ -144,6 +144,7 @@ def auto_share(table_data, current_index, window, stop):
             if not check_exist("coccoc.PNG"):
                 show_desktop()
 
+            time.sleep(2)
             pyautogui.click(browser)
             pyautogui.press('f2')
             pyautogui.hotkey('ctrl', 'c')
