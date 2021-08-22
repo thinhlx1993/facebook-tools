@@ -159,8 +159,8 @@ def auto_share(table_data, current_index, window, stop):
             pyautogui.moveTo(1027, 549)
             if waiting_for("reload_bar.PNG", waiting_time=10):
                 click_to("fullscreen_btn.PNG", waiting_time=10)
-            else:
-                continue
+            # else:
+            #     continue
 
             access_video(None)
             if waiting_for("reload_bar.PNG"):
