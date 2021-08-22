@@ -13,27 +13,27 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 pyautogui.PAUSE = 0.2
 
 groups = [
-    "https://www.facebook.com/groups/284528346141823"
-    "https://www.facebook.com/groups/372180039813663/"
-    "https://www.facebook.com/groups/1wood/"
-    "https://www.facebook.com/groups/2482038492036858/"
-    "https://www.facebook.com/groups/118324232155883/"
-    "https://www.facebook.com/groups/764469894399332/"
-    "https://www.facebook.com/groups/237876086746624/"
-    "https://www.facebook.com/groups/2024863544223154/"
-    "https://www.facebook.com/groups/1806480589657646/"
-    "https://www.facebook.com/groups/665858770866658/"
-    "https://www.facebook.com/groups/191115926250896/"
-    "https://www.facebook.com/groups/840300433502695/"
-    "https://www.facebook.com/groups/710369076275708/"
-    "https://www.facebook.com/groups/apaixonadosporferramentas/"
-    "https://www.facebook.com/groups/3541592475928295"
-    "https://www.facebook.com/groups/1099592037096961/"
-    "https://www.facebook.com/groups/2165172070388247/"
-    "https://www.facebook.com/groups/920508311830400"
-    "https://www.facebook.com/groups/4046851472079245"
-    "https://www.facebook.com/groups/316487553214879"
-    "https://www.facebook.com/groups/312177843254758/"
+    "https://www.facebook.com/groups/284528346141823",
+    "https://www.facebook.com/groups/372180039813663/",
+    "https://www.facebook.com/groups/1wood/",
+    "https://www.facebook.com/groups/2482038492036858/",
+    "https://www.facebook.com/groups/118324232155883/",
+    "https://www.facebook.com/groups/764469894399332/",
+    "https://www.facebook.com/groups/237876086746624/",
+    "https://www.facebook.com/groups/2024863544223154/",
+    "https://www.facebook.com/groups/1806480589657646/",
+    "https://www.facebook.com/groups/665858770866658/",
+    "https://www.facebook.com/groups/191115926250896/",
+    "https://www.facebook.com/groups/840300433502695/",
+    "https://www.facebook.com/groups/710369076275708/",
+    "https://www.facebook.com/groups/apaixonadosporferramentas/",
+    "https://www.facebook.com/groups/3541592475928295",
+    "https://www.facebook.com/groups/1099592037096961/",
+    "https://www.facebook.com/groups/2165172070388247/",
+    "https://www.facebook.com/groups/920508311830400",
+    "https://www.facebook.com/groups/4046851472079245",
+    "https://www.facebook.com/groups/316487553214879",
+    "https://www.facebook.com/groups/312177843254758/",
     "https://www.facebook.com/groups/274687116922393/"
 ]
 
@@ -59,8 +59,8 @@ def join_group():
                 return True
             else:
                 pyautogui.moveTo(x, y)
-                write_an_answer = check_exist("write_an_answer.PNG")
-                while not write_an_answer:
+                write_an_answer = waiting_for("write_an_answer.PNG", waiting_time=10)
+                while write_an_answer:
                     pyautogui.click(write_an_answer)
                     paste_text("Yes. I'm agree")
                     pyautogui.scroll(-200)
@@ -68,7 +68,7 @@ def join_group():
                     time.sleep(1)
                 check_box_group = check_exist("check_box_group.PNG")
                 waiting_time = 0
-                while not check_box_group and waiting_time < 5:
+                while check_box_group and waiting_time < 5:
                     waiting_time += 1
                     pyautogui.click(check_box_group)
                     pyautogui.scroll(-200)
@@ -76,7 +76,7 @@ def join_group():
                     time.sleep(1)
                     if check_exist("submit_join.PNG"):
                         break
-
+                click_to("check.PNG", waiting_time=5)
                 click_to("submit_join.PNG", waiting_time=5)
                 return True
     return False
@@ -209,7 +209,8 @@ def auto_share(table_data, current_index, window, stop):
                             if check_exist("languages_and_regions.PNG"):
                                 break
 
-                join_group()
+                # for _ in range(5):
+                #     join_group()
 
                 status = access_video(video_id)
                 if status:
@@ -279,18 +280,18 @@ def auto_share(table_data, current_index, window, stop):
                         time.sleep(5)
                         click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
                         click_to("post_success.PNG", confidence=0.8, waiting_time=20)
-                        # spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
-                        # if spam:
-                        #     pyautogui.hotkey('ctrl', 'f4')
-                        #     time.sleep(1)
-                        #     pyautogui.press('enter')
-                        #     time.sleep(1)
-                        #     pyautogui.hotkey('ctrl', 'f4')
-                        #     logger.info("limited")
-                        # # click_to("dark_logo.PNG", confidence=0.9)
-                        # else:
-                        #     # click_many("close_btn.PNG")
-                        #     click_to("dark_logo.PNG", confidence=0.9)
+                        spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
+                #         if spam:
+                #             pyautogui.hotkey('ctrl', 'f4')
+                #             time.sleep(1)
+                #             pyautogui.press('enter')
+                #             time.sleep(1)
+                #             pyautogui.hotkey('ctrl', 'f4')
+                #             logger.info("limited")
+                #         # click_to("dark_logo.PNG", confidence=0.9)
+                #         else:
+                #             # click_many("close_btn.PNG")
+                #             click_to("dark_logo.PNG", confidence=0.9)
 
             pyautogui.hotkey('ctrl', 'f4')
 
@@ -460,18 +461,19 @@ if __name__ == '__main__':
                 if exist_scheduler:
                     scheduler_table.update_one({"_id": exist_scheduler['_id']},
                                                {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
+                    sg.Popup('Them that bai, video da co', keep_on_top=True)
+                else:
+                    new_scheduler = {
+                        "_id": str(uuid.uuid4()),
+                        "video_id": video_id,
+                        "title": text_seo,
+                        "scheduler_time": datetime.now().timestamp(),
+                        "create_date": datetime.now().timestamp(),
+                        "shared": False,
+                        "share_number": 0
+                    }
 
-                new_scheduler = {
-                    "_id": str(uuid.uuid4()),
-                    "video_id": video_id,
-                    "title": text_seo,
-                    "scheduler_time": datetime.now().timestamp(),
-                    "create_date": datetime.now().timestamp(),
-                    "shared": False,
-                    "share_number": 0
-                }
-
-                result = scheduler_table.insert_one(new_scheduler)
+                    result = scheduler_table.insert_one(new_scheduler)
                 table_default = scheduler_table.find({"shared": False},
                                                      {"video_id": 1, "groups_shared": 1, "shared": 1})
                 table_default = list(map(mapping_table, list(table_default)))
