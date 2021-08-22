@@ -157,7 +157,7 @@ def auto_share(table_data, current_index, window, stop):
             click_to("signin.PNG", waiting_time=5)
 
             pyautogui.moveTo(1027, 549)
-            if waiting_for("reload_bar.PNG"):
+            if waiting_for("reload_bar.PNG", waiting_time=10):
                 click_to("fullscreen_btn.PNG", waiting_time=10)
             else:
                 continue
