@@ -42,8 +42,10 @@ def show_desktop():
     show_desktop_btn = check_exist("show_desktop_btn.PNG")
     if show_desktop_btn:
         pyautogui.click(show_desktop_btn, button="RIGHT")
-        click_to("show_desktop.PNG", waiting_time=10)
-        time.sleep(2)
+        if check_exist("show_desktop.PNG"):
+            click_to("show_desktop.PNG", waiting_time=10)
+            time.sleep(2)
+    pyautogui.click(1027, 549)
 
 
 def join_group():
