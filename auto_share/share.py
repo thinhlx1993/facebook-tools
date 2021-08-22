@@ -293,7 +293,7 @@ def auto_share(table_data, current_index, window, stop):
                 #         else:
                 #             # click_many("close_btn.PNG")
                 #             click_to("dark_logo.PNG", confidence=0.9)
-            window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
+            # window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
             pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
