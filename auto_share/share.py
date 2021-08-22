@@ -77,7 +77,7 @@ def join_group():
                     if check_exist("submit_join.PNG"):
                         break
 
-                click_to("check.PNG", waiting_time=10)
+                click_many("check.PNG")
                 click_to("submit_join.PNG", waiting_time=10)
                 return True
     return False
