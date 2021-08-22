@@ -146,16 +146,10 @@ def auto_share(table_data, current_index, window, stop):
 
             time.sleep(2)
             pyautogui.click(browser)
-            pyautogui.press('f2')
-            pyautogui.hotkey('ctrl', 'c')
-            via_name = clipboard.paste()
-            if via_name in shared_via:
-                continue
-
-            shared_via.append(via_name)
-            logger.info(f"click to: {browser}, via_name {via_name}")
+            # shared_via.append(via_name)
+            logger.info(f"click to: {browser}")
             pyautogui.press('enter')
-            pyautogui.press('enter')
+            # pyautogui.press('enter')
             time.sleep(2)
             click_to("signin.PNG", waiting_time=5)
 
