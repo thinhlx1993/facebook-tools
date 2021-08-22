@@ -39,9 +39,11 @@ groups = [
 
 
 def show_desktop():
-    pyautogui.click(1635, 1065, button="RIGHT")
-    click_to("show_desktop.PNG", waiting_time=5)
-    time.sleep(2)
+    show_desktop_btn = check_exist("show_desktop_btn.PNG")
+    if show_desktop_btn:
+        pyautogui.click(show_desktop_btn, button="RIGHT")
+        click_to("show_desktop.PNG", waiting_time=10)
+        time.sleep(2)
 
 
 def join_group():
