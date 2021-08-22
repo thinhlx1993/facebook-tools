@@ -41,6 +41,7 @@ groups = [
 def show_desktop():
     pyautogui.click(1635, 1065, button="RIGHT")
     click_to("show_desktop.PNG", waiting_time=5)
+    time.sleep(2)
 
 
 def join_group():
