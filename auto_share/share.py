@@ -280,7 +280,7 @@ def auto_share(table_data, current_index, window, stop):
                         typeing_text(title)
                         time.sleep(5)
                         click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
-                        click_to("post_success.PNG", confidence=0.8, waiting_time=20)
+                        click_to("post_success.PNG", confidence=0.8, waiting_time=10)
                         spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
                 #         if spam:
                 #             pyautogui.hotkey('ctrl', 'f4')
