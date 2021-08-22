@@ -146,8 +146,8 @@ def auto_share(table_data, current_index, window, stop):
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
             # pyautogui.click(997, 452)
-            # if not check_exist("coccoc.PNG"):
-            show_desktop()
+            if not check_exist("coccoc.PNG"):
+                show_desktop()
             logger.info(f"click to: {browser}")
             pyautogui.doubleClick(browser)
             # shared_via.append(via_name)
@@ -293,7 +293,7 @@ def auto_share(table_data, current_index, window, stop):
                 #         else:
                 #             # click_many("close_btn.PNG")
                 #             click_to("dark_logo.PNG", confidence=0.9)
-            # window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
+            window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
             pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
