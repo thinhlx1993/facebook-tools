@@ -209,8 +209,8 @@ def auto_share(table_data, current_index, window, stop):
                             if check_exist("languages_and_regions.PNG"):
                                 break
 
-                # for _ in range(5):
-                #     join_group()
+                for _ in range(2):
+                    join_group()
 
                 status = access_video(video_id)
                 if status:
