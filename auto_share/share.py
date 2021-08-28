@@ -148,10 +148,14 @@ def auto_share(table_data, current_index, window, stop):
             pyautogui.moveTo(browser)
             if not check_exist("coccoc.PNG"):
                 show_desktop()
-            pyautogui.click(browser)
-            logger.info(f"click to: {browser}")
-            # shared_via.append(via_name)
-            pyautogui.press('enter')
+            for _ in range(3):
+                pyautogui.click(browser)
+                logger.info(f"click to: {browser}")
+                # shared_via.append(via_name)
+                pyautogui.press('enter')
+                if check_exist("reload_bar.PNG"):
+                    break
+
             # pyautogui.press('enter')
             click_to("signin.PNG", waiting_time=5)
 
@@ -209,8 +213,8 @@ def auto_share(table_data, current_index, window, stop):
                             if check_exist("languages_and_regions.PNG"):
                                 break
 
-                # for _ in range(5):
-                #     join_group()
+                for _ in range(2):
+                    join_group()
 
                 status = access_video(video_id)
                 if status:
@@ -405,7 +409,7 @@ if __name__ == '__main__':
     sg.theme('DarkAmber')  # Add a touch of color
     # All the stuff inside your window.
     headings = ['video_id', 'share group', 'share done']  # the text of the headings
-    table_default = scheduler_table.find({"shared": False}, {"video_id": 1, "groups_shared": 1, "shared": 1})
+    table_default = scheduler_table.find({"shared": False}, {"video_id": 1, "groups_shared": 1, "shared": 1}).sort("create_date", pymongo.ASCENDING)
     table_default = list(map(mapping_table, list(table_default)))
     layout = [[sg.Text('Video ID'), sg.InputText("", key="video_id"), sg.Button('Add')],
               [sg.Text('SEO Text'), sg.InputText("", key="text_seo")],
@@ -479,7 +483,7 @@ if __name__ == '__main__':
 
                     result = scheduler_table.insert_one(new_scheduler)
                 table_default = scheduler_table.find({"shared": False},
-                                                     {"video_id": 1, "groups_shared": 1, "shared": 1})
+                                                     {"video_id": 1, "groups_shared": 1, "shared": 1}).sort("create_date", pymongo.ASCENDING)
                 table_default = list(map(mapping_table, list(table_default)))
                 window.Element('table').Update(values=table_default)
                 sg.Popup('Them thanh cong', keep_on_top=True)
