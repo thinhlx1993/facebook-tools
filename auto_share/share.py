@@ -430,8 +430,8 @@ if __name__ == '__main__':
         print(f'{event} You entered {values}')
         print('event', event)
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
-            browserExe = "chrome.exe"
-            os.system("taskkill /f /im " + browserExe)
+            # browserExe = "chrome.exe"
+            # os.system("taskkill /f /im " + browserExe)
             break
         elif event == 'Start':
             window.Element('Start').Update(text="Sharing")
@@ -471,7 +471,6 @@ if __name__ == '__main__':
                     new_scheduler = {
                         "_id": str(uuid.uuid4()),
                         "video_id": video_id,
-                        "title": text_seo,
                         "scheduler_time": datetime.now().timestamp(),
                         "create_date": datetime.now().timestamp(),
                         "shared": False,
