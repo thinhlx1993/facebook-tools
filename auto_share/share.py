@@ -465,7 +465,7 @@ if __name__ == '__main__':
         elif event == 'Add':
             video_id = str(values['video_id']).strip()
             text_seo = str(values['text_seo']).strip()
-            if video_id != "" and text_seo != "":
+            if video_id != "":
                 exist_scheduler = scheduler_table.find_one({"video_id": video_id})
                 if exist_scheduler:
                     scheduler_table.update_one({"_id": exist_scheduler['_id']},
