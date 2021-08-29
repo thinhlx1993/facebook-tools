@@ -45,7 +45,7 @@ def show_desktop():
         if check_exist("show_desktop.PNG"):
             click_to("show_desktop.PNG", waiting_time=10)
             time.sleep(1)
-    pyautogui.click(1027, 549)
+    pyautogui.moveTo(1027, 549)
 
 
 def join_group():
@@ -465,7 +465,7 @@ if __name__ == '__main__':
         elif event == 'Add':
             video_id = str(values['video_id']).strip()
             text_seo = str(values['text_seo']).strip()
-            if video_id != "" and text_seo != "":
+            if video_id != "":
                 exist_scheduler = scheduler_table.find_one({"video_id": video_id})
                 if exist_scheduler:
                     scheduler_table.update_one({"_id": exist_scheduler['_id']},
@@ -475,7 +475,6 @@ if __name__ == '__main__':
                     new_scheduler = {
                         "_id": str(uuid.uuid4()),
                         "video_id": video_id,
-                        "title": text_seo,
                         "scheduler_time": datetime.now().timestamp(),
                         "create_date": datetime.now().timestamp(),
                         "shared": False,
