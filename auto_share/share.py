@@ -434,8 +434,8 @@ if __name__ == '__main__':
         print(f'{event} You entered {values}')
         print('event', event)
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
-            browserExe = "chrome.exe"
-            os.system("taskkill /f /im " + browserExe)
+            # browserExe = "chrome.exe"
+            # os.system("taskkill /f /im " + browserExe)
             break
         elif event == 'Start':
             window.Element('Start').Update(text="Sharing")
