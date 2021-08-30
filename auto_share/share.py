@@ -166,15 +166,16 @@ def auto_share(table_data, current_index, window, stop):
                 logger.info(f"click to: {browser}")
                 # shared_via.append(via_name)
                 pyautogui.press('enter')
+                time.sleep(2)
                 if check_exist("reload_bar.PNG"):
                     break
 
             # pyautogui.press('enter')
-            click_to("signin.PNG", waiting_time=5)
+            # click_to("signin.PNG", waiting_time=5)
 
             pyautogui.moveTo(1027, 549)
-            if waiting_for("reload_bar.PNG", waiting_time=10):
-                click_to("fullscreen_btn.PNG", waiting_time=10)
+            if waiting_for("reload_bar.PNG", waiting_time=20):
+                click_to("fullscreen.PNG", waiting_time=10, region=(0, 33, 1900, 1000))
             # else:
             #     continue
 
@@ -420,6 +421,8 @@ def mapping_table(item):
 
 
 if __name__ == '__main__':
+    # time.sleep(2)
+    # print(pyautogui.position())
     sg.theme('DarkAmber')  # Add a touch of color
     # All the stuff inside your window.
     headings = ['video_id', 'share group', 'share done']  # the text of the headings
