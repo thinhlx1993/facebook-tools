@@ -34,7 +34,20 @@ groups = [
     "https://www.facebook.com/groups/4046851472079245",
     "https://www.facebook.com/groups/316487553214879",
     "https://www.facebook.com/groups/312177843254758/",
-    "https://www.facebook.com/groups/274687116922393/"
+    "https://www.facebook.com/groups/274687116922393/",
+    "https://www.facebook.com/groups/2136378319728934/",
+    "https://www.facebook.com/groups/725646077993653/",
+    "https://www.facebook.com/groups/680120385933768/",
+    "https://www.facebook.com/groups/WeldersGroup/",
+    "https://www.facebook.com/groups/soldadura.estruturas.metalicas/",
+    "https://www.facebook.com/groups/1218881038314391/",
+    "https://www.facebook.com/groups/384520012952678/",
+    "https://www.facebook.com/groups/320331992020107/",
+    "https://www.facebook.com/groups/117686506236993/",
+    "https://www.facebook.com/groups/561140977665034/",
+    "https://www.facebook.com/groups/ayadsater/",
+    "https://www.facebook.com/groups/1971605999749160/",
+    "https://www.facebook.com/groups/20974732671980479"
 ]
 
 
