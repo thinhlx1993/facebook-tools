@@ -45,7 +45,7 @@ def show_desktop():
         if check_exist("show_desktop.PNG"):
             click_to("show_desktop.PNG", waiting_time=10)
             time.sleep(1)
-    pyautogui.click(1027, 549)
+    pyautogui.moveTo(1027, 549)
 
 
 def join_group():
