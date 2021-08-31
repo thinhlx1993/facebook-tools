@@ -13,26 +13,6 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 pyautogui.PAUSE = 0.2
 
 groups = [
-    "https://www.facebook.com/groups/284528346141823",
-    "https://www.facebook.com/groups/372180039813663/",
-    "https://www.facebook.com/groups/1wood/",
-    "https://www.facebook.com/groups/2482038492036858/",
-    "https://www.facebook.com/groups/118324232155883/",
-    "https://www.facebook.com/groups/764469894399332/",
-    "https://www.facebook.com/groups/237876086746624/",
-    "https://www.facebook.com/groups/2024863544223154/",
-    "https://www.facebook.com/groups/1806480589657646/",
-    "https://www.facebook.com/groups/665858770866658/",
-    "https://www.facebook.com/groups/191115926250896/",
-    "https://www.facebook.com/groups/840300433502695/",
-    "https://www.facebook.com/groups/710369076275708/",
-    "https://www.facebook.com/groups/apaixonadosporferramentas/",
-    "https://www.facebook.com/groups/3541592475928295",
-    "https://www.facebook.com/groups/1099592037096961/",
-    "https://www.facebook.com/groups/2165172070388247/",
-    "https://www.facebook.com/groups/920508311830400",
-    "https://www.facebook.com/groups/4046851472079245",
-    "https://www.facebook.com/groups/316487553214879",
     "https://www.facebook.com/groups/312177843254758/",
     "https://www.facebook.com/groups/274687116922393/",
     "https://www.facebook.com/groups/2136378319728934/",
@@ -166,6 +146,7 @@ def auto_share(table_data, current_index, window, stop):
                 logger.info(f"click to: {browser}")
                 # shared_via.append(via_name)
                 pyautogui.press('enter')
+                time.sleep(2)
                 if check_exist("reload_bar.PNG"):
                     break
 
@@ -177,6 +158,9 @@ def auto_share(table_data, current_index, window, stop):
                 click_to("fullscreen_btn.PNG", waiting_time=10)
             # else:
             #     continue
+
+            # for _ in range(5):
+            #     join_group()
 
             access_video(None)
             if waiting_for("reload_bar.PNG"):
