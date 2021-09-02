@@ -131,10 +131,6 @@ def auto_share(table_data, current_index, window, stop):
             share_number = scheduler.get("share_number", 0)
             groups_shared = scheduler.get('groups_shared', [])
             # group_type = scheduler.get("group_type", ["go", "co_khi", "xay_dung"])
-            share_number += 1
-            update_data = {"share_number": share_number}
-            if share_number >= 30:
-                update_data['shared'] = True
 
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
@@ -285,6 +281,10 @@ def auto_share(table_data, current_index, window, stop):
                                         else:
                                             pyautogui.hotkey('ctrl', 'a')
                                             pyautogui.press('backspace')
+                        share_number += 1
+                        update_data = {"share_number": share_number}
+                        if share_number >= 30:
+                            update_data['shared'] = True
                         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                         post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
                         if post_btn:
