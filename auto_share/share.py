@@ -197,6 +197,11 @@ def auto_share(table_data, current_index, window, stop):
                 if check_exist("chan_socket.PNG"):
                     click_to("chan_socket.PNG")
 
+                if check_exist("checkpoint_1.PNG"):
+                    continue
+                if check_exist("checkpoint_2.PNG"):
+                    continue
+
                 if not waiting_for("search_title.PNG", waiting_time=10):
                     # change language
                     reload_bar = waiting_for("reload_bar.PNG")
