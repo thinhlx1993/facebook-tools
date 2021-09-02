@@ -295,7 +295,7 @@ def auto_share(table_data, current_index, window, stop):
                         post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
                         if post_btn:
                             title = scheduler['title'] if 'title' in scheduler else get_title()
-                            typeing_text(title)
+                            paste_text(title)
                             time.sleep(5)
                             click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
                             click_to("post_success.PNG", confidence=0.8, waiting_time=10)
