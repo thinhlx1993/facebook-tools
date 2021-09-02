@@ -155,7 +155,13 @@ def auto_share(table_data, current_index, window, stop):
 
             pyautogui.moveTo(1027, 549)
             if waiting_for("reload_bar.PNG", waiting_time=20):
-                click_to("fullscreen.PNG", waiting_time=10, region=(0, 33, 1900, 1000))
+                new_tab = check_exist("new tab_btn.PNG", region=(0, 33, 1900, 1000))
+                if new_tab:
+                    pyautogui.click(new_tab, button="right")
+                    click_to("maxsimize.PNG", waiting_time=15)
+                full_screen = check_exist("fullscreen.PNG", region=(0, 33, 1900, 1000))
+                if full_screen:
+                    pyautogui.click(full_screen)
             # else:
             #     continue
 
