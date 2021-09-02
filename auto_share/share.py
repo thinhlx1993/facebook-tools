@@ -13,26 +13,6 @@ from utils import click_to, click_many, check_exist, paste_text, typeing_text, w
 pyautogui.PAUSE = 0.2
 
 groups = [
-    "https://www.facebook.com/groups/284528346141823",
-    "https://www.facebook.com/groups/372180039813663/",
-    "https://www.facebook.com/groups/1wood/",
-    "https://www.facebook.com/groups/2482038492036858/",
-    "https://www.facebook.com/groups/118324232155883/",
-    "https://www.facebook.com/groups/764469894399332/",
-    "https://www.facebook.com/groups/237876086746624/",
-    "https://www.facebook.com/groups/2024863544223154/",
-    "https://www.facebook.com/groups/1806480589657646/",
-    "https://www.facebook.com/groups/665858770866658/",
-    "https://www.facebook.com/groups/191115926250896/",
-    "https://www.facebook.com/groups/840300433502695/",
-    "https://www.facebook.com/groups/710369076275708/",
-    "https://www.facebook.com/groups/apaixonadosporferramentas/",
-    "https://www.facebook.com/groups/3541592475928295",
-    "https://www.facebook.com/groups/1099592037096961/",
-    "https://www.facebook.com/groups/2165172070388247/",
-    "https://www.facebook.com/groups/920508311830400",
-    "https://www.facebook.com/groups/4046851472079245",
-    "https://www.facebook.com/groups/316487553214879",
     "https://www.facebook.com/groups/312177843254758/",
     "https://www.facebook.com/groups/274687116922393/",
     "https://www.facebook.com/groups/2136378319728934/",
@@ -153,7 +133,7 @@ def auto_share(table_data, current_index, window, stop):
             # group_type = scheduler.get("group_type", ["go", "co_khi", "xay_dung"])
             share_number += 1
             update_data = {"share_number": share_number}
-            if share_number >= 20:
+            if share_number >= 30:
                 update_data['shared'] = True
 
             video_id = scheduler['video_id']
@@ -178,6 +158,9 @@ def auto_share(table_data, current_index, window, stop):
                 click_to("fullscreen.PNG", waiting_time=10, region=(0, 33, 1900, 1000))
             # else:
             #     continue
+
+            for _ in range(1):
+                join_group()
 
             access_video(None)
             if waiting_for("reload_bar.PNG"):
@@ -311,12 +294,13 @@ def auto_share(table_data, current_index, window, stop):
                 #         else:
                 #             # click_many("close_btn.PNG")
                 #             click_to("dark_logo.PNG", confidence=0.9)
-            window.write_event_value('-THREAD-', "")  # put a message into queue for GUI
+            window.write_event_value('-THREAD-', "not done")  # put a message into queue for GUI
             pyautogui.hotkey('ctrl', 'f4')
 
         et = time.time()
         logger.debug(f"share done time consuming: {round((et - st)/60, 1)}")
         pyautogui.hotkey('windows', 'd')
+    window.write_event_value('-THREAD-', "done")  # put a message into queue for GUI
 
 
 def watch_videos():
