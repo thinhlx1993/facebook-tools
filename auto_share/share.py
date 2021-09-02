@@ -468,22 +468,22 @@ if __name__ == '__main__':
             video_id = str(values['video_id']).strip()
             text_seo = str(values['text_seo']).strip()
             if video_id != "":
-                exist_scheduler = scheduler_table.find_one({"video_id": video_id})
-                if exist_scheduler:
-                    scheduler_table.update_one({"_id": exist_scheduler['_id']},
-                                               {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
-                    sg.Popup('Them that bai, video da co', keep_on_top=True)
-                else:
-                    new_scheduler = {
-                        "_id": str(uuid.uuid4()),
-                        "video_id": video_id,
-                        "scheduler_time": datetime.now().timestamp(),
-                        "create_date": datetime.now().timestamp(),
-                        "shared": False,
-                        "share_number": 0
-                    }
+                exist_scheduler = scheduler_table.delete_one({"video_id": video_id})
+                # if exist_scheduler:
+                #     scheduler_table.update_one({"_id": exist_scheduler['_id']},
+                #                                {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
+                #     sg.Popup('Them that bai, video da co', keep_on_top=True)
+                # else:
+                new_scheduler = {
+                    "_id": str(uuid.uuid4()),
+                    "video_id": video_id,
+                    "scheduler_time": datetime.now().timestamp(),
+                    "create_date": datetime.now().timestamp(),
+                    "shared": False,
+                    "share_number": 0
+                }
 
-                    result = scheduler_table.insert_one(new_scheduler)
+                result = scheduler_table.insert_one(new_scheduler)
                 table_default = scheduler_table.find({"shared": False},
                                                      {"video_id": 1, "groups_shared": 1, "shared": 1}).sort("create_date", pymongo.ASCENDING)
                 table_default = list(map(mapping_table, list(table_default)))
