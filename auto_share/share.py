@@ -277,7 +277,8 @@ def auto_share(table_data, current_index, window, stop):
                         scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                         post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
                         if post_btn:
-                            title = scheduler['title'] if 'title' in scheduler else get_title()
+                            title = get_title()
+                            logger.info(title)
                             paste_text(title)
                             time.sleep(5)
                             click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
