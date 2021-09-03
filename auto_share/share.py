@@ -331,8 +331,9 @@ def auto_share(table_data, current_index, window, stop):
             window.write_event_value('-THREAD-', "not done")  # put a message into queue for GUI
             # move via to done folder
             try:
-                os.makedirs(r"C:\Users\HOMEPC\Desktop\shared", exist_ok=True)
-                os.rename(f"C:\\Users\\HOMEPC\\Desktop\\{via_name}", f"C:\\Users\\HOMEPC\\Desktop\\shared\\{via_name}")
+                home_dir = os.path.expanduser("~")
+                os.makedirs(f"{home_dir}\\Desktop\\shared", exist_ok=True)
+                os.rename(f"{home_dir}\\Desktop\\{via_name}", f"{home_dir}\\Desktop\\shared\\{via_name}")
             except Exception as ex:
                 logger.error(ex)
 
