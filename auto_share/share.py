@@ -271,10 +271,9 @@ def auto_share(table_data, current_index, window, stop):
                                 continue
 
                             # check group enable
-                            go_enable = scheduler.get("go", False)
-                            co_khi_enable = scheduler.get("co_khi", False)
-                            xay_dung_enable = scheduler.get(""
-                                                            "xay_dung", False)
+                            go_enable = scheduler.get("go", True)
+                            co_khi_enable = scheduler.get("co_khi", True)
+                            xay_dung_enable = scheduler.get("xay_dung", True)
                             groups_share = []
 
                             if go_enable:
