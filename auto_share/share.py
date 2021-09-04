@@ -209,6 +209,8 @@ def auto_share(table_data, current_index, window, stop):
                     continue
                 if check_exist("checkpoint_2.PNG"):
                     continue
+                if check_exist("cookies_failed.PNG"):
+                    continue
 
                 if not waiting_for("search_title.PNG", waiting_time=10):
                     # change language
