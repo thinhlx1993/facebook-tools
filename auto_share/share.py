@@ -9,7 +9,7 @@ import clipboard
 import pymongo
 import pyautogui
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
-    relative_position, get_title, scheduler_table, logger, group_table
+    relative_position, get_title, scheduler_table, logger, group_table, via_shared
 pyautogui.PAUSE = 0.2
 
 groups = [
@@ -148,7 +148,7 @@ def auto_share(table_data, current_index, window, stop):
                 pyautogui.hotkey('ctrl', 'c')
                 time.sleep(0.5)
                 pyautogui.press('esc')
-                via_name = clipboard.paste()
+                via_name = clipboard.paste().strip()
                 logger.info(f"via name: {via_name}")
                 # shared_via.append(via_name)
                 pyautogui.press('enter')
@@ -157,6 +157,15 @@ def auto_share(table_data, current_index, window, stop):
                 time.sleep(2)
                 if check_exist("reload_bar.PNG"):
                     break
+
+            # check via is shared enough on this day
+            now = datetime.now().strftime("%B %d, %Y")
+            via_history = via_shared.find_one({"date": now})
+            if via_history:
+                share_number = via_history.get(via_name, 0)
+                if share_number > 4:
+                    logger.info(f"via {via_name} da share du 4 video")
+                    continue
 
             # pyautogui.press('enter')
             # click_to("signin.PNG", waiting_time=5)
@@ -208,6 +217,8 @@ def auto_share(table_data, current_index, window, stop):
                 if check_exist("checkpoint_1.PNG"):
                     continue
                 if check_exist("checkpoint_2.PNG"):
+                    continue
+                if check_exist("cookies_failed.PNG"):
                     continue
 
                 if not waiting_for("search_title.PNG", waiting_time=10):
@@ -315,7 +326,17 @@ def auto_share(table_data, current_index, window, stop):
                                 logger.info(title)
                                 paste_text(title)
                                 time.sleep(5)
-                                click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=20)
+                                click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=10)
+                                # save via shared +1
+                                now = datetime.now().strftime("%B %d, %Y")
+                                via_history = via_shared.find_one({"date": now})
+                                if via_history:
+                                    share_number = via_history.get(via_name, 0)
+                                    share_number += 1
+                                    via_history[via_name] = share_number
+                                else:
+                                    new_item = {"_id": str(uuid.uuid4()), "date": now, via_name: 1}
+                                    via_shared.insert_one(new_item)
                                 click_to("post_success.PNG", confidence=0.8, waiting_time=10)
                                 spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
                                 if spam:
@@ -445,7 +466,15 @@ def start_watch():
 
 
 def mapping_table(item):
-    return [item.get('video_id', ''), len(item.get('groups_shared', [])), item.get('shared', False)]
+    return [
+        item.get('video_id', ''),
+        len(item.get('groups_shared', [])),
+        item.get('shared', False),
+        item.get('go', False),
+        item.get('co_khi', False),
+        item.get('xay_dung', False),
+        item.get('options', False),
+    ]
 
 
 if __name__ == '__main__':
@@ -453,8 +482,21 @@ if __name__ == '__main__':
     # print(pyautogui.position())
     sg.theme('DarkAmber')  # Add a touch of color
     # All the stuff inside your window.
-    headings = ['video_id', 'share group', 'share done']  # the text of the headings
-    table_default = scheduler_table.find({"shared": False}, {"video_id": 1, "groups_shared": 1, "shared": 1}).sort("create_date", pymongo.ASCENDING)
+    headings = ['video_id', 'share group', 'share done', "Gỗ", "Cơ Khí", "Xây Dựng", "Tùy Chọn"]  # the text of the headings
+    table_default = scheduler_table.find(
+        {
+            "shared": False
+        },
+        {
+            "video_id": 1,
+            "groups_shared": 1,
+            "shared": 1,
+            "go": 1,
+            "co_khi": 1,
+            "xay_dung": 1,
+            "options": 1,
+        }
+    ).sort("create_date", pymongo.ASCENDING)
     table_default = list(map(mapping_table, list(table_default)))
     layout = [[sg.Text('Video ID'), sg.InputText("", key="video_id"), sg.Button('Add')],
               [
@@ -463,7 +505,9 @@ if __name__ == '__main__':
                   sg.Checkbox(
                       'Cơ Khí', key='groups.co_khi', enable_events=False, default=True),
                   sg.Checkbox(
-                      'Xây Dựng', key='groups.xay_dung', enable_events=False, default=True)
+                      'Xây Dựng', key='groups.xay_dung', enable_events=False, default=True),
+                  sg.Checkbox(
+                      'Tùy Chọn', key='groups.options', enable_events=False, default=True)
               ],
               [
                   sg.Table(values=table_default,
@@ -536,12 +580,25 @@ if __name__ == '__main__':
                     "share_number": 0,
                     "go": values.get("groups.go", False),
                     "co_khi": values.get("groups.co_khi", False),
-                    "xay_dung": values.get("groups.xay_dung", False)
+                    "xay_dung": values.get("groups.xay_dung", False),
+                    "options": values.get("groups.options", False)
                 }
 
                 result = scheduler_table.insert_one(new_scheduler)
-                table_default = scheduler_table.find({"shared": False},
-                                                     {"video_id": 1, "groups_shared": 1, "shared": 1}).sort("create_date", pymongo.ASCENDING)
+                table_default = scheduler_table.find(
+                    {
+                        "shared": False
+                    },
+                    {
+                        "video_id": 1,
+                        "groups_shared": 1,
+                        "shared": 1,
+                        "go": 1,
+                        "co_khi": 1,
+                        "xay_dung": 1,
+                        "options": 1,
+                    }
+                ).sort("create_date", pymongo.ASCENDING)
                 table_default = list(map(mapping_table, list(table_default)))
                 window.Element('table').Update(values=table_default)
                 sg.Popup('Them thanh cong', keep_on_top=True)
