@@ -285,6 +285,7 @@ def auto_share(table_data, current_index, window, stop):
                             go_enable = scheduler.get("go", True)
                             co_khi_enable = scheduler.get("co_khi", True)
                             xay_dung_enable = scheduler.get("xay_dung", True)
+                            options_enable = scheduler.get("options", True)
                             groups_share = []
 
                             if go_enable:
@@ -295,6 +296,9 @@ def auto_share(table_data, current_index, window, stop):
                                     groups_share.extend([x for x in group_file.readlines()])
                             if xay_dung_enable:
                                 with open("xay_dung.txt", encoding='utf-8') as group_file:
+                                    groups_share.extend([x for x in group_file.readlines()])
+                            if options_enable:
+                                with open("tuy_chon.txt", encoding='utf-8') as group_file:
                                     groups_share.extend([x for x in group_file.readlines()])
 
                             for group_name in groups_share:
