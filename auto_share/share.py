@@ -164,6 +164,7 @@ def auto_share(table_data, current_index, window, stop):
             if via_history:
                 share_number = via_history.get(via_name, 0)
                 if share_number > 4:
+                    pyautogui.hotkey('ctrl', 'f4')
                     logger.info(f"via {via_name} da share du 4 video")
                     continue
 
