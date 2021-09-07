@@ -126,7 +126,7 @@ def auto_share(table_data, current_index, window, stop):
     browsers = pyautogui.locateAllOnScreen(f"btn/coccoc.PNG", confidence=0.95)
     for browser in browsers:
         st = time.time()
-        scheduler = scheduler_table.find({"shared": False, "share_number": {"$lt": 30}}).sort("create_date", pymongo.ASCENDING)
+        scheduler = scheduler_table.find({"shared": False}).sort("create_date", pymongo.ASCENDING)
         scheduler = list(scheduler)
         if len(scheduler) > 0:
             scheduler = scheduler[0]
@@ -162,8 +162,8 @@ def auto_share(table_data, current_index, window, stop):
             now = datetime.now().strftime("%B %d, %Y")
             via_history = via_shared.find_one({"date": now})
             if via_history:
-                share_number = via_history.get(via_name, 0)
-                if share_number > 4:
+                via_share_number = via_history.get(via_name, 0)
+                if via_share_number > 4:
                     pyautogui.hotkey('ctrl', 'f4')
                     logger.info(f"via {via_name} da share du 4 video")
                     continue
@@ -322,7 +322,7 @@ def auto_share(table_data, current_index, window, stop):
                                             pyautogui.press('backspace')
                             share_number += 1
                             update_data = {"share_number": share_number}
-                            if share_number > 30 or groups_shared > 30:
+                            if share_number > 30 or len(groups_shared) > 30:
                                 update_data['shared'] = True
                             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
@@ -492,8 +492,7 @@ if __name__ == '__main__':
     headings = ['video_id', 'share group', 'share done', "Gỗ", "Cơ Khí", "Xây Dựng", "Tùy Chọn"]  # the text of the headings
     table_default = scheduler_table.find(
         {
-            "shared": False,
-            "share_number": {"$lt": 30}
+            "shared": False
         },
         {
             "video_id": 1,
