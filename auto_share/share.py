@@ -11,7 +11,7 @@ import pyautogui
 from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
     relative_position, get_title, scheduler_table, logger, group_table, via_shared
 pyautogui.PAUSE = 0.2
-
+pyautogui.FAILSAFE = False
 groups = [
     "https://www.facebook.com/groups/312177843254758/",
     "https://www.facebook.com/groups/274687116922393/",
