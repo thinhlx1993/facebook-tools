@@ -336,11 +336,11 @@ def auto_share(table_data, current_index, window, stop):
                                 now = datetime.now().strftime("%B %d, %Y")
                                 via_history = via_shared.find_one({"date": now})
                                 if via_history:
-                                    share_number = via_history.get(via_name, 0)
-                                    share_number += 1
-                                    via_history[via_name] = share_number
+                                    via_share_number = via_history.get(via_name, 0)
+                                    via_share_number += 1
+                                    via_history[via_name] = via_share_number
                                     via_shared.update_one({"_id": via_history['_id']},
-                                                          {"$set": {via_name: share_number}})
+                                                          {"$set": {via_name: via_share_number}})
                                 else:
                                     new_item = {"_id": str(uuid.uuid4()), "date": now, via_name: 1}
                                     via_shared.insert_one(new_item)
