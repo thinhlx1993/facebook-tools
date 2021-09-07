@@ -163,7 +163,7 @@ def auto_share(table_data, current_index, window, stop):
             via_history = via_shared.find_one({"date": now})
             if via_history:
                 via_share_number = via_history.get(via_name, 0)
-                if via_share_number > 4:
+                if via_share_number >= 4:
                     pyautogui.hotkey('ctrl', 'f4')
                     logger.info(f"via {via_name} da share du 4 video")
                     continue
@@ -566,7 +566,15 @@ if __name__ == '__main__':
             window.Element('table').Update(values=table_data)
         elif event == '-THREAD-':
             table_default = scheduler_table.find({"shared": False, "share_number": {"$lt": 30}},
-                                                 {"video_id": 1, "groups_shared": 1, "shared": 1})
+                                                 {
+                                                     "video_id": 1,
+                                                     "groups_shared": 1,
+                                                     "shared": 1,
+                                                     "go": 1,
+                                                     "co_khi": 1,
+                                                     "xay_dung": 1,
+                                                     "options": 1
+                                                 })
             table_default = list(map(mapping_table, list(table_default)))
             window.Element('table').Update(values=table_default)
         elif event == 'Add':
