@@ -162,8 +162,8 @@ def auto_share(table_data, current_index, window, stop):
             now = datetime.now().strftime("%B %d, %Y")
             via_history = via_shared.find_one({"date": now})
             if via_history:
-                share_number = via_history.get(via_name, 0)
-                if share_number > 4:
+                via_share_number = via_history.get(via_name, 0)
+                if via_share_number >= 4:
                     pyautogui.hotkey('ctrl', 'f4')
                     logger.info(f"via {via_name} da share du 4 video")
                     continue
@@ -322,7 +322,7 @@ def auto_share(table_data, current_index, window, stop):
                                             pyautogui.press('backspace')
                             share_number += 1
                             update_data = {"share_number": share_number}
-                            if share_number >= 30:
+                            if share_number > 30 or len(groups_shared) > 30:
                                 update_data['shared'] = True
                             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
@@ -336,11 +336,11 @@ def auto_share(table_data, current_index, window, stop):
                                 now = datetime.now().strftime("%B %d, %Y")
                                 via_history = via_shared.find_one({"date": now})
                                 if via_history:
-                                    share_number = via_history.get(via_name, 0)
-                                    share_number += 1
-                                    via_history[via_name] = share_number
+                                    via_share_number = via_history.get(via_name, 0)
+                                    via_share_number += 1
+                                    via_history[via_name] = via_share_number
                                     via_shared.update_one({"_id": via_history['_id']},
-                                                          {"$set": {via_name: share_number}})
+                                                          {"$set": {via_name: via_share_number}})
                                 else:
                                     new_item = {"_id": str(uuid.uuid4()), "date": now, via_name: 1}
                                     via_shared.insert_one(new_item)
@@ -565,8 +565,16 @@ if __name__ == '__main__':
                 table_data.pop(item)
             window.Element('table').Update(values=table_data)
         elif event == '-THREAD-':
-            table_default = scheduler_table.find({"shared": False},
-                                                 {"video_id": 1, "groups_shared": 1, "shared": 1})
+            table_default = scheduler_table.find({"shared": False, "share_number": {"$lt": 30}},
+                                                 {
+                                                     "video_id": 1,
+                                                     "groups_shared": 1,
+                                                     "shared": 1,
+                                                     "go": 1,
+                                                     "co_khi": 1,
+                                                     "xay_dung": 1,
+                                                     "options": 1
+                                                 })
             table_default = list(map(mapping_table, list(table_default)))
             window.Element('table').Update(values=table_default)
         elif event == 'Add':
