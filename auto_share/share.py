@@ -215,13 +215,9 @@ def auto_share(table_data, current_index, window, stop):
                 if check_exist("chan_socket.PNG"):
                     click_to("chan_socket.PNG")
 
-                if check_exist("checkpoint_1.PNG"):
-                    continue
-                if check_exist("checkpoint_2.PNG"):
-                    continue
-                if check_exist("cookies_failed.PNG"):
-                    continue
-                if check_exist("disabled.PNG"):
+                buttons = ["checkpoint_1.PNG", "checkpoint_2.PNG", "cookies_failed.PNG", "disabled.PNG"]
+                ret = deciscion(buttons, waiting_time=10)
+                if ret:
                     continue
 
                 if not waiting_for("search_title.PNG", waiting_time=10):
@@ -324,7 +320,7 @@ def auto_share(table_data, current_index, window, stop):
                                             pyautogui.press('backspace')
                             share_number += 1
                             update_data = {"share_number": share_number}
-                            if share_number > 30 or len(groups_shared) > 30:
+                            if share_number > 20 or len(groups_shared) > 20:
                                 update_data['shared'] = True
                             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
