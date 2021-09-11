@@ -320,7 +320,7 @@ def auto_share(table_data, current_index, window, stop):
                                             pyautogui.press('backspace')
                             share_number += 1
                             update_data = {"share_number": share_number}
-                            if share_number > 20 or len(groups_shared) > 20:
+                            if share_number > 30 or len(groups_shared) > 30:
                                 update_data['shared'] = True
                             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
                             post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
