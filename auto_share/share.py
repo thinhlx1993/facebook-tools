@@ -37,7 +37,9 @@ def show_desktop():
         pyautogui.click(show_desktop_btn, button="RIGHT")
         if check_exist("show_desktop.PNG"):
             click_to("show_desktop.PNG", waiting_time=10)
-            time.sleep(1)
+    else:
+        pyautogui.hotkey("windows", "d")
+    time.sleep(1)
     pyautogui.moveTo(1027, 549)
 
 
@@ -139,6 +141,7 @@ def auto_share(table_data, current_index, window, stop):
             logger.debug(f"share video {video_id}")
             pyautogui.moveTo(browser)
             if not check_exist("coccoc.PNG"):
+                logger.info("Not found coc coc")
                 show_desktop()
             for _ in range(3):
                 pyautogui.click(browser)
@@ -232,7 +235,7 @@ def auto_share(table_data, current_index, window, stop):
                         paste_text("https://www.facebook.com/settings?tab=language")
                         pyautogui.hotkey('enter')
                         waiting_for("reload_bar.PNG")
-                        for i in range(3):
+                        for i in range(2):
                             click_to("English.PNG")
                             time.sleep(2)
                             pyautogui.press('f5')
@@ -241,7 +244,7 @@ def auto_share(table_data, current_index, window, stop):
                                 break
 
                 # for _ in range(2):
-                #     join_group()
+                # join_group()
 
                 status = access_video(video_id)
                 if status:
