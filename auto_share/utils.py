@@ -39,6 +39,7 @@ via_share_table = db['via_share']
 scheduler_table = db['scheduler']
 group_table = db['groups']
 via_shared = db['via_shared']
+video_shared = db['video_shared']
 
 
 def random_interval():

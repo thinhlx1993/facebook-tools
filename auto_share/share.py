@@ -8,8 +8,8 @@ import PySimpleGUI as sg
 import clipboard
 import pymongo
 import pyautogui
-from utils import click_to, click_many, check_exist, paste_text, typeing_text, waiting_for, deciscion, \
-    relative_position, get_title, scheduler_table, logger, group_table, via_shared
+from utils import click_to, click_many, check_exist, paste_text, waiting_for, deciscion,\
+    get_title, scheduler_table, logger, via_shared, video_shared
 pyautogui.PAUSE = 0.2
 pyautogui.FAILSAFE = False
 groups = [
@@ -119,7 +119,7 @@ def access_group(group_id):
 
 
 def auto_share(table_data, current_index, window, stop):
-    shared_via = []
+    shared_group_name = []
     time.sleep(5)
     logger.debug("start share")
     show_desktop()
@@ -184,7 +184,7 @@ def auto_share(table_data, current_index, window, stop):
             #     continue
 
             # for _ in range(2):
-            #     join_group()
+            join_group()
 
             access_video(None)
             if waiting_for("reload_bar.PNG"):
@@ -302,9 +302,18 @@ def auto_share(table_data, current_index, window, stop):
                                 with open("tuy_chon.txt", encoding='utf-8') as group_file:
                                     groups_share.extend([x for x in group_file.readlines()])
 
+                            found_group_name = False
                             for group_name in groups_share:
                                 group_name = group_name.strip()
                                 if group_name not in groups_shared:
+                                    shared_group_name.append(group_name)
+                                    if shared_group_name.count(group_name) > 3:
+                                        # mark group shared
+                                        groups_shared.append(group_name)
+                                        scheduler_table.update_one({"_id": scheduler['_id']},
+                                                                   {"$set": {"groups_shared": groups_shared}})
+                                        break
+
                                     search_for_group = waiting_for("search_for_group.PNG")
                                     if search_for_group:
                                         search_x, search_y = search_for_group
@@ -316,47 +325,47 @@ def auto_share(table_data, current_index, window, stop):
                                             scheduler_table.update_one({"_id": scheduler['_id']},
                                                                        {"$set": {"groups_shared": groups_shared}})
                                             click_to("public_group.PNG")
+                                            found_group_name = True
                                             break
                                         else:
                                             pyautogui.hotkey('ctrl', 'a')
                                             pyautogui.press('backspace')
+
                             share_number += 1
                             update_data = {"share_number": share_number}
-                            if share_number > 30 or len(groups_shared) > 30:
+                            if share_number >= len(groups_share):
                                 update_data['shared'] = True
                             scheduler_table.update_one({"_id": scheduler['_id']}, {"$set": update_data})
-                            post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
-                            if post_btn:
-                                title = get_title()
-                                logger.info(title)
-                                paste_text(title)
-                                time.sleep(5)
-                                click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=10)
-                                # save via shared +1
-                                now = datetime.now().strftime("%B %d, %Y")
-                                via_history = via_shared.find_one({"date": now})
-                                if via_history:
-                                    via_share_number = via_history.get(via_name, 0)
-                                    via_share_number += 1
-                                    via_history[via_name] = via_share_number
-                                    via_shared.update_one({"_id": via_history['_id']},
-                                                          {"$set": {via_name: via_share_number}})
-                                else:
-                                    new_item = {"_id": str(uuid.uuid4()), "date": now, via_name: 1}
-                                    via_shared.insert_one(new_item)
-                                click_to("post_success.PNG", confidence=0.8, waiting_time=10)
-                                spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
-                                if spam:
-                                    pyautogui.hotkey('ctrl', 'f4')
-                                    time.sleep(1)
-                                    pyautogui.press('enter')
-                                    # time.sleep(1)
-                                    # pyautogui.hotkey('ctrl', 'f4')
-                                    logger.info("limited")
-                    #         # click_to("dark_logo.PNG", confidence=0.9)
-                    #         else:
-                    #             # click_many("close_btn.PNG")
-                    #             click_to("dark_logo.PNG", confidence=0.9)
+                            if found_group_name:
+                                post_btn = waiting_for("post.PNG", confidence=0.8, waiting_time=20)
+                                if post_btn:
+                                    title = get_title()
+                                    logger.info(title)
+                                    paste_text(title)
+                                    time.sleep(5)
+                                    click_to("post.PNG", confidence=0.8, duration=1, interval=3, waiting_time=10)
+                                    # save via shared +1
+                                    now = datetime.now().strftime("%B %d, %Y")
+                                    via_history = via_shared.find_one({"date": now})
+                                    if via_history:
+                                        via_share_number = via_history.get(via_name, 0)
+                                        via_share_number += 1
+                                        via_history[via_name] = via_share_number
+                                        via_shared.update_one({"_id": via_history['_id']},
+                                                              {"$set": {via_name: via_share_number}})
+                                    else:
+                                        new_item = {"_id": str(uuid.uuid4()), "date": now, via_name: 1}
+                                        via_shared.insert_one(new_item)
+                                    click_to("post_success.PNG", confidence=0.8, waiting_time=10)
+                                    spam = waiting_for("spam.PNG", confidence=0.9, waiting_time=10)
+                                    if spam:
+                                        pyautogui.hotkey('ctrl', 'f4')
+                                        time.sleep(1)
+                                        pyautogui.press('enter')
+                                        # time.sleep(1)
+                                        # pyautogui.hotkey('ctrl', 'f4')
+                                        logger.info("limited")
+
             window.write_event_value('-THREAD-', "not done")  # put a message into queue for GUI
             # move via to done folder
             try:
