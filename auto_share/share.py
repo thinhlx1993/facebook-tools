@@ -158,7 +158,7 @@ def auto_share(table_data, current_index, window, stop):
                 # shared_via.append(via_name)
                 pyautogui.press('enter')
                 time.sleep(0.3)
-                pyautogui.press('enter')
+                # pyautogui.press('enter')
                 # time.sleep(2)
                 if waiting_for("reload_bar.PNG", waiting_time=5):
                     break
