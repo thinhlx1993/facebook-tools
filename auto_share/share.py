@@ -144,23 +144,22 @@ def auto_share(table_data, current_index, window, stop):
                 logger.info("Not found coc coc")
                 show_desktop()
             for _ in range(2):
-                if via_name != "fb.com":
-                    pyautogui.click(browser)
-                    logger.info(f"click to: {browser}")
-                    pyautogui.press("f2")
-                    time.sleep(0.5)
-                    pyautogui.hotkey('ctrl', 'c')
-                    time.sleep(0.5)
-                    pyautogui.press('esc')
-                    via_name = clipboard.paste().strip()
-                    logger.info(f"via name: {via_name}")
-                    # shared_via.append(via_name)
-                    pyautogui.press('enter')
-                    time.sleep(0.5)
-                    pyautogui.press('enter')
-                    time.sleep(2)
-                    if check_exist("reload_bar.PNG"):
-                        break
+                pyautogui.click(browser)
+                logger.info(f"click to: {browser}")
+                pyautogui.press("f2")
+                time.sleep(0.5)
+                pyautogui.hotkey('ctrl', 'c')
+                time.sleep(0.5)
+                pyautogui.press('esc')
+                via_name = clipboard.paste().strip()
+                logger.info(f"via name: {via_name}")
+                # shared_via.append(via_name)
+                pyautogui.press('enter')
+                time.sleep(0.5)
+                pyautogui.press('enter')
+                time.sleep(2)
+                if check_exist("reload_bar.PNG"):
+                    break
             if via_name == "fb.com" or via_name == "":
                 continue
 
