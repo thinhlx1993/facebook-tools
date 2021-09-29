@@ -157,10 +157,10 @@ def auto_share(table_data, current_index, window, stop):
             logger.info(f"via name: {via_name}")
             # shared_via.append(via_name)
             pyautogui.press('enter')
-            time.sleep(0.3)
+            # time.sleep(0.3)
             # pyautogui.press('enter')
             # time.sleep(2)
-            if waiting_for("reload_bar.PNG", waiting_time=10):
+            if waiting_for("reload_bar.PNG", waiting_time=5):
                 if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
                     pyautogui.hotkey('ctrl', 'f4')
                     continue
