@@ -167,7 +167,7 @@ def auto_share(table_data, current_index, window, stop):
                         break
 
             # time.sleep(2)
-            if waiting_for("reload_bar.PNG", waiting_time=5):
+            if check_exist("reload_bar.PNG"):
                 if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
                     pyautogui.hotkey('ctrl', 'f4')
                     continue
