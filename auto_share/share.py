@@ -161,7 +161,7 @@ def auto_share(table_data, current_index, window, stop):
                     time.sleep(2)
                     if check_exist("reload_bar.PNG"):
                         break
-            if via_name == "fb.com":
+            if via_name == "fb.com" or via_name == "":
                 continue
 
             # check via is shared enough on this day
