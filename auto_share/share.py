@@ -10,8 +10,9 @@ import pymongo
 import pyautogui
 from utils import click_to, click_many, check_exist, paste_text, waiting_for, deciscion,\
     get_title, scheduler_table, logger, via_shared, video_shared
-pyautogui.PAUSE = 0.2
-pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.1
+# pyautogui.FAILSAFE = False
+
 groups = [
     "https://www.facebook.com/groups/312177843254758/",
     "https://www.facebook.com/groups/274687116922393/",
@@ -139,26 +140,32 @@ def auto_share(table_data, current_index, window, stop):
 
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
+
             pyautogui.moveTo(browser)
+            time.sleep(0.2)
+
             if not check_exist("coccoc.PNG"):
                 logger.info("Not found coc coc")
                 show_desktop()
-            # for _ in range(4):
-            pyautogui.click(browser)
-            time.sleep(0.3)
-            logger.info(f"click to: {browser}")
-            pyautogui.press("f2")
-            time.sleep(0.3)
-            pyautogui.hotkey('ctrl', 'c')
-            time.sleep(0.3)
-            pyautogui.press('esc')
-            time.sleep(0.3)
-            via_name = clipboard.paste().strip()
-            logger.info(f"via name: {via_name}")
-            # shared_via.append(via_name)
-            pyautogui.press('enter')
-            # time.sleep(0.3)
-            # pyautogui.press('enter')
+            for _ in range(3):
+                pyautogui.click(browser)
+                time.sleep(0.5)
+                logger.info(f"click to: {browser}")
+                pyautogui.press("f2")
+                time.sleep(0.5)
+                pyautogui.hotkey('ctrl', 'c')
+                time.sleep(0.5)
+                pyautogui.press('esc')
+                time.sleep(0.5)
+                via_name = clipboard.paste().strip()
+                logger.info(f"via name: {via_name}")
+                if "Chrome" in via_name:
+                    # shared_via.append(via_name)
+                    pyautogui.press('enter')
+                    time.sleep(1)
+                    if waiting_for("reload_bar.PNG", waiting_time=5):
+                        break
+
             # time.sleep(2)
             if waiting_for("reload_bar.PNG", waiting_time=5):
                 if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
