@@ -143,7 +143,7 @@ def auto_share(table_data, current_index, window, stop):
             if not check_exist("coccoc.PNG"):
                 logger.info("Not found coc coc")
                 show_desktop()
-            for _ in range(2):
+            for _ in range(4):
                 pyautogui.click(browser)
                 logger.info(f"click to: {browser}")
                 pyautogui.press("f2")
@@ -160,7 +160,7 @@ def auto_share(table_data, current_index, window, stop):
                 time.sleep(2)
                 if check_exist("reload_bar.PNG"):
                     break
-            if via_name == "fb.com" or via_name == "":
+            if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
                 continue
 
             # check via is shared enough on this day
