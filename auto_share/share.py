@@ -145,20 +145,22 @@ def auto_share(table_data, current_index, window, stop):
                 show_desktop()
             for _ in range(4):
                 pyautogui.click(browser)
+                time.sleep(0.3)
                 logger.info(f"click to: {browser}")
                 pyautogui.press("f2")
-                time.sleep(0.5)
+                time.sleep(0.3)
                 pyautogui.hotkey('ctrl', 'c')
-                time.sleep(0.5)
+                time.sleep(0.3)
                 pyautogui.press('esc')
+                time.sleep(0.3)
                 via_name = clipboard.paste().strip()
                 logger.info(f"via name: {via_name}")
                 # shared_via.append(via_name)
                 pyautogui.press('enter')
-                time.sleep(0.5)
+                time.sleep(0.3)
                 pyautogui.press('enter')
-                time.sleep(2)
-                if check_exist("reload_bar.PNG"):
+                # time.sleep(2)
+                if waiting_for("reload_bar.PNG", waiting_time=10):
                     break
             if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
                 continue
