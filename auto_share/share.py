@@ -189,7 +189,7 @@ def auto_share(table_data, current_index, window, stop):
             #     continue
 
             # for _ in range(2):
-            join_group()
+            # join_group()
 
             access_video(None)
             if waiting_for("reload_bar.PNG"):
