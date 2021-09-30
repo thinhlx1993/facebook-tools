@@ -190,6 +190,7 @@ def auto_share(table_data, current_index, window, stop):
                     new_tab = check_exist("new tab_btn.PNG", region=(0, 33, 1900, 1000))
                     if new_tab:
                         pyautogui.click(new_tab, button="right")
+                        time.sleep(0.5)
                         click_to("maxsimize.PNG", waiting_time=15)
                     full_screen = check_exist("fullscreen.PNG", region=(0, 33, 1900, 1000))
                     if full_screen:
