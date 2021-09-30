@@ -172,6 +172,9 @@ def auto_share(table_data, current_index, window, stop):
                     pyautogui.hotkey('ctrl', 'f4')
                     continue
 
+                if check_exist("khoi_phuc_chrome.PNG"):
+                    click_to("khoi_phuc_chrome.PNG", waiting_time=5)
+
                 # check via is shared enough on this day
                 now = datetime.now().strftime("%B %d, %Y")
                 via_history = via_shared.find_one({"date": now})
