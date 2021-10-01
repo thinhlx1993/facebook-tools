@@ -181,12 +181,13 @@ def auto_share(table_data, current_index, window, stop):
                     # shared_via.append(via_name)
                     pyautogui.press('enter')
                     time.sleep(1)
+
+                    if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
+                        # not in maximize mod
+                        show_full_screen()
+                        
                     if waiting_for("reload_bar.PNG", waiting_time=5):
                         break
-
-            if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
-                # not in maximize mod
-                show_full_screen()
 
             # time.sleep(2)
             if check_exist("reload_bar.PNG"):
