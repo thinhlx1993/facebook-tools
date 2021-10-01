@@ -184,6 +184,10 @@ def auto_share(table_data, current_index, window, stop):
                     if waiting_for("reload_bar.PNG", waiting_time=5):
                         break
 
+            if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
+                # not in maximize mod
+                show_full_screen()
+
             # time.sleep(2)
             if check_exist("reload_bar.PNG"):
                 if via_name == "fb.com" or via_name == "" or "Chrome" not in via_name:
