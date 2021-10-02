@@ -122,6 +122,7 @@ def access_group(group_id):
 
 
 def show_full_screen():
+    print("Show full screen")
     # not in maximize mod
     new_tab = check_exist("new tab_btn.PNG", region=(0, 33, 1900, 1000))
     if new_tab:
@@ -185,7 +186,7 @@ def auto_share(table_data, current_index, window, stop):
                     if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
                         # not in maximize mod
                         show_full_screen()
-                        
+
                     if waiting_for("reload_bar.PNG", waiting_time=5):
                         break
 
