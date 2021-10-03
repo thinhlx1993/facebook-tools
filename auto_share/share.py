@@ -121,6 +121,25 @@ def access_group(group_id):
     return False
 
 
+def show_full_screen():
+    print("Show full screen")
+    # not in maximize mod
+    new_tab = check_exist("new tab_btn.PNG", region=(0, 33, 1900, 1000))
+    if new_tab:
+        pyautogui.click(new_tab, button="right")
+        time.sleep(0.5)
+        click_to("maxsimize.PNG", waiting_time=15)
+        return
+    full_screen = check_exist("fullscreen.PNG", region=(0, 33, 1900, 1000))
+    if full_screen:
+        pyautogui.click(full_screen)
+        return
+
+    pyautogui.hotkey('atl', 'space')
+    time.sleep(1)
+    pyautogui.press('x')
+
+
 def auto_share(table_data, current_index, window, stop):
     shared_group_name = []
     time.sleep(5)
@@ -163,6 +182,11 @@ def auto_share(table_data, current_index, window, stop):
                     # shared_via.append(via_name)
                     pyautogui.press('enter')
                     time.sleep(1)
+
+                    if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
+                        # not in maximize mod
+                        show_full_screen()
+
                     if waiting_for("reload_bar.PNG", waiting_time=5):
                         break
 
@@ -186,14 +210,10 @@ def auto_share(table_data, current_index, window, stop):
                 # click_to("signin.PNG", waiting_time=5)
 
                 pyautogui.moveTo(1027, 549)
-                if waiting_for("reload_bar.PNG", waiting_time=20):
-                    new_tab = check_exist("new tab_btn.PNG", region=(0, 33, 1900, 1000))
-                    if new_tab:
-                        pyautogui.click(new_tab, button="right")
-                        click_to("maxsimize.PNG", waiting_time=15)
-                    full_screen = check_exist("fullscreen.PNG", region=(0, 33, 1900, 1000))
-                    if full_screen:
-                        pyautogui.click(full_screen)
+                if not check_exist("reload_bar.PNG", region=(74, 41, 30, 30)):
+                    # not in maximize mod
+                    show_full_screen()
+
                 # else:
                 #     continue
 
