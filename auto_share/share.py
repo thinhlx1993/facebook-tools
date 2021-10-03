@@ -318,7 +318,7 @@ def auto_share(table_data, current_index, window, stop):
                                 for group_name in groups_share:
                                     group_name = group_name.strip()
                                     if group_name not in groups_shared:
-                                        shared_group_name.append(group_name)
+                                        # shared_group_name.append(group_name)
                                         if shared_group_name.count(group_name) > 3:
                                             # mark group shared
                                             groups_shared.append(group_name)
