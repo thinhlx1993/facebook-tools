@@ -167,6 +167,7 @@ def auto_share(table_data, current_index, window, stop):
                 show_desktop()
             for _ in range(3):
                 click_to("recycle.PNG", waiting_time=5)
+                time.sleep(0.5)
                 pyautogui.click(browser)
                 time.sleep(0.5)
                 logger.info(f"click to: {browser}")
