@@ -36,8 +36,7 @@ def show_desktop():
     show_desktop_btn = check_exist("show_desktop_btn.PNG")
     if show_desktop_btn:
         pyautogui.click(show_desktop_btn, button="RIGHT")
-        if check_exist("show_desktop.PNG"):
-            click_to("show_desktop.PNG", waiting_time=10)
+        click_to("show_desktop.PNG", waiting_time=10)
     else:
         pyautogui.hotkey("windows", "d")
     time.sleep(1)
