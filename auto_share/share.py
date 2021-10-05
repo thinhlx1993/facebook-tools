@@ -159,8 +159,8 @@ def auto_share(table_data, current_index, window, stop):
             video_id = scheduler['video_id']
             logger.debug(f"share video {video_id}")
 
-            pyautogui.moveTo(browser)
-            time.sleep(0.2)
+            # pyautogui.moveTo(browser)
+            # time.sleep(0.2)
 
             if not check_exist("coccoc.PNG"):
                 logger.info("Not found coc coc")
