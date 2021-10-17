@@ -1,7 +1,7 @@
 import youtube_dl
 import os
 
-page_name = "input.txt"
+page_name = "input"
 os.makedirs(f"downloaded", exist_ok=True)
 
 if os.path.isfile(f"{page_name}.txt"):
