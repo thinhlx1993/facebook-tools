@@ -19,4 +19,5 @@ if os.path.isfile(f"{page_name}.txt"):
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([link])
                 except Exception as ex:
+                    print(ex)
                     pass
