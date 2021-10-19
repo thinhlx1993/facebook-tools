@@ -94,7 +94,7 @@ def access_video(video_id):
         pyautogui.hotkey('ctrl', 'a')
         pyautogui.press('backspace')
         if video_id:
-            paste_text(f"fb.com/{video_id}")
+            paste_text(f"https://www.facebook.com/watch/live/?ref=watch_permalink&v={video_id}")
         else:
             paste_text(f"fb.com")
         pyautogui.hotkey('enter')
