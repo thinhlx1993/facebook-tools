@@ -94,7 +94,7 @@ def access_video(video_id):
         pyautogui.hotkey('ctrl', 'a')
         pyautogui.press('backspace')
         if video_id:
-            paste_text(f"https://www.facebook.com/watch/live/?ref=watch_permalink&v={video_id}")
+            paste_text(f"fb.com/{video_id}")
         else:
             paste_text(f"fb.com")
         pyautogui.hotkey('enter')
@@ -547,7 +547,7 @@ if __name__ == '__main__':
         }
     ).sort("create_date", pymongo.ASCENDING)
     table_default = list(map(mapping_table, list(table_default)))
-    layout = [[sg.Text('Video ID'), sg.InputText("", key="video_id"), sg.Button('Add')],
+    layout = [[sg.Text('Video ID'), sg.Multiline(size=(30, 5), key="video_id"), sg.Button('Add')],
               [
                   sg.Checkbox(
                       'Gỗ', key='groups.go', enable_events=False, default=True),
@@ -620,45 +620,46 @@ if __name__ == '__main__':
             table_default = list(map(mapping_table, list(table_default)))
             window.Element('table').Update(values=table_default)
         elif event == 'Add':
-            video_id = str(values['video_id']).strip()
-            if video_id != "":
-                exist_scheduler = scheduler_table.delete_one({"video_id": video_id})
-                # if exist_scheduler:
-                #     scheduler_table.update_one({"_id": exist_scheduler['_id']},
-                #                                {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
-                #     sg.Popup('Them that bai, video da co', keep_on_top=True)
-                # else:
-                new_scheduler = {
-                    "_id": str(uuid.uuid4()),
-                    "video_id": video_id,
-                    "scheduler_time": datetime.now().timestamp(),
-                    "create_date": datetime.now().timestamp(),
-                    "shared": False,
-                    "share_number": 0,
-                    "go": values.get("groups.go", False),
-                    "co_khi": values.get("groups.co_khi", False),
-                    "xay_dung": values.get("groups.xay_dung", False),
-                    "options": values.get("groups.options", False)
-                }
-
-                result = scheduler_table.insert_one(new_scheduler)
-                table_default = scheduler_table.find(
-                    {
-                        "shared": False
-                    },
-                    {
-                        "video_id": 1,
-                        "groups_shared": 1,
-                        "shared": 1,
-                        "go": 1,
-                        "co_khi": 1,
-                        "xay_dung": 1,
-                        "options": 1,
+            video_ids = str(values['video_id']).strip().split('\n')
+            for video_id in video_ids:
+                if video_id != "":
+                    exist_scheduler = scheduler_table.delete_one({"video_id": video_id})
+                    # if exist_scheduler:
+                    #     scheduler_table.update_one({"_id": exist_scheduler['_id']},
+                    #                                {"$set": {"shared": False, "share_number": 30, "title": text_seo}})
+                    #     sg.Popup('Them that bai, video da co', keep_on_top=True)
+                    # else:
+                    new_scheduler = {
+                        "_id": str(uuid.uuid4()),
+                        "video_id": video_id,
+                        "scheduler_time": datetime.now().timestamp(),
+                        "create_date": datetime.now().timestamp(),
+                        "shared": False,
+                        "share_number": 0,
+                        "go": values.get("groups.go", False),
+                        "co_khi": values.get("groups.co_khi", False),
+                        "xay_dung": values.get("groups.xay_dung", False),
+                        "options": values.get("groups.options", False)
                     }
-                ).sort("create_date", pymongo.ASCENDING)
-                table_default = list(map(mapping_table, list(table_default)))
-                window.Element('table').Update(values=table_default)
-                sg.Popup('Them thanh cong', keep_on_top=True)
-            else:
-                sg.Popup('Them that bai', keep_on_top=True)
+
+                    result = scheduler_table.insert_one(new_scheduler)
+                    table_default = scheduler_table.find(
+                        {
+                            "shared": False
+                        },
+                        {
+                            "video_id": 1,
+                            "groups_shared": 1,
+                            "shared": 1,
+                            "go": 1,
+                            "co_khi": 1,
+                            "xay_dung": 1,
+                            "options": 1,
+                        }
+                    ).sort("create_date", pymongo.ASCENDING)
+                    table_default = list(map(mapping_table, list(table_default)))
+                    window.Element('table').Update(values=table_default)
+            sg.Popup('Them thanh cong', keep_on_top=True)
+            # else:
+            #     sg.Popup('Them that bai', keep_on_top=True)
     window.close()
