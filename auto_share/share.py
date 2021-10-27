@@ -280,6 +280,7 @@ def auto_share(table_data, current_index, window, stop):
 
                     status = access_video(video_id)
                     if status:
+
                         waiting_for("dark_logo.PNG")
                         waiting_for("reload_bar.PNG")
                         if not check_exist("not_available.PNG"):
@@ -398,6 +399,8 @@ def auto_share(table_data, current_index, window, stop):
                                             # time.sleep(1)
                                             # pyautogui.hotkey('ctrl', 'f4')
                                             logger.info(f"limited {via_name}")
+                        else:
+                            scheduler_table.delete_one({"video_id": video_id})
 
                 window.write_event_value('-THREAD-', "not done")  # put a message into queue for GUI
                 # move via to done folder
