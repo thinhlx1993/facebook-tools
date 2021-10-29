@@ -31,10 +31,9 @@ ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-os.makedirs(f"downloaded", exist_ok=True)
 
-
-def download_video(table_data, current_index, window, stop):
+def download_video(table_data, current_index, window, ten_phim):
+    os.makedirs(f"downloaded/{ten_phim}", exist_ok=True)
     for idx, row in enumerate(table_data):
         if idx >= current_index:
             link, views, status = row
@@ -44,7 +43,7 @@ def download_video(table_data, current_index, window, stop):
                     info_dict = ydl.extract_info(link, download=False)
                     video_title = info_dict.get('title', None)
                     ext = info_dict.get('ext', None)
-                    ydl_opts = {'outtmpl': f'downloaded/{views}-{video_title}'}
+                    ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{video_title}'}
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([link])
                     window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
@@ -92,6 +91,10 @@ def crawl_movie(page_name, filter_number):
                     view_count = 0
 
                 if view_count > filter_number or filter_number == 0:
+                    if view_count > 1000000:
+                        view_count = f"{view_count/1000000}M"
+                    elif 1000000 > view_count > 1000:
+                        view_count = f"{view_count/1000}K"
                     table_data.append([
                         href,
                         view_count,
@@ -108,6 +111,7 @@ if __name__ == '__main__':
     headings = ['links', 'likes', 'status']  # the text of the headings
 
     layout = [[sg.Text('views filter'), sg.InputText("0", key="input_number")],
+              [sg.Text('Ten Phim'), sg.InputText(key="ten_phim")],
               [sg.Table(values=[],
                         headings=headings,
                         display_row_numbers=True,
@@ -146,7 +150,7 @@ if __name__ == '__main__':
             if len(values['table']) > 0:
                 current_index = values['table'][0]
             table_data = window.Element('table').Get()
-            thread = threading.Thread(target=download_video, args=(table_data, current_index, window, lambda: stop_threads,), daemon=True)
+            thread = threading.Thread(target=download_video, args=(table_data, current_index, window, values.get("ten_phim", ""),), daemon=True)
             thread.start()
         elif event == 'Remove All Links':
             window.Element('table').Update(values=[])
