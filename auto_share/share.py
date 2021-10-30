@@ -74,7 +74,7 @@ def join_group(via_name):
                     else:
                         pyautogui.click(x, y)
                         buttons = ["joined.PNG", "answer_question.PNG"]
-                        decision = deciscion(buttons)
+                        decision = deciscion(buttons, waiting_time=20)
                         if decision:
                             x, y, btn_idx = decision
                             if btn_idx == 0:
