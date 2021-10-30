@@ -63,10 +63,16 @@ def join_group(via_name):
             line = line.strip()
             if line not in groups_joined and line != "":
                 access_group(line)
-                buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG", "join_group_3.PNG"]
+                buttons = ["joined.PNG", "join_group.PNG", "join_group_1.PNG", "join_group_2.PNG", "join_group_3.PNG"]
                 decision = deciscion(buttons, waiting_time=10)
                 if decision:
                     x, y, btn_idx = decision
+                    if btn_idx == 0:
+                        groups_joined.append(line)
+                        group_joined.update_one({"via_name": via_name},
+                                                {"$set": {"groups_joined": groups_joined}})
+                        continue
+
                     pyautogui.click(x, y)
                     buttons = ["joined.PNG", "answer_question.PNG"]
                     decision = deciscion(buttons)
