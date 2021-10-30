@@ -9,7 +9,7 @@ import clipboard
 import pymongo
 import pyautogui
 from utils import click_to, click_many, check_exist, paste_text, waiting_for, deciscion,\
-    get_title, scheduler_table, logger, via_shared, video_shared
+    get_title, scheduler_table, logger, via_shared, video_shared, group_joined
 pyautogui.PAUSE = 0.1
 pyautogui.FAILSAFE = False
 
@@ -44,43 +44,49 @@ def show_desktop():
 
 
 def join_group():
-    group = random.choice(groups)
-    access_group(group)
-    buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
-    decision = deciscion(buttons, waiting_time=10)
-    if decision:
-        x, y, btn_idx = decision
-        pyautogui.click(x, y)
-        buttons = ["joined.PNG", "answer_question.PNG"]
-        decision = deciscion(buttons)
-        if decision:
-            x, y, btn_idx = decision
-            if btn_idx == 0:
-                return True
-            else:
-                pyautogui.moveTo(x, y)
-                write_an_answer = waiting_for("write_an_answer.PNG", waiting_time=10)
-                while write_an_answer:
-                    pyautogui.click(write_an_answer)
-                    paste_text("Yes. I'm agree")
-                    pyautogui.scroll(-200)
-                    write_an_answer = check_exist("write_an_answer.PNG")
-                    time.sleep(1)
-                check_box_group = check_exist("check_box_group.PNG")
-                waiting_time = 0
-                while check_box_group and waiting_time < 5:
-                    waiting_time += 1
-                    pyautogui.click(check_box_group)
-                    pyautogui.scroll(-200)
-                    check_box_group = check_exist("check_box_group.PNG")
-                    time.sleep(1)
-                    if check_exist("submit_join.PNG"):
-                        break
+    if not os.path.isfile("join_group.txt"):
+        return
 
-                click_many("check.PNG")
-                click_to("submit_join.PNG", waiting_time=10)
+    number_join = 0
+    with open("join_group.txt") as group_file:
+        for line in group_file.readlines():
+            access_group(line.strip())
+            buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
+            decision = deciscion(buttons, waiting_time=10)
+            if decision:
+                x, y, btn_idx = decision
+                pyautogui.click(x, y)
+                buttons = ["joined.PNG", "answer_question.PNG"]
+                decision = deciscion(buttons)
+                if decision:
+                    x, y, btn_idx = decision
+                    if btn_idx == 0:
+                        continue
+                    else:
+                        pyautogui.moveTo(x, y)
+                        write_an_answer = waiting_for("write_an_answer.PNG", waiting_time=10)
+                        while write_an_answer:
+                            pyautogui.click(write_an_answer)
+                            paste_text("Yes. I'm agree")
+                            pyautogui.scroll(-200)
+                            write_an_answer = check_exist("write_an_answer.PNG")
+                            time.sleep(1)
+                        check_box_group = check_exist("check_box_group.PNG")
+                        waiting_time = 0
+                        while check_box_group and waiting_time < 5:
+                            waiting_time += 1
+                            pyautogui.click(check_box_group)
+                            pyautogui.scroll(-200)
+                            check_box_group = check_exist("check_box_group.PNG")
+                            time.sleep(1)
+                            if check_exist("submit_join.PNG"):
+                                break
+
+                        click_many("check.PNG")
+                        click_to("submit_join.PNG", waiting_time=10)
+            number_join += 1
+            if number_join > 5:
                 return True
-    return False
 
 
 def access_video(video_id):
@@ -139,7 +145,7 @@ def show_full_screen():
     pyautogui.press('x')
 
 
-def auto_share(table_data, current_index, window, stop):
+def auto_share(table_data, current_index, window, stop, enable_join_group):
     shared_group_name = []
     time.sleep(5)
     logger.debug("start share")
@@ -219,7 +225,8 @@ def auto_share(table_data, current_index, window, stop):
                 #     continue
 
                 # for _ in range(2):
-                # join_group()
+                if enable_join_group:
+                    join_group()
 
                 access_video(None)
                 if waiting_for("reload_bar.PNG"):
@@ -499,10 +506,10 @@ def watch_videos():
         pyautogui.hotkey('windows', 'd')
 
 
-def start_share(table_data, current_index, window, stop):
+def start_share(table_data, current_index, window, stop, enable_join_group):
     logger.debug("Start share")
     try:
-        auto_share(table_data, current_index, window, stop)
+        auto_share(table_data, current_index, window, stop, enable_join_group)
         logger.debug("Done share")
     except Exception as ex:
         logger.error(ex)
@@ -559,7 +566,9 @@ if __name__ == '__main__':
                   sg.Checkbox(
                       'Xây Dựng', key='groups.xay_dung', enable_events=False, default=True),
                   sg.Checkbox(
-                      'Tùy Chọn', key='groups.options', enable_events=False, default=True)
+                      'Tùy Chọn', key='groups.options', enable_events=False, default=True),
+                  sg.Checkbox(
+                      'Join group when sharing video', key='join_group', enable_events=False, default=False)
               ],
               [
                   sg.Table(values=table_default,
@@ -597,7 +606,8 @@ if __name__ == '__main__':
                 current_index = values['table'][0]
             table_data = window.Element('table').Get()
             thread = threading.Thread(target=start_share,
-                                      args=(table_data, current_index, window, lambda: stop_threads,),
+                                      args=(table_data, current_index, window,
+                                            lambda: stop_threads, values.get("join_group", False)),
                                       daemon=True)
             thread.start()
         elif event == 'Remove':
