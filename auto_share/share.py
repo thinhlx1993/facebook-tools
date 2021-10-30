@@ -84,7 +84,7 @@ def join_group():
 
                         click_many("check.PNG")
                         click_to("submit_join.PNG", waiting_time=10)
-            number_join += 1
+                        number_join += 1
             if number_join > 5:
                 return True
 
