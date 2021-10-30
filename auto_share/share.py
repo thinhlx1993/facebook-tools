@@ -53,6 +53,7 @@ def join_group(via_name):
     if via_data is None:
         groups_joined = []
         via_data = {"_id": str(ObjectId()), "via_name": via_name, "groups_joined": groups_joined}
+        group_joined.insert_one(via_data)
     else:
         groups_joined = via_data['groups_joined']
 
