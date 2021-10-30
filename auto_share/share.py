@@ -8,6 +8,8 @@ import PySimpleGUI as sg
 import clipboard
 import pymongo
 import pyautogui
+from bson import ObjectId
+
 from utils import click_to, click_many, check_exist, paste_text, waiting_for, deciscion,\
     get_title, scheduler_table, logger, via_shared, video_shared, group_joined
 pyautogui.PAUSE = 0.1
@@ -43,49 +45,67 @@ def show_desktop():
     pyautogui.moveTo(1027, 549)
 
 
-def join_group():
+def join_group(via_name):
     if not os.path.isfile("join_group.txt"):
         return
+
+    via_data = group_joined.find_one({"via_name": via_name})
+    if via_data is None:
+        groups_joined = []
+        via_data = {"_id": str(ObjectId()), "via_name": via_name, "groups_joined": groups_joined}
+    else:
+        groups_joined = via_data['groups_joined']
 
     number_join = 0
     with open("join_group.txt") as group_file:
         for line in group_file.readlines():
-            access_group(line.strip())
-            buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
-            decision = deciscion(buttons, waiting_time=10)
-            if decision:
-                x, y, btn_idx = decision
-                pyautogui.click(x, y)
-                buttons = ["joined.PNG", "answer_question.PNG"]
-                decision = deciscion(buttons)
+            line = line.strip()
+            if line not in groups_joined:
+                access_group(line)
+                buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
+                decision = deciscion(buttons, waiting_time=10)
                 if decision:
                     x, y, btn_idx = decision
-                    if btn_idx == 0:
-                        continue
-                    else:
-                        pyautogui.moveTo(x, y)
-                        write_an_answer = waiting_for("write_an_answer.PNG", waiting_time=10)
-                        while write_an_answer:
-                            pyautogui.click(write_an_answer)
-                            paste_text("Yes. I'm agree")
-                            pyautogui.scroll(-200)
-                            write_an_answer = check_exist("write_an_answer.PNG")
-                            time.sleep(1)
-                        check_box_group = check_exist("check_box_group.PNG")
-                        waiting_time = 0
-                        while check_box_group and waiting_time < 5:
-                            waiting_time += 1
-                            pyautogui.click(check_box_group)
-                            pyautogui.scroll(-200)
-                            check_box_group = check_exist("check_box_group.PNG")
-                            time.sleep(1)
-                            if check_exist("submit_join.PNG"):
-                                break
-
-                        click_many("check.PNG")
-                        submit_status = click_to("submit_join.PNG", waiting_time=10)
-                        if submit_status:
+                    pyautogui.click(x, y)
+                    buttons = ["joined.PNG", "answer_question.PNG"]
+                    decision = deciscion(buttons)
+                    if decision:
+                        x, y, btn_idx = decision
+                        if btn_idx == 0:
+                            # joined
                             number_join += 1
+                            groups_joined.append(line)
+                            group_joined.update_one({"via_name": via_name},
+                                                    {"$set": {"groups_joined": groups_joined}})
+                            continue
+                        else:
+                            pyautogui.moveTo(x, y)
+                            write_an_answer = waiting_for("write_an_answer.PNG", waiting_time=10)
+                            while write_an_answer:
+                                pyautogui.click(write_an_answer)
+                                paste_text("Yes. I'm agree")
+                                pyautogui.scroll(-300)
+                                write_an_answer = check_exist("write_an_answer.PNG")
+                                time.sleep(1)
+                            check_box_group = check_exist("check_box_group.PNG")
+                            waiting_time = 0
+                            while check_box_group and waiting_time < 5:
+                                waiting_time += 1
+                                pyautogui.click(check_box_group)
+                                pyautogui.scroll(-300)
+                                check_box_group = check_exist("check_box_group.PNG")
+                                time.sleep(1)
+                                if check_exist("submit_join.PNG"):
+                                    break
+
+                            click_many("check.PNG")
+                            submit_status = click_to("submit_join.PNG", waiting_time=10)
+                            if submit_status:
+                                # joined
+                                groups_joined.append(line)
+                                number_join += 1
+                                group_joined.update_one({"via_name": via_name},
+                                                        {"$set": {"groups_joined": groups_joined}})
             if number_join > 5:
                 return True
 
@@ -227,7 +247,7 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
 
                 # for _ in range(2):
                 if enable_join_group:
-                    join_group()
+                    join_group(via_name)
 
                 access_video(None)
                 if waiting_for("reload_bar.PNG"):
