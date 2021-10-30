@@ -63,7 +63,7 @@ def join_group(via_name):
             line = line.strip()
             if line not in groups_joined and line != "":
                 access_group(line)
-                buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG"]
+                buttons = ["join_group.PNG", "join_group_1.PNG", "join_group_2.PNG", "join_group_3.PNG"]
                 decision = deciscion(buttons, waiting_time=10)
                 if decision:
                     x, y, btn_idx = decision
