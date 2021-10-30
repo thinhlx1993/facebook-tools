@@ -80,7 +80,6 @@ def join_group(via_name):
                         x, y, btn_idx = decision
                         if btn_idx == 0:
                             # joined
-                            number_join += 1
                             groups_joined.append(line)
                             group_joined.update_one({"via_name": via_name},
                                                     {"$set": {"groups_joined": groups_joined}})
@@ -110,11 +109,12 @@ def join_group(via_name):
                             if submit_status:
                                 # joined
                                 groups_joined.append(line)
-                                number_join += 1
+
                                 group_joined.update_one({"via_name": via_name},
                                                         {"$set": {"groups_joined": groups_joined}})
-            if number_join > 5:
-                return True
+                number_join += 1
+                if number_join > 3:
+                    return True
 
 
 def access_video(video_id):
