@@ -86,9 +86,6 @@ def download_video(table_data, current_index, window, ten_phim):
             link, views, status = row
             ydl_opts = {}
 
-            filename = f'downloaded/{ten_phim}/{views}-None.mp4'
-            download_chromium(idx, link, filename, window)
-
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 try:
                     info_dict = ydl.extract_info(link, download=False)
