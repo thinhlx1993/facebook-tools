@@ -629,10 +629,10 @@ if __name__ == '__main__':
             # browserExe = "chrome.exe"
             # os.system("taskkill /f /im " + browserExe)
             break
-        elif event == 'Start':
+        elif event == 'Kill Chrome':
             browserExe = "chrome.exe"
             os.system("taskkill /f /im " + browserExe)
-        elif event == 'Kill Chrome':
+        elif event == 'Start':
             window.Element('Start').Update(text="Sharing")
             stop_threads = False
             current_index = 0
