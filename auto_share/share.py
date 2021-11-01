@@ -247,9 +247,6 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
                     # not in maximize mod
                     show_full_screen()
 
-                if enable_join_group:
-                    join_group(via_name)
-
                 access_video(None)
                 if waiting_for("reload_bar.PNG"):
                     if check_exist("chan_socket.PNG"):
@@ -262,6 +259,9 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
                 buttons = ['light_logo.PNG', 'dark_logo.PNG']
                 results = deciscion(buttons)
                 if results:
+                    # join groups
+                    if enable_join_group:
+                        join_group(via_name)
                     btn_x, btn_y, btn_index = results
                     if btn_index == 0:
                         # change theme
@@ -332,7 +332,15 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
                                     share_x, share_y, idx = result
                                     pyautogui.click(share_x, share_y)
                                 else:
-                                    continue
+                                    pyautogui.scroll(-300)
+                                    time.sleep(1)
+                                    buttons = ['share_btn_1.PNG', 'share_btn.PNG']
+                                    result = deciscion(buttons, confidence=0.9)
+                                    if result:
+                                        share_x, share_y, idx = result
+                                        pyautogui.click(share_x, share_y)
+                                    else:
+                                        continue
 
                                 # click options or share to a group
                                 buttons = ["share_to_group.PNG", "options.PNG"]
