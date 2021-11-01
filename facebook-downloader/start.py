@@ -1,13 +1,21 @@
 import os
 import subprocess
 import re
+
+import requests
+import youtube_dl
 import json
 import threading
 import PySimpleGUI as sg
 import pyautogui
 import logging
 
-import youtube_dl
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from bs4 import BeautifulSoup
 import os
 
@@ -32,12 +40,55 @@ logger.addHandler(fh)
 logger.addHandler(ch)
 
 
+options = webdriver.ChromeOptions()
+options.add_argument("--start-maximized")
+options.add_argument('--headless')
+driver = webdriver.Chrome('./chromedriver.exe', options=options)
+
+
+def waiting_for_id(id_here):
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.ID, id_here))
+        )
+        return element
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+def waiting_for_class(class_here):
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, class_here))
+        )
+        return element
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+def waiting_for_xpath(xpath):
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
+        return element
+    except Exception as ex:
+        print(ex)
+        return False
+
+
 def download_video(table_data, current_index, window, ten_phim):
     os.makedirs(f"downloaded/{ten_phim}", exist_ok=True)
     for idx, row in enumerate(table_data):
         if idx >= current_index:
             link, views, status = row
             ydl_opts = {}
+
+            filename = f'downloaded/{ten_phim}/{views}-None.mp4'
+            download_chromium(idx, link, filename, window)
+
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 try:
                     info_dict = ydl.extract_info(link, download=False)
@@ -49,8 +100,50 @@ def download_video(table_data, current_index, window, ten_phim):
                     window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
                 except Exception as ex:
                     print(ex)
-                    window.write_event_value('-THREAD-', [idx, False])
+                    filename = f'downloaded/{ten_phim}/{views}-None.mp4'
+                    download_chromium(idx, link, filename, window)
                     pass
+
+
+def download_chromium(idx, link, filename, window):
+    try:
+        driver.get("https://snapsave.app/")
+        input_url_xpath = """//*[@id="url"]"""
+        input_url = waiting_for_xpath(input_url_xpath)
+        submit_btn_xpath = """//*[@id="send"]"""
+        submit_btn = waiting_for_xpath(submit_btn_xpath)
+        if input_url and submit_btn:
+            input_url.send_keys(link)
+            submit_btn.click()
+            waiting_for_xpath("""//*[@id="download-section"]/section/div/div[1]/div[2]/div/table/thead/tr/th[1]/abbr""")
+            # button is-success is-small
+            download_buttons = driver.find_elements(By.CLASS_NAME, "is-success")
+            for download_button in download_buttons:
+                if download_button.text == 'Download':
+                    href = download_button.get_attribute("href")
+                    if href:
+                        print(href)
+                        download_file(href, filename+'.mp4')
+                        window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
+                        break
+    except Exception as ex:
+        window.write_event_value('-THREAD-', [idx, False])
+        print(ex)
+
+
+def download_file(url, local_filename):
+    # NOTE the stream=True parameter below
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(local_filename, 'wb') as f:
+            print(f"Downloading {local_filename}")
+            for chunk in r.iter_content(chunk_size=8192):
+                # If you have chunk encoded response uncomment if
+                # and set chunk_size parameter to None.
+                #if chunk:
+                #
+                f.write(chunk)
+            print(f"Done {local_filename}")
 
 
 def crawl_movie(page_name, filter_number):
@@ -104,6 +197,7 @@ def crawl_movie(page_name, filter_number):
 
 
 if __name__ == '__main__':
+
     # browserExe = "movies.exe"
     # os.system("taskkill /f /im " + browserExe)
     sg.theme('DarkAmber')  # Add a touch of color
