@@ -613,7 +613,8 @@ if __name__ == '__main__':
               [
                   sg.Button('Start'),
                   sg.Button('Remove'),
-                  sg.Button('Cancel')]
+                  sg.Button('Exit'),
+                  sg.Button('Kill Chrome')]
               ]
 
     # Create the Window
@@ -629,6 +630,9 @@ if __name__ == '__main__':
             # os.system("taskkill /f /im " + browserExe)
             break
         elif event == 'Start':
+            browserExe = "chrome.exe"
+            os.system("taskkill /f /im " + browserExe)
+        elif event == 'Kill Chrome':
             window.Element('Start').Update(text="Sharing")
             stop_threads = False
             current_index = 0
