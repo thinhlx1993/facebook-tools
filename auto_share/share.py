@@ -324,6 +324,11 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
                                     pyautogui.moveTo(playbtn)
                                     pyautogui.click(playbtn)
 
+                                buttons = ['share_btn_1.PNG', 'share_btn.PNG']
+                                result = deciscion(buttons, confidence=0.9, waiting_time=1)
+                                if not result:
+                                    pyautogui.scroll(-100)
+
                             for _ in range(2):
                                 # click share buttons
                                 buttons = ['share_btn_1.PNG', 'share_btn.PNG']
