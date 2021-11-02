@@ -327,6 +327,7 @@ def auto_share(table_data, current_index, window, stop, enable_join_group):
                                 buttons = ['share_btn_1.PNG', 'share_btn.PNG']
                                 result = deciscion(buttons, confidence=0.9, waiting_time=1)
                                 if not result:
+                                    pyautogui.click(1484, 604)
                                     pyautogui.scroll(-100)
 
                             for _ in range(2):
@@ -577,6 +578,7 @@ def mapping_table(item):
 if __name__ == '__main__':
     # time.sleep(2)
     # print(pyautogui.position())
+
     sg.theme('DarkAmber')  # Add a touch of color
     # All the stuff inside your window.
     headings = ['video_id', 'share group', 'share done', "Gỗ", "Cơ Khí", "Xây Dựng", "Tùy Chọn"]  # the text of the headings
