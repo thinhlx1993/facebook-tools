@@ -104,25 +104,26 @@ def download_video(table_data, current_index, window, ten_phim):
 
 def download_chromium(idx, link, filename, window):
     try:
-        driver.get("https://snapsave.app/")
-        input_url_xpath = """//*[@id="url"]"""
-        input_url = waiting_for_xpath(input_url_xpath)
-        submit_btn_xpath = """//*[@id="send"]"""
-        submit_btn = waiting_for_xpath(submit_btn_xpath)
-        if input_url and submit_btn:
-            input_url.send_keys(link)
-            submit_btn.click()
-            waiting_for_xpath("""//*[@id="download-section"]/section/div/div[1]/div[2]/div/table/thead/tr/th[1]/abbr""")
-            # button is-success is-small
-            download_buttons = driver.find_elements(By.CLASS_NAME, "is-success")
-            for download_button in download_buttons:
-                if download_button.text == 'Download':
-                    href = download_button.get_attribute("href")
-                    if href:
-                        print(href)
-                        download_file(href, filename+'.mp4')
-                        window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
-                        break
+        for _ in range(3):
+            driver.get("https://snapsave.app/")
+            input_url_xpath = """//*[@id="url"]"""
+            input_url = waiting_for_xpath(input_url_xpath)
+            submit_btn_xpath = """//*[@id="send"]"""
+            submit_btn = waiting_for_xpath(submit_btn_xpath)
+            if input_url and submit_btn:
+                input_url.send_keys(link)
+                submit_btn.click()
+                waiting_for_xpath("""//*[@id="download-section"]/section/div/div[1]/div[2]/div/table/thead/tr/th[1]/abbr""")
+                # button is-success is-small
+                download_buttons = driver.find_elements(By.CLASS_NAME, "is-success")
+                for download_button in download_buttons:
+                    if download_button.text == 'Download':
+                        href = download_button.get_attribute("href")
+                        if href:
+                            print(href)
+                            download_file(href, filename + '.mp4')
+                            window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
+                            return True
     except Exception as ex:
         window.write_event_value('-THREAD-', [idx, False])
         print(ex)
