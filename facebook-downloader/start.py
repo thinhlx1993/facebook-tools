@@ -83,7 +83,7 @@ def download_video(table_data, current_index, window, ten_phim):
     os.makedirs(f"downloaded/{ten_phim}", exist_ok=True)
     for idx, row in enumerate(table_data):
         if idx >= current_index:
-            link, views, status = row
+            link, name, views, status = row
             ydl_opts = {}
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -91,13 +91,13 @@ def download_video(table_data, current_index, window, ten_phim):
                     info_dict = ydl.extract_info(link, download=False)
                     video_title = info_dict.get('title', None)
                     ext = info_dict.get('ext', None)
-                    ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{video_title}'}
+                    ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{name}'}
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         ydl.download([link])
                     window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
                 except Exception as ex:
                     print(ex)
-                    filename = f'downloaded/{ten_phim}/{views}-None.mp4'
+                    filename = f'downloaded/{ten_phim}/{views}-{name}.mp4'
                     download_chromium(idx, link, filename, window)
                     pass
 
@@ -157,41 +157,41 @@ def crawl_movie(page_name, filter_number):
 
     html_doc = open(page_name, encoding="utf-8")
     soup = BeautifulSoup(html_doc, 'html.parser')
-    table_data = []
-
-    for parent in soup.find_all(class_='n851cfcs'):
-        child = parent.find(class_="bi6gxh9e")
-        href = None
-        view_count = None
-        if child:
-            href_el = child.find("a")
+    tables_data = []
+    parents = soup.select('div.rq0escxv.rj1gh0hx.buofh1pr.ni8dbmo4.stjgntxs.l9j0dhe7')
+    print(f"Number parents {len(parents)}")
+    for parent in parents:
+        href_el = parent.select_one("div.i1fnvgqd.btwxx1t3.j83agx80.bp9cbjyn > span:nth-child(1) > div:nth-child(2) > a")
+        text_video = parent.select_one('div.i1fnvgqd.btwxx1t3.j83agx80.bp9cbjyn > span:nth-child(1) > div:nth-child(2) > a > span > span')
+        views = parent.select_one("div.i1fnvgqd.btwxx1t3.j83agx80.bp9cbjyn > span:nth-child(1) > div:nth-child(3) > div > div:nth-child(2) > div > div > span > div")
+        if href_el and text_video and views:
+            # if "Views" in views.text:
+            #     view_count = views.text
+            # else:
+            #     continue
+            view_count = views.text
             href = href_el.get('href')
-            views = parent.find_all(class_="bnpdmtie")
-            for view in views:
-                if "Views" in view.text:
-                    view_count = view.text
-                    break
-            if view_count and href:
-                if "M" in view_count:
-                    view_count_float = view_count.replace("M", "").replace("Views", "")
-                    view_count = float(view_count_float)*1000000
-                elif "K" in view_count:
-                    view_count = view_count.replace("K", "").replace("Views", "")
-                    view_count = float(view_count)*1000
-                else:
-                    view_count = 0
+            if "M" in view_count:
+                view_count_float = view_count.replace("M", "").replace("Views", "")
+                view_count = float(view_count_float)*1000000
+            elif "K" in view_count:
+                view_count = view_count.replace("K", "").replace("Views", "")
+                view_count = float(view_count)*1000
+            else:
+                view_count = 0
 
-                if view_count > filter_number or filter_number == 0:
-                    if view_count > 1000000:
-                        view_count = f"{view_count/1000000}M"
-                    elif 1000000 > view_count > 1000:
-                        view_count = f"{view_count/1000}K"
-                    table_data.append([
-                        href,
-                        view_count,
-                        "waiting"
-                    ])
-    return table_data
+            if view_count > filter_number or filter_number == 0:
+                if view_count >= 1000000:
+                    view_count = f"{view_count/1000000}M"
+                elif 1000000 > view_count > 1000:
+                    view_count = f"{view_count/1000}K"
+                tables_data.append([
+                    href,
+                    text_video.text,
+                    view_count,
+                    "waiting"
+                ])
+    return tables_data
 
 
 if __name__ == '__main__':
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     # os.system("taskkill /f /im " + browserExe)
     sg.theme('DarkAmber')  # Add a touch of color
     # All the stuff inside your window.
-    headings = ['links', 'likes', 'status']  # the text of the headings
+    headings = ['links', 'name', 'likes', 'status']  # the text of the headings
 
     layout = [[sg.Text('views filter'), sg.InputText("0", key="input_number")],
               [sg.Text('Ten Phim'), sg.InputText(key="ten_phim")],
@@ -209,7 +209,7 @@ if __name__ == '__main__':
                         display_row_numbers=True,
                         justification='right',
                         auto_size_columns=False,
-                        col_widths=[50, 15, 15],
+                        col_widths=[50, 15, 15, 15],
                         vertical_scroll_only=False,
                         num_rows=24, key='table')],
               [sg.Button('Start download'),
