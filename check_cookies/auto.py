@@ -1,15 +1,11 @@
-import pyperclip
-import os
-from utils import *
-
-# if os.path.isfile("pass.txt"):
-#     os.remove("pass.txt")
-# if os.path.isfile("failed.txt"):
-#     os.remove("failed.txt")
+import pyautogui
+from check_cookies.utils import logger, click_to, waiting_for, paste_text, deciscion
 
 failed = 0
 passed = 0
-with open("input.txt", encoding='utf-8') as file:
+
+
+with open("new-133.txt", encoding='utf-8') as file:
     for line in file.readlines():
         line = line.strip()
         if line != "":
@@ -33,19 +29,19 @@ with open("input.txt", encoding='utf-8') as file:
             if result:
                 x, y, btn_index = result
                 if btn_index == 0 or btn_index == 1:
-                    with open("pass.txt", "a", encoding='utf-8') as myfile:
+                    with open("old/pass.txt", "a", encoding='utf-8') as myfile:
                         myfile.write(line + '\n')
                         passed += 1
                         myfile.close()
                         logger.info("cookies passed")
                 else:
-                    with open("failed.txt", "a", encoding='utf-8') as myfile:
+                    with open("old/failed.txt", "a", encoding='utf-8') as myfile:
                         myfile.write(line + '\n')
                         failed += 1
                         myfile.close()
                         logger.info("cookies failed")
             else:
-                with open("failed.txt", "a", encoding='utf-8') as myfile:
+                with open("old/failed.txt", "a", encoding='utf-8') as myfile:
                     myfile.write(line + '\n')
                     failed += 1
                     myfile.close()
