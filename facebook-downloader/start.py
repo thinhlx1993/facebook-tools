@@ -98,8 +98,8 @@ def download_video(table_data, current_index, window, ten_phim):
                 except Exception as ex:
                     print(ex)
                     filename = f'downloaded/{ten_phim}/{views}-{name}.mp4'
-                    download_chromium(idx, link, filename, window)
-                    pass
+                    if not os.path.isfile("f'downloaded/{ten_phim}/{views}-{name}.mp4'"):
+                        download_chromium(idx, link, filename, window)
 
 
 def download_chromium(idx, link, filename, window):
