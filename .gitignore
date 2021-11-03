@@ -151,3 +151,7 @@ cython_debug/
 /script/split/
 /auto_share/debug/
 *.txt
+auto_share/co_khi.txt
+auto_share/go.txt
+auto_share/xay_dung.txt
+auto_share/join_group.txt
