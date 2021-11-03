@@ -150,7 +150,6 @@ cython_debug/
 /script/split/Daily Dose of Satisfaction/
 /script/split/
 /auto_share/debug/
-*.txt
 auto_share/co_khi.txt
 auto_share/go.txt
 auto_share/xay_dung.txt
