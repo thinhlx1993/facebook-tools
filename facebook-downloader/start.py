@@ -1,7 +1,7 @@
 import os
 import subprocess
 import re
-
+import time
 import requests
 import youtube_dl
 import json
@@ -79,27 +79,30 @@ def waiting_for_xpath(xpath):
         return False
 
 
-def download_video(table_data, current_index, window, ten_phim):
+def download_video(table_data, current_index, window, ten_phim, pause_download):
     os.makedirs(f"downloaded/{ten_phim}", exist_ok=True)
     for idx, row in enumerate(table_data):
         if idx >= current_index:
+            if pause_download():
+                return True
+
             link, name, views, status = row
             ydl_opts = {}
-
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                try:
-                    info_dict = ydl.extract_info(link, download=False)
-                    video_title = info_dict.get('title', None)
-                    ext = info_dict.get('ext', None)
-                    ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{name}'}
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([link])
-                    window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
-                except Exception as ex:
-                    print(ex)
-                    filename = f'downloaded/{ten_phim}/{views}-{name}.mp4'
-                    if not os.path.isfile("f'downloaded/{ten_phim}/{views}-{name}.mp4'"):
-                        download_chromium(idx, link, filename, window)
+            if status == "waiting":
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    try:
+                        info_dict = ydl.extract_info(link, download=False)
+                        video_title = info_dict.get('title', None)
+                        ext = info_dict.get('ext', None)
+                        ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{name}'}
+                        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                            ydl.download([link])
+                        window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
+                    except Exception as ex:
+                        print(ex)
+                        filename = f'downloaded/{ten_phim}/{views}-{name}.mp4'
+                        if not os.path.isfile("f'downloaded/{ten_phim}/{views}-{name}.mp4'"):
+                            download_chromium(idx, link, filename, window)
 
 
 def download_chromium(idx, link, filename, window):
@@ -242,7 +245,9 @@ if __name__ == '__main__':
             if len(values['table']) > 0:
                 current_index = values['table'][0]
             table_data = window.Element('table').Get()
-            thread = threading.Thread(target=download_video, args=(table_data, current_index, window, values.get("ten_phim", ""),), daemon=True)
+            thread = threading.Thread(target=download_video, args=(table_data, current_index,
+                                                                   window, values.get("ten_phim", ""),
+                                                                   lambda: stop_threads,), daemon=True)
             thread.start()
         elif event == 'Remove All Links':
             window.Element('table').Update(values=[])
