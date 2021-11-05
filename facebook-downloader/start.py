@@ -88,7 +88,8 @@ def download_video(table_data, current_index, window, ten_phim, pause_download):
 
             link, name, views, status = row
             ydl_opts = {}
-            if status == "waiting":
+            if status == "waiting" or status == 'Error':
+                window.write_event_value('-THREAD-', [idx, 'Downloading'])
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                     try:
                         info_dict = ydl.extract_info(link, download=False)
@@ -97,7 +98,7 @@ def download_video(table_data, current_index, window, ten_phim, pause_download):
                         ydl_opts = {'outtmpl': f'downloaded/{ten_phim}/{views}-{name}'}
                         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                             ydl.download([link])
-                        window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
+                        window.write_event_value('-THREAD-', [idx, 'Downloaded'])  # put a message into queue for GUI
                     except Exception as ex:
                         print(ex)
                         filename = f'downloaded/{ten_phim}/{views}-{name}.mp4'
@@ -125,10 +126,12 @@ def download_chromium(idx, link, filename, window):
                         if href:
                             print(href)
                             download_file(href, filename + '.mp4')
-                            window.write_event_value('-THREAD-', [idx, True])  # put a message into queue for GUI
+                            window.write_event_value('-THREAD-', [idx, 'Downloaded'])  # put a message into queue for GUI
                             return True
+        window.write_event_value('-THREAD-', [idx, 'Error'])
+        return False
     except Exception as ex:
-        window.write_event_value('-THREAD-', [idx, False])
+        window.write_event_value('-THREAD-', [idx, 'Error'])
         print(ex)
 
 
@@ -270,10 +273,8 @@ if __name__ == '__main__':
             idx, download_status = values['-THREAD-']
             logger.debug(f"download status: {idx} {download_status} {len(table_data)}")
             table_data = window.Element('table').Get()
-            if download_status:
-                table_data[idx][-1] = 'Downloaded'
-            else:
-                table_data[idx][-1] = 'Error'
+            table_data[idx][-1] = download_status
+            # table_data[idx][-1] = download_status
             window.Element('table').Update(values=table_data, select_rows=[idx])
             window.Refresh()
             if idx == len(table_data) - 1:
