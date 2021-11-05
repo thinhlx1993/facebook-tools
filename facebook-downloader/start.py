@@ -246,7 +246,7 @@ if __name__ == '__main__':
                 current_index = values['table'][0]
             table_data = window.Element('table').Get()
             thread = threading.Thread(target=download_video, args=(table_data, current_index,
-                                                                   window, values.get("ten_phim", ""),
+                                                                   window, values.get("ten_phim", "").strip(),
                                                                    lambda: stop_threads,), daemon=True)
             thread.start()
         elif event == 'Remove All Links':
