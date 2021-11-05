@@ -1,6 +1,0 @@
-scikit-image
-opencv-python
-matplotlib
-keyboard
-image_similarity_measures
-pytesseract
